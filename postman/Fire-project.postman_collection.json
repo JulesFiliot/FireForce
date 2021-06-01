@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "35f4e459-e5bc-444b-bd7e-155172a2ac41",
+		"name": "Fire-project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all vehicles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/vehicle",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"vehicle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add vehicle",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \n        \"lon\": 4.828066,\n        \"lat\": 45.747389,\n        \"type\": \"CAR\",\n        \"efficiency\": 10.0,\n        \"liquidType\": \"WATER\",\n        \"liquidQuantity\": 100.0,\n        \"liquidConsumption\": 1.0,\n        \"fuel\": 100.0,\n        \"fuelConsumption\": 10.0,\n        \"crewMember\": 8,\n        \"crewMemberCapacity\": 8,\n        \"facilityRefID\": 0\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/vehicle",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"vehicle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Fire",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/creation/config",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"creation",
+						"config"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Create Config",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/config/creation",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"config",
+						"creation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Behavior Config",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/config/behavior",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"config",
+						"behavior"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "set Create Config",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"fireCreationProbability\": 0.0,\n    \"fireCreationSleep\": 20000,\n    \"fireCreationZone\": [\n        {\n            \"type\": \"Point\",\n            \"coordinates\": [\n                520820,\n                5719535\n            ]\n        },\n        {\n            \"type\": \"Point\",\n            \"coordinates\": [\n                566984,\n                5754240\n            ]\n        }\n    ],\n    \"max_INTENSITY\": 50.0,\n    \"max_RANGE\": 50.0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/config/creation",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"config",
+						"creation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset all fire",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/fire/reset",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"fire",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Behavior Config",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"propagationThreshold\": 5.0,\n    \"attenuationFactor\": 0.8,\n    \"intensityReplicationThreshold\": 10.0,\n    \"replicationProbability\": 0.1,\n    \"maxFireRange\": 50.0,\n    \"maxFireIntensity\": 50.0,\n    \"intensity_inc\": 0.1,\n    \"sleepTime\": 5000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8081/config/behavior",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"config",
+						"behavior"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Compute distance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8081/fire/distance?lonCoord1=45.826406&latCoord1=5.014313&lonCoord2=45.818608&latCoord2=5.011581",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"fire",
+						"distance"
+					],
+					"query": [
+						{
+							"key": "lonCoord1",
+							"value": "45.826406"
+						},
+						{
+							"key": "latCoord1",
+							"value": "5.014313"
+						},
+						{
+							"key": "lonCoord2",
+							"value": "45.818608"
+						},
+						{
+							"key": "latCoord2",
+							"value": "5.011581"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
