@@ -1,0 +1,21 @@
+stages:
+  - package
+  - deploy
+
+job_package:
+  image: maven:3.6-jdk-11
+  stage: package
+  script:
+    - mvn  package
+  artifacts:
+    paths:
+    - target/*.jar
+    expire_in: 1 week
+
+job_deploy:
+  image: maven:3.6-jdk-11
+  stage: deploy
+  script:
+    - 'mvn deploy -s ci_settings.xml'
+  only:
+    - master
