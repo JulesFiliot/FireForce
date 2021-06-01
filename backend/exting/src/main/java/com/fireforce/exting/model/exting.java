@@ -10,9 +10,22 @@ public class exting {
 	@Id
 	@GeneratedValue
 	private Integer id;
+	private String name;
 	
-	public exting (Integer id) {
+	public exting (String name) {
 		super();
-		this.id = id;
+		this.name = name;
+	}
+	
+	public Integer getId() {
+		return this.id;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 }
