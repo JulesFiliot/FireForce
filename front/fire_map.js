@@ -57,7 +57,7 @@ function reset_fire() {
         method: 'GET',
     };
     fetch(RESET_URL, context)
-        .then(reponse => fetch_fire())
+        .then(fetch_fire())
         .catch(error => err_callback(error));
 }
 
@@ -67,12 +67,13 @@ function fetch_fire() {
     let context = {
         method: 'GET'
     };
-    
     fetch(GET_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
 }
+
 function fireList_callback(reponse) {
+    clear_fire();
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
@@ -100,6 +101,7 @@ function clear_fire() {
         i.remove();
     }
     firePrinted = [];
+    fireList = [];
 }
 
 function create_fire_popup(circle, fire) {
@@ -129,6 +131,17 @@ function hide(obj) {
     } else {
         el.style.display = 'none';
     }
+}
+
+
+
+
+function vehicle_creator() {
+    var vehicle_type = document.getElementById("vehicle_type").value;
+    var liquid_type = document.getElementById("liquid_type").value;
+    var lat = Math.random()*(45.7941125 - 45.7145454) + 45.7145454;
+    var lon = Math.random()*(4.9266428 - 4.7736324) + 4.7736324;
+    create_vehicle(vehicle_type, liquid_type, lon, lat);
 }
 
 /*
@@ -161,6 +174,7 @@ function create_vehicle(vehicle_type, liquid_type, lon, lat) {
             "liquidType":liquid_type
         })
     };
+    console.log("Create vehicle")
     fetch(POST_VEHICLE_URL, context)
         .catch(error => err_callback(error));
 }
@@ -201,19 +215,12 @@ function print_vehicle(vehicle) {
             color: 'blue',
             fillColor: 'blue',
             fillOpacity: 100, // MAX_INTENSITY
-            radius: 10
+            radius: 5
         }
     ).addTo(mymap);
     vehiclePrinted.push(circle);
 }
 
-function vehicule_creator() {
-    var vehicule_type = document.getElementById("vehicule_type").value;
-    var liquid_type = document.getElementById("liquid_type").value;
-    var lon = Math.random()*45.7145454 + (45.7941125 - 45.7145454);
-    var lat = Math.random()*4.7736324 + (4.9266428 - 4.7736324);
-    create_vehicule(vehicule_type, liquid_type, lon, lat);
-}
 
 // --- CODE ---
 
