@@ -29,7 +29,7 @@ public class vehic {
 	private Integer facilityRefID;
 
 	
-	public vehic(int id,double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
+	public vehic(double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
 			com.project.model.dto.LiquidType liquidType, float liquidQuantity, float liquidConsumption, float fuel,
 			float fuelConsumption, int crewMember, int crewMemberCapacity, Integer facilityRefID) {
 		super();
@@ -46,6 +46,17 @@ public class vehic {
 		this.crewMember = crewMember;
 		this.crewMemberCapacity = crewMemberCapacity;
 		this.facilityRefID = facilityRefID;
+	}
+	
+	public vehic() {}
+	
+	public String toString() {
+		return "Vehicule " + "[" + this.id + "] : position (" + this.lon + " ; " + this.lat + "), type : " 
+	+ this.type.toString() + ", efficiency : " + this.efficiency + ", liquid type : " + this.liquidType +
+	", liquid quantity : " + this.liquidQuantity + ", liquid consumption : " + this.liquidConsumption +
+	", fuel : " + this.fuel + ", fuel consumption : " + this.fuelConsumption + ", crew member : " 
+	+ this.crewMember + ", crew member capacity : " + this.crewMemberCapacity + ", facility ref ID : "
+	+ this.facilityRefID;
 	}
 
 	
