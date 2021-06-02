@@ -52,7 +52,16 @@ public class fStationCtr {
     }
     @RequestMapping(value="/editStationName/{id}/{name}")
     public void editStationName(@PathVariable String name, @PathVariable Integer id) {
-        ;
+        fSService.editStationName(id, name);
     }
+    @RequestMapping(value="/editStationCapacity/{id}/{capacity}")
+    public void editStationCapacity(@PathVariable int capacity, @PathVariable Integer id) {
+        fSService.editStationCapacity(id, capacity);
+    }
+    
+	@RequestMapping(value = "/editStationCoord/{id}/{lat}/{lon}")
+	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
+		fSService.newCoord(fSService.getStation(id), lat, lon);
+	}
 }
 

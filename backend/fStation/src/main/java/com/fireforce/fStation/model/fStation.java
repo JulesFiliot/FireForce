@@ -71,7 +71,7 @@ public class fStation {
 	}
 	
 	public String toString() {
-		return "Station "+this.name + " [id:" + this.id + "] : position (" + this.lon + " ; " + this.lat + "), capacity : " 
+		return "Station "+this.name + " [id:" + this.id + "] : position (" + this.lat + " ; " + this.lon + "), capacity : " 
 	+ this.capacity;
 	}
 }
