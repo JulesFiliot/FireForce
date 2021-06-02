@@ -9,7 +9,7 @@ function put_fire_config() {
             'Content-type': 'application/json'
           },
         body: JSON.stringify({
-            "fireCreationProbability":0.4,
+            "fireCreationProbability":0.0,
             "fireCreationSleep":20000,
             "fireCreationZone":[
                 {"type":"Point","coordinates":[520820,5719535]},
@@ -86,6 +86,21 @@ function fire_filter(fire) {
         print_fire(fire);
     }
 }
+
+
+$( function() {
+    $( "#slider-range" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ 75, 300 ],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+  } );
 
 // --- CODE ---
 
