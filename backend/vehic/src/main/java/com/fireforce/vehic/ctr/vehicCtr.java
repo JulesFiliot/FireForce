@@ -29,6 +29,16 @@ public class vehicCtr {
 		restTemplate.postForEntity(reqUrl, t,Object.class);
 	}
 	
+	@RequestMapping(method = RequestMethod.POST,value = "/vehicle/{id}")
+	public void updateVehic(@RequestBody vehic v, @PathVariable Integer id) {
+		
+		VehicleDto t = new VehicleDto(id.intValue(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
+		
+    	String reqUrl = "http://127.0.0.1:8081/vehicle/"+id;
+        RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(reqUrl, t);
+	}
+	
 	@RequestMapping(value = "/generateVehics")
 	public void generateVehics() {
 		vServ.generateVehics();
