@@ -48,7 +48,32 @@
     		<groupId>org.springframework.boot</groupId>
     		<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
+		
+		<dependency>
+		  <groupId>com.project</groupId>
+		  <artifactId>fire-simulator-public</artifactId>
+		  <version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
+	
+	<repositories>
+  <repository>
+    <id>gitlab-maven</id>
+    <url>https://gitlab.com/api/v4/projects/26319036/packages/maven</url>
+  </repository>
+</repositories>
+
+<distributionManagement>
+  <repository>
+    <id>gitlab-maven</id>
+    <url>https://gitlab.com/api/v4/projects/26319036/packages/maven</url>
+  </repository>
+
+  <snapshotRepository>
+    <id>gitlab-maven</id>
+    <url>https://gitlab.com/api/v4/projects/26319036/packages/maven</url>
+  </snapshotRepository>
+</distributionManagement>
 
 	<build>
 		<plugins>
