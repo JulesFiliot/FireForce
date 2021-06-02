@@ -51,13 +51,8 @@ function clear_fire() {
 }
 
 function fire_filter(fire) {
-    var typeselect = document.getElementById("type").value;
-    if (typeselect == "") {
+    if (document.getElementById(fire.type).checked == true) {
         print_fire(fire);
-    } else {
-        if (fire.type == typeselect) {
-            print_fire(fire);
-        }
     }
 }
 
