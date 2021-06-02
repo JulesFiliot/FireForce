@@ -57,11 +57,9 @@ function reset_fire() {
         method: 'GET',
     };
     fetch(RESET_URL, context)
+        .then(response => fetch_fire())
         .catch(error => err_callback(error));
-    fetch_fire();
 }
-
-
 
 function fetch_fire() {
     const GET_FIRE_URL="http://127.0.0.1:8081/fire"; 
@@ -84,12 +82,7 @@ function fireList_callback(reponse) {
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
-    create_fire();
-}
-   
-function create_fire() {
     for(const fire of fireList){
-        console.log(fire);
         fire_filter(fire);
     }
 }
@@ -120,6 +113,7 @@ function create_fire_popup(circle, fire) {
     circle.bindPopup(popup_text);
  }
 
+//Filter fires and print only those in the range defined by the user
 function fire_filter(fire) {
     if (document.getElementById(fire.type).checked == true) {
         if (fire.intensity >= document.getElementById("intensitymin").value && fire.intensity <= document.getElementById("intensitymax").value) {
@@ -143,13 +137,95 @@ function hide(obj) {
     }
 }
 
+/*
+		this.id=id;
+		this.lon = lon;
+		this.lat = lat;
+		this.type = type;
+		this.efficiency = efficiency;
+		this.liquidType = liquidType;
+		this.liquidQuantity = liquidQuantity;
+		this.liquidConsumption = liquidConsumption;
+		this.fuel = fuel;
+		this.fuelConsumption = fuelConsumption;
+		this.crewMember = crewMember;
+		this.crewMemberCapacity = crewMemberCapacity;
+		this.facilityRefID = facilityRefID;
+
+*/
+function create_vehicle(vehicle_type, liquid_type, lon, lat) {
+    const POST_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    let context = {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            "lon":lon,
+            "lat":lat,
+            "type":vehicle_type,
+            "liquidType":liquid_type
+        })
+    };
+    fetch(POST_VEHICLE_URL, context)
+        .catch(error => err_callback(error));
+}
+
+function fetch_vehicles() {
+    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    let context = {
+        method: 'GET',
+    };
+
+    fetch(GET_VEHICLE_URL, context)
+        .then(response => response.json().then(body => vehiclesList_callback(body)))
+        .catch(error => err_callback(error));
+}
+
+function vehiclesList_callback(response) {    
+    clear_vehicles();
+    vehicleList = [];
+    for(var i = 0; i < response.length; i++) {
+        vehicleList[i] = response[i];
+    }
+    for(const vehicle of vehicleList) {
+        print_vehicle(vehicle);
+    }
+}
+
+//clear printed vehicles
+function clear_vehicles() {
+    for (i of vehiclePrinted) {
+        i.remove();
+    }
+    vehiclePrinted = [];
+}
+
+function print_vehicle(vehicle) {
+    var circle = L.circle([vehicle.lat, vehicle.lon],
+        {
+            color: 'blue',
+            fillColor: 'blue',
+            fillOpacity: 100, // MAX_INTENSITY
+            radius: 10
+        }
+    ).addTo(mymap);
+    vehiclePrinted.push(circle);
+}
+
+
 // --- CODE ---
 
 let fireList = [];
 let firePrinted = [];
+let vehicleList = [];
+let vehiclePrinted = [];
 
 var intervalId = window.setInterval(function(){
     fetch_fire();
+    fetch_vehicles();
 }, 5000);
 
+//create_vehicle(0, 1, 4.5, 45.5);
 fetch_fire();
+fetch_vehicles();
