@@ -15,6 +15,8 @@
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
 		<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 	</head>
 
 	<body>
@@ -22,49 +24,75 @@
 		<div id="mapid"></div>
 
 		<div id="over_map">
-			<form class="filtre" onchange="fetch_fire()">
-				<p>Type de feu :</p>
+
+			<h3 style="cursor: pointer" onclick="hide('config_interface')">Configuration interface</h3>
+
+			<div class="interface" id="config_interface" onchange="put_config()">
+
+				<p>Fire creation probability :</p>
+				<input type="number" id="creationProba" name="creationProba" min="0" max="1" step="0.1" value="0">
+				<p>Fire creation sleep :</p>
+				<input type="number" id="creationSleep" name="creationSleep" min="5" max="30" step="1" value="20">
+				<br/><br/>
+				<button onclick="reset_fire()">Fire reset</button>
+
+			</div>
+
+			<h3 style="cursor: pointer" onclick="hide('fire_interface')">Fire interface</h3>
+
+			<div class="interface" id="fire_interface" onchange="fetch_fire()">
+
+				<p>Fire intensity :</p>
+				<input type="number" id="intensitymin" name="intensitymin" min="0" max="50" value="0"> <br/>
+				<input type="number" id="intensitymax" name="intensitymax" min="0" max="50" value="50">
+
+				<p>Fire range :</p>
+				<input type="number" id="rangemin" name="rangemin" min="0" max="50" value="0"> <br/>
+				<input type="number" id="rangemax" name="rangemax" min="0" max="50" value="50">
+
+				<p>Fire type :</p>
 				<div>
-					<!--
-					<select id="type" name="fire_type" class="select">
-						<option value="">-Tous-</option>
-						<option value="A">A</option>
-						<option value="B_Gasoline">B_Gasoline</option>
-						<option value="B_Alcohol">B_Alcohol</option>
-						<option value="B_Plastics">B_Plastics</option>
-					</select>
-					-->
 					<div>
 						<input type="checkbox" id="A" name="A" checked>
-						<label for="A">A-Secs</label>
+						<label for="A">A-Organic</label>
 					</div>
 					<div>
 						<input type="checkbox" id="B_Gasoline" name="B_Gasoline" checked>
-						<label for="B_Gasoline">B-Hydorcarbures</label>
+						<label for="B_Gasoline">B-Gasoline</label>
 					</div>
 					<div>
 						<input type="checkbox" id="B_Alcohol" name="B_Alcohol" checked>
-						<label for="B_Alcohol">B-Alcools</label>
+						<label for="B_Alcohol">B-Alcohol</label>
 					</div>
 					<div>
 						<input type="checkbox" id="B_Plastics" name="B_Plastics" checked>
-						<label for="B_Plastics">B-Plastiques</label>
+						<label for="B_Plastics">B-Plastics</label>
 					</div>
 					<div>
 						<input type="checkbox" id="C_Flammable_Gases" name="C_Flammable_Gases" checked>
-						<label for="C_Flammable_Gases">C-Gaz</label>
+						<label for="C_Flammable_Gases">C-Gases</label>
 					</div>
 					<div>
 						<input type="checkbox" id="D_Metals" name="D_Metals" checked>
-						<label for="D_Metals">D-Métaux</label>
+						<label for="D_Metals">D-Metals</label>
 					</div>
 					<div>
 						<input type="checkbox" id="E_Electric" name="E_Electric" checked>
-						<label for="E_Electric">E-Electriques</label>
+						<label for="E_Electric">E-Electric</label>
 					</div>
 				</div>
 
-			</form>
+			</div>
+
+			<h3 style="cursor: pointer" onclick="hide('vehicule_interface')">Vehicule interface</h3>
+
+			<div class="interface" id="vehicule_interface">
+
+				<p>CAMION</p>
+
+			</div>
+			
+
 		</div>
 
 		<!--

@@ -45,4 +45,60 @@ public class vehicServ {
 		System.out.println(v);
 	}
 
+	public void newLiquidType(vehic v, String type) {
+		if (type.equals("A")) v.setLiquidType(LiquidType.ALL);
+		else if (type.equals("W")) v.setLiquidType(LiquidType.WATER);
+		else if (type.equals("WA")) v.setLiquidType(LiquidType.WATER_WITH_ADDITIVES);
+		else if (type.equals("C")) v.setLiquidType(LiquidType.CARBON_DIOXIDE);
+		else if (type.equals("P")) v.setLiquidType(LiquidType.POWDER);
+		else {
+			System.out.println("Error : unknown liquid type.");
+			return;
+		}
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newEfficiency(vehic v, float val) {
+		v.setEfficiency(val);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newLiquidQuantity(vehic v, float val) {
+		v.setLiquidQuantity(val);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newLiquidConsumption(vehic v, float val) {
+		v.setLiquidConsumption(val);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newFuel(vehic v, float val) {
+		v.setFuel(val);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newFuelConsumption(vehic v, float val) {
+		v.setFuelConsumption(val);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newCrewMember(vehic v, int val) {
+		v.setCrewMember(val);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newCrewMemberCapacity(vehic v, int val) {
+		v.setCrewMemberCapacity(val);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
 }
