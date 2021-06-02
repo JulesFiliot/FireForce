@@ -13,6 +13,7 @@ public class vehic {
 	@Id
 	@GeneratedValue
 	private Integer id;
+	private Integer remoteId = -1;
 	private String name;
 	public static final int CREW_MEMBER_START_VALUE=-1;
 	private double lon;
@@ -50,7 +51,7 @@ public class vehic {
 	public vehic() {}
 	
 	public String toString() {
-		return "Vehicule " + "[" + this.id + "] : position (" + this.lat + " ; " + this.lon + "), type : " 
+		return "Vehicule " + "[" + this.id + "] [" + this.remoteId + "] : position (" + this.lat + " ; " + this.lon + "), type : " 
 	+ this.type.toString() + ", efficiency : " + this.efficiency + ", liquid type : " + this.liquidType +
 	", liquid quantity : " + this.liquidQuantity + ", liquid consumption : " + this.liquidConsumption +
 	", fuel : " + this.fuel + ", fuel consumption : " + this.fuelConsumption + ", crew member : " 
@@ -171,4 +172,14 @@ public class vehic {
 		this.id = id;
 	}
 
+	public Integer getRemoteId() {
+		return remoteId;
+	}
+
+	public void setRemoteId(Integer remoteId) {
+		this.remoteId = remoteId;
+	}
+
+	
+	
 }
