@@ -1,16 +1,17 @@
 // FUNCTIONS
 
 //PUT request to change the fire config
-function put_fire_config() {
-    const PUT_FIRE_URL = "http://127.0.0.1:8081/config/creation";
+function put_creation_config(creationProba, creationSleep) {
+    console.log(creationProba);
+    const PUT_CREATION_URL = "http://127.0.0.1:8081/config/creation";
     let context = {
         method: 'PUT',
         headers: {
             'Content-type': 'application/json'
           },
         body: JSON.stringify({
-            "fireCreationProbability":0.2,
-            "fireCreationSleep":20000,
+            "fireCreationProbability":creationProba,
+            "fireCreationSleep":creationSleep,
             "fireCreationZone":[
                 {"type":"Point","coordinates":[520820,5719535]},
                 {"type":"Point","coordinates":[566984,5754240]}],
@@ -18,7 +19,7 @@ function put_fire_config() {
             "max_RANGE":50.0
         })
     };
-    fetch(PUT_FIRE_URL, context)
+    fetch(PUT_CREATION_URL, context)
         .catch(error => err_callback(error));
 }
 
@@ -33,7 +34,7 @@ function put_behavior_config() {
             "propagationThreshold":5.0,
             "attenuationFactor":0.8,
             "intensityReplicationThreshold":10.0,
-            "replicationProbability":0.2,
+            "replicationProbability":0.0,
             "maxFireRange":50.0,
             "maxFireIntensity":50.0,
             "intensity_inc":0.1,
@@ -43,6 +44,24 @@ function put_behavior_config() {
     fetch(PUT_BEHAVIOR_URL, context)
         .catch(error => err_callback(error));
 }
+
+function put_config() {
+    creationProba = document.getElementById("creationProba").value;
+    creationSleep = document.getElementById("creationSleep").value*1000;
+    put_creation_config(creationProba,creationSleep);
+}
+
+function reset_fire() {
+    const RESET_URL = "http://127.0.0.1:8081/fire/reset";
+    let context = {
+        method: 'GET',
+    };
+    fetch(RESET_URL, context)
+        .catch(error => err_callback(error));
+    fetch_fire();
+}
+
+
 
 function fetch_fire() {
     const GET_FIRE_URL="http://127.0.0.1:8081/fire"; 
@@ -103,24 +122,26 @@ function create_fire_popup(circle, fire) {
 
 function fire_filter(fire) {
     if (document.getElementById(fire.type).checked == true) {
-        print_fire(fire);
+        if (fire.intensity >= document.getElementById("intensitymin").value && fire.intensity <= document.getElementById("intensitymax").value) {
+            if (fire.range >= document.getElementById("rangemin").value && fire.range <= document.getElementById("rangemax").value) {
+                print_fire(fire);
+            }
+        }
     }
 }
 
-
-$( function() {
-    $( "#slider-range" ).slider({
-      range: true,
-      min: 0,
-      max: 500,
-      values: [ 75, 300 ],
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-      }
-    });
-    $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-      " - $" + $( "#slider-range" ).slider( "values", 1 ) );
-  } );
+function hide(obj) {
+    var el = document.getElementById(obj);
+    if (el.style.display == 'none') {
+        var interface = document.getElementsByClassName("interface");
+        for (i of interface) {
+            i.style.display = 'none';
+        }
+        el.style.display = 'block';
+    } else {
+        el.style.display = 'none';
+    }
+}
 
 // --- CODE ---
 
@@ -131,6 +152,4 @@ var intervalId = window.setInterval(function(){
     fetch_fire();
 }, 5000);
 
-put_fire_config();
-put_behavior_config();
 fetch_fire();
