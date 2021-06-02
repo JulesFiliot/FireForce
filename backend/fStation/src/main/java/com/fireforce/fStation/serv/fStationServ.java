@@ -57,4 +57,15 @@ public class fStationServ {
 		fSRepo.save(fS);
 		System.out.println(fS);
 	}
+
+	public void updateFS(fStation fS) {
+		Optional<fStation> fSOpt =fSRepo.findById(fS.getId());
+		if (fSOpt.isPresent()) {
+			fStation fS2=fSOpt.get();
+			fS2=fS;
+			fSRepo.save(fS2);
+			System.out.println(fS2);
+
+		}
+	}
 }

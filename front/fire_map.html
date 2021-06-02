@@ -24,13 +24,32 @@
 		<div id="mapid"></div>
 
 		<div id="over_map">
-			<form class="filtre" onchange="fetch_fire()">
+
+			<h3 style="cursor: pointer" onclick="hide('config_interface')">Configuration interface</h3>
+
+			<div class="interface" id="config_interface" onchange="put_config()">
+
+				<p>Fire creation probability :</p>
+				<input type="number" id="creationProba" name="creationProba" min="0" max="1" step="0.1" value="0">
+				<p>Fire creation sleep :</p>
+				<input type="number" id="creationSleep" name="creationSleep" min="5" max="30" step="1" value="20">
+				<br/><br/>
+				<button onclick="reset_fire()">Fire reset</button>
+
+			</div>
+
+			<h3 style="cursor: pointer" onclick="hide('fire_interface')">Fire interface</h3>
+
+			<div class="interface" id="fire_interface" onchange="fetch_fire()">
+
 				<p>Fire intensity :</p>
-				<p id="intensitymin">0</p>
-				<input id="minrange" type="range" min="0" max="50" step="1" value="0" class="slider" onchange="updateMin(this.value);">
+				<input type="number" id="intensitymin" name="intensitymin" min="0" max="50" value="0"> <br/>
+				<input type="number" id="intensitymax" name="intensitymax" min="0" max="50" value="50">
+
 				<p>Fire range :</p>
-				<p id="rangemax">50</p>
-				<input id="maxrange" type="range" min="0" max="50" step="1" value="50" class="slider" onchange="updateMax(this.value);">
+				<input type="number" id="rangemin" name="rangemin" min="0" max="50" value="0"> <br/>
+				<input type="number" id="rangemax" name="rangemax" min="0" max="50" value="50">
+
 				<p>Fire type :</p>
 				<div>
 					<div>
@@ -63,14 +82,44 @@
 					</div>
 				</div>
 
-			</form>
+			</div>
 
-			<p>
-				<label for="amount">Price range:</label>
-				<input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
-			</p>
-			   
-			<div id="slider-range"></div>
+			<h3 style="cursor: pointer" onclick="hide('vehicule_interface')">Vehicule interface</h3>
+
+			<div class="interface" id="vehicule_interface">
+
+				<p>CAMION</p>
+
+			</div>
+
+			<h3 style="cursor: pointer" onclick="hide('vehicule_creator')">Vehicule creator</h3>
+
+			<div class="interface" id="vehicule_creator">
+
+				<p>Vehicule type:</p>
+				<select id="vehicule_type" name="vehicule_type" class="select">
+					<option value="CAR">Car</option>  <!-- enum donc maybe "0" au lieu de CAR, etc -->
+					<option value="FIRE_ENGINE">Fire Engine</option>
+					<option value="PUMPER_TRUCK">Pumper Truck</option>
+					<option value="WATER_TENDER">Water Tender</option>
+					<option value="TURNTABLE_TRUCK">Turntable Ladder Truck</option>
+					<option value="TRUCK">Truck</option>
+				</select>
+
+				<p>Liquid type:</p>
+				<select id="liquid_type" name="liquid_type" class="select">
+					<option value="ALL">All</option>
+					<option value="WATER">Water</option>
+					<option value="WATER_WITH_ADDITIVES">Water with Additives</option>
+					<option value="CARBON_DIOXIDE">Carbon Dioxide</option>
+					<option value="POWDER">Powder</option>
+				</select>
+
+				<br/><br/>
+				<button onclick="vehicule_creator()">Create</button>
+
+			</div>
+			
 
 		</div>
 
