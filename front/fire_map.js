@@ -1,12 +1,36 @@
 // FUNCTIONS
 
+//PUT request to change the fire config
+function put_fire_config() {
+    const PUT_FIRE_URL = "http://127.0.0.1:8081/config/creation";
+    let context = {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+          },
+        body: JSON.stringify({
+            "fireCreationProbability":0.4,
+            "fireCreationSleep":20000,
+            "fireCreationZone":[
+                {"type":"Point","coordinates":[520820,5719535]},
+                {"type":"Point","coordinates":[566984,5754240]}],
+            "max_INTENSITY":50.0,
+            "max_RANGE":50.0
+        })
+    };
+
+    fetch(PUT_FIRE_URL, context)
+        .then(context => console.log(context.body))
+        .catch(error => err_callback(error));
+}
+
 function fetch_fire() {
     const GET_FIRE_URL="http://127.0.0.1:8081/fire"; 
     let context = {
         method: 'GET'
     };
     
-    fetch(GET_FIRE_URL,context)
+    fetch(GET_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
 }
@@ -16,6 +40,8 @@ function err_callback(error){
 }
    
 function fireList_callback(reponse) {
+    clear_fire();
+    fireList = [];
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
@@ -25,7 +51,7 @@ function fireList_callback(reponse) {
 function create_fire() {
     for(const fire of fireList){
         console.log(fire);
-        print_fire(fire);
+        fire_filter(fire);
     }
 }
    
@@ -38,9 +64,11 @@ function print_fire(fire) {
             radius: fire.range
         }
     ).addTo(mymap);
+    create_fire_popup(circle, fire);
     firePrinted.push(circle);
 }
 
+//clear printed fires
 function clear_fire() {
     for (i of firePrinted) {
         i.remove();
@@ -48,6 +76,16 @@ function clear_fire() {
     firePrinted = [];
 }
 
+function create_fire_popup(circle, fire) {
+    let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
+    circle.bindPopup(popup_text);
+ }
+ 
+function fire_filter(fire) {
+    if (document.getElementById(fire.type).checked == true) {
+        print_fire(fire);
+    }
+}
 
 // --- CODE ---
 
@@ -55,9 +93,8 @@ let fireList = [];
 let firePrinted = [];
 
 var intervalId = window.setInterval(function(){
-    clear_fire();
     fetch_fire();
-}, 20000);
+}, 5000);
 
-clear_fire();
+put_fire_config();
 fetch_fire();
