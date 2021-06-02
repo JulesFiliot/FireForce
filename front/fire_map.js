@@ -9,7 +9,7 @@ function put_fire_config() {
             'Content-type': 'application/json'
           },
         body: JSON.stringify({
-            "fireCreationProbability":0.2,
+            "fireCreationProbability":0.0,
             "fireCreationSleep":20000,
             "fireCreationZone":[
                 {"type":"Point","coordinates":[520820,5719535]},
@@ -33,7 +33,7 @@ function put_behavior_config() {
             "propagationThreshold":5.0,
             "attenuationFactor":0.8,
             "intensityReplicationThreshold":10.0,
-            "replicationProbability":0.2,
+            "replicationProbability":0.1,
             "maxFireRange":50.0,
             "maxFireIntensity":50.0,
             "intensity_inc":0.1,
