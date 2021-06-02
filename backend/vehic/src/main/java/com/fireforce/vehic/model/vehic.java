@@ -47,6 +47,15 @@ public class vehic {
 		this.crewMemberCapacity = crewMemberCapacity;
 		this.facilityRefID = facilityRefID;
 	}
+	
+	public String toString() {
+		return "Vehicule " + "[" + this.id + "] : position (" + this.lon + " ; " + this.lat + "), type : " 
+	+ this.type.toString() + ", efficiency : " + this.efficiency + ", liquid type : " + this.liquidType +
+	", liquid quantity : " + this.liquidQuantity + ", liquid consumption : " + this.liquidConsumption +
+	", fuel : " + this.fuel + ", fuel consumption : " + this.fuelConsumption + ", crew member : " 
+	+ this.crewMember + ", crew member capacity : " + this.crewMemberCapacity + ", facility ref ID : "
+	+ this.facilityRefID;
+	}
 
 	
 	public Integer getId() {
