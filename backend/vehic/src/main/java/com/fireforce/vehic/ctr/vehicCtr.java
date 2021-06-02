@@ -40,4 +40,39 @@ public class vehicCtr {
 	public void newLiquidType(@PathVariable Integer id ,@PathVariable String type) {
 		vServ.newLiquidType(vServ.getVehic(id), type);
 	}
+	
+	@RequestMapping(value = "/editVehicEfficiency/{id}/{val}")
+	public void newEfficiency(@PathVariable Integer id, @PathVariable float val) {
+		vServ.newEfficiency(vServ.getVehic(id), val);
+	}
+	
+	@RequestMapping(value = "/editVehicLiquidQuantity/{id}/{val}")
+	public void newLiquidQuantity(@PathVariable Integer id, @PathVariable float val) {
+		vServ.newLiquidQuantity(vServ.getVehic(id), val);
+	}
+	
+	@RequestMapping(value = "/editVehicLiquidConsumption/{id}/{val}")
+	public void newLiquidConsumption(@PathVariable Integer id, @PathVariable float val) {
+		vServ.newLiquidConsumption(vServ.getVehic(id), val);
+	}
+	
+	@RequestMapping(value = "/editVehicFuel/{id}/{val}")
+	public void newFuel(@PathVariable Integer id, @PathVariable float val) {
+		vServ.newFuel(vServ.getVehic(id), val);
+	}
+	
+	@RequestMapping(value = "/editVehicFuelConsumption/{id}/{val}")
+	public void newFuelConsumption(@PathVariable Integer id, @PathVariable float val) {
+		vServ.newFuelConsumption(vServ.getVehic(id), val);
+	}
+	
+	@RequestMapping(value = "/editCrewMember/{id}/{val}")
+	public void newCrewMember(@PathVariable Integer id, @PathVariable int val) {
+		vServ.newCrewMember(vServ.getVehic(id), val);
+	}
+	
+	@RequestMapping(value = "/editCrewMemberCapacity/{id}/{val}")
+	public void newCrewMemberCapacity(@PathVariable Integer id, @PathVariable int val) {
+		vServ.newCrewMemberCapacity(vServ.getVehic(id), val);
+	}
 }
