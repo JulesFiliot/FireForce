@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
 import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.serv.vehicServ;
 import com.project.model.dto.VehicleDto;
@@ -19,24 +18,14 @@ public class vehicCtr {
 	@Autowired
 	vehicServ vServ;
 	
-	@RequestMapping(method = RequestMethod.POST,value = "/vehicle")
+	@RequestMapping(method = RequestMethod.POST, value = "/vehicle")
 	public void addVehic(@RequestBody vehic v) {
 		vServ.addVehic(v);
-		VehicleDto t = new VehicleDto(v.getId().intValue(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
-		
-    	String reqUrl = "http://127.0.0.1:8081/vehicle";
-        RestTemplate restTemplate = new RestTemplate();
-		restTemplate.postForEntity(reqUrl, t,Object.class);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST,value = "/vehicle/{id}")
-	public void updateVehic(@RequestBody vehic v, @PathVariable Integer id) {
-		
-		VehicleDto t = new VehicleDto(id.intValue(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
-		
-    	String reqUrl = "http://127.0.0.1:8081/vehicle/"+id;
-        RestTemplate restTemplate = new RestTemplate();
-		restTemplate.put(reqUrl, t);
+	@RequestMapping(method = RequestMethod.PUT, value = "/vehicle")
+	public void updateVehic(@RequestBody vehic v) {
+		vServ.updateVehic(v);
 	}
 	
 	@RequestMapping(value = "/generateVehics")
@@ -44,54 +33,77 @@ public class vehicCtr {
 		vServ.generateVehics();
 	}
 	
+	
 	@RequestMapping(value = "/getVehic/{id}")
 	public vehic getVehic(@PathVariable Integer id) {
 		return vServ.getVehic(id);
 	}
 	
+	/*
 	@RequestMapping(value = "/editVehicCoord/{id}/{lat}/{lon}")
 	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
-		vServ.newCoord(vServ.getVehic(id), lat, lon);
+		System.out.println(id);
+		vehic v = vServ.getVehic(id);
+		System.out.println(v.getId());
+		vServ.newCoord(v, lat, lon);
+		System.out.println(v.getId());
+		updateVehic(v, id);
 	}
 
 	
 	@RequestMapping(value = "/editVehicLiquidType/{id}/{type}")
 	public void newLiquidType(@PathVariable Integer id ,@PathVariable String type) {
-		vServ.newLiquidType(vServ.getVehic(id), type);
+		vehic v = vServ.getVehic(id);
+		vServ.newLiquidType(v, type);
+		updateVehic(v, id);
 	}
 	
 	@RequestMapping(value = "/editVehicEfficiency/{id}/{val}")
 	public void newEfficiency(@PathVariable Integer id, @PathVariable float val) {
-		vServ.newEfficiency(vServ.getVehic(id), val);
+		vehic v = vServ.getVehic(id);
+		vServ.newEfficiency(v, val);
+		updateVehic(v, id);
 	}
 	
 	@RequestMapping(value = "/editVehicLiquidQuantity/{id}/{val}")
 	public void newLiquidQuantity(@PathVariable Integer id, @PathVariable float val) {
-		vServ.newLiquidQuantity(vServ.getVehic(id), val);
+		vehic v = vServ.getVehic(id);
+		vServ.newLiquidQuantity(v, val);
+		updateVehic(v, id);
 	}
 	
 	@RequestMapping(value = "/editVehicLiquidConsumption/{id}/{val}")
 	public void newLiquidConsumption(@PathVariable Integer id, @PathVariable float val) {
-		vServ.newLiquidConsumption(vServ.getVehic(id), val);
+		vehic v = vServ.getVehic(id);
+		vServ.newLiquidConsumption(v, val);
+		updateVehic(v, id);
 	}
 	
 	@RequestMapping(value = "/editVehicFuel/{id}/{val}")
 	public void newFuel(@PathVariable Integer id, @PathVariable float val) {
-		vServ.newFuel(vServ.getVehic(id), val);
+		vehic v = vServ.getVehic(id);
+		vServ.newFuel(v, val);
+		updateVehic(v, id);
 	}
 	
 	@RequestMapping(value = "/editVehicFuelConsumption/{id}/{val}")
 	public void newFuelConsumption(@PathVariable Integer id, @PathVariable float val) {
-		vServ.newFuelConsumption(vServ.getVehic(id), val);
+		vehic v = vServ.getVehic(id);
+		vServ.newFuelConsumption(v, val);
+		updateVehic(v, id);
 	}
 	
 	@RequestMapping(value = "/editCrewMember/{id}/{val}")
 	public void newCrewMember(@PathVariable Integer id, @PathVariable int val) {
-		vServ.newCrewMember(vServ.getVehic(id), val);
+		vehic v = vServ.getVehic(id);
+		vServ.newCrewMember(v, val);
+		updateVehic(v, id);
 	}
 	
 	@RequestMapping(value = "/editCrewMemberCapacity/{id}/{val}")
 	public void newCrewMemberCapacity(@PathVariable Integer id, @PathVariable int val) {
-		vServ.newCrewMemberCapacity(vServ.getVehic(id), val);
-	}
+		vehic v = vServ.getVehic(id);
+		vServ.newCrewMemberCapacity(v, val);
+		updateVehic(v, id);
+	}*/
 }

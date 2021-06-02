@@ -3,11 +3,14 @@ package com.fireforce.vehic.serv;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.repo.vehicRepo;
 import com.project.model.dto.LiquidType;
+import com.project.model.dto.VehicleDto;
 import com.project.model.dto.VehicleType;
 
 @Service
@@ -21,7 +24,16 @@ public class vehicServ {
 	}
 	
 	public void addVehic(vehic v) {
+		VehicleDto t = new VehicleDto(0,v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
+    	
+		String reqUrl = "http://127.0.0.1:8081/vehicle";
+        RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<VehicleDto> reqVehicDTO = restTemplate.postForEntity(reqUrl, t,VehicleDto.class);
+		VehicleDto xv = reqVehicDTO.getBody();
+		
+		v.setRemoteId(xv.getId());
 		vehic createdVehic = vRepo.save(v);
+		
 		System.out.println(createdVehic);
 	}
 
@@ -30,6 +42,17 @@ public class vehicServ {
 		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 12, LiquidType.POWDER, 1, 1, 1, 1, 1, 1, 1);
 		this.addVehic(v1);
 		this.addVehic(v2);
+	}
+	
+	public void updateVehic(vehic v) {
+		VehicleDto t = new VehicleDto(v.getRemoteId(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
+    	String reqUrl = "http://127.0.0.1:8081/vehicle/"+v.getRemoteId();
+        RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(reqUrl, t);
+		
+		vehic newV = getVehic(v.getId());
+		newV = v;
+		vRepo.save(newV);
 	}
 	
 	public vehic getVehic(Integer id) {
