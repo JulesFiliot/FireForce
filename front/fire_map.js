@@ -16,6 +16,8 @@ function err_callback(error){
 }
    
 function fireList_callback(reponse) {
+    clear_fire();
+    fireList = [];
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
@@ -25,7 +27,7 @@ function fireList_callback(reponse) {
 function create_fire() {
     for(const fire of fireList){
         console.log(fire);
-        print_fire(fire);
+        fire_filter(fire);
     }
 }
    
@@ -48,6 +50,16 @@ function clear_fire() {
     firePrinted = [];
 }
 
+function fire_filter(fire) {
+    var typeselect = document.getElementById("type").value;
+    if (typeselect == "") {
+        print_fire(fire);
+    } else {
+        if (fire.type == typeselect) {
+            print_fire(fire);
+        }
+    }
+}
 
 // --- CODE ---
 
@@ -55,9 +67,7 @@ let fireList = [];
 let firePrinted = [];
 
 var intervalId = window.setInterval(function(){
-    clear_fire();
     fetch_fire();
 }, 20000);
 
-clear_fire();
 fetch_fire();
