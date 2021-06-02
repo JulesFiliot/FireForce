@@ -91,6 +91,34 @@
 				<p>CAMION</p>
 
 			</div>
+
+			<h3 style="cursor: pointer" onclick="hide('vehicule_creator')">Vehicule creator</h3>
+
+			<div class="interface" id="vehicule_creator">
+
+				<p>Vehicule type:</p>
+				<select id="vehicule_type" name="vehicule_type" class="select">
+					<option value="CAR">Car</option>  <!-- enum donc maybe "0" au lieu de CAR, etc -->
+					<option value="FIRE_ENGINE">Fire Engine</option>
+					<option value="PUMPER_TRUCK">Pumper Truck</option>
+					<option value="WATER_TENDER">Water Tender</option>
+					<option value="TURNTABLE_TRUCK">Turntable Ladder Truck</option>
+					<option value="TRUCK">Truck</option>
+				</select>
+
+				<p>Liquid type:</p>
+				<select id="liquid_type" name="liquid_type" class="select">
+					<option value="ALL">All</option>
+					<option value="WATER">Water</option>
+					<option value="WATER_WITH_ADDITIVES">Water with Additives</option>
+					<option value="CARBON_DIOXIDE">Carbon Dioxide</option>
+					<option value="POWDER">Powder</option>
+				</select>
+
+				<br/><br/>
+				<button onclick="vehicule_creator()">Create</button>
+
+			</div>
 			
 
 		</div>

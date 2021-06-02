@@ -50,7 +50,13 @@ public class fStationCtr {
     public double test(@PathVariable Integer id) {
     	return fSService.getStation(id).getLat();
     }
-    @RequestMapping(value="/editStationName/{id}/{name}")
+    
+    @RequestMapping(method=RequestMethod.PUT, value="/updateFStation")
+    public void updateFSTATION(@RequestBody fStation fS) {
+    	fSService.updateFS(fS);
+    	
+    }
+    /*@RequestMapping(value="/editStationName/{id}/{name}")
     public void editStationName(@PathVariable String name, @PathVariable Integer id) {
         fSService.editStationName(id, name);
     }
@@ -62,6 +68,6 @@ public class fStationCtr {
 	@RequestMapping(value = "/editStationCoord/{id}/{lat}/{lon}")
 	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
 		fSService.newCoord(fSService.getStation(id), lat, lon);
-	}
+	}*/
 }
 

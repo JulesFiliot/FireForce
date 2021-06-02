@@ -57,9 +57,10 @@ function reset_fire() {
         method: 'GET',
     };
     fetch(RESET_URL, context)
-        .then(response => fetch_fire())
+        .then(reponse => fetch_fire())
         .catch(error => err_callback(error));
 }
+
 
 function fetch_fire() {
     const GET_FIRE_URL="http://127.0.0.1:8081/fire"; 
@@ -71,14 +72,7 @@ function fetch_fire() {
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
 }
-   
-function err_callback(error){
-    console.log(error);
-}
-   
 function fireList_callback(reponse) {
-    clear_fire();
-    fireList = [];
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
@@ -213,6 +207,13 @@ function print_vehicle(vehicle) {
     vehiclePrinted.push(circle);
 }
 
+function vehicule_creator() {
+    var vehicule_type = document.getElementById("vehicule_type").value;
+    var liquid_type = document.getElementById("liquid_type").value;
+    var lon = Math.random()*45.7145454 + (45.7941125 - 45.7145454);
+    var lat = Math.random()*4.7736324 + (4.9266428 - 4.7736324);
+    create_vehicule(vehicule_type, liquid_type, lon, lat);
+}
 
 // --- CODE ---
 
