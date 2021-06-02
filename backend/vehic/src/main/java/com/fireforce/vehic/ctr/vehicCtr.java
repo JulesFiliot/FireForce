@@ -31,8 +31,13 @@ public class vehicCtr {
 		return vServ.getVehic(id);
 	}
 	
-	@RequestMapping(value = "/newCoord/{id}/{lat}/{lon}")
+	@RequestMapping(value = "/editVehicCoord/{id}/{lat}/{lon}")
 	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
 		vServ.newCoord(vServ.getVehic(id), lat, lon);
+	}
+	
+	@RequestMapping(value = "/editVehicLiquidType/{id}/{type}")
+	public void newLiquidType(@PathVariable Integer id ,@PathVariable String type) {
+		vServ.newLiquidType(vServ.getVehic(id), type);
 	}
 }
