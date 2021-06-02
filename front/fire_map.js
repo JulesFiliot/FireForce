@@ -9,7 +9,7 @@ function put_fire_config() {
             'Content-type': 'application/json'
           },
         body: JSON.stringify({
-            "fireCreationProbability":0.0,
+            "fireCreationProbability":0.2,
             "fireCreationSleep":20000,
             "fireCreationZone":[
                 {"type":"Point","coordinates":[520820,5719535]},
@@ -18,9 +18,29 @@ function put_fire_config() {
             "max_RANGE":50.0
         })
     };
-
     fetch(PUT_FIRE_URL, context)
-        .then(context => console.log(context.body))
+        .catch(error => err_callback(error));
+}
+
+function put_behavior_config() {
+    const PUT_BEHAVIOR_URL = "http://127.0.0.1:8081/config/behavior";
+    let context = {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            "propagationThreshold":5.0,
+            "attenuationFactor":0.8,
+            "intensityReplicationThreshold":10.0,
+            "replicationProbability":0.2,
+            "maxFireRange":50.0,
+            "maxFireIntensity":50.0,
+            "intensity_inc":0.1,
+            "sleepTime":5000
+        })
+    };
+    fetch(PUT_BEHAVIOR_URL, context)
         .catch(error => err_callback(error));
 }
 
@@ -80,7 +100,7 @@ function create_fire_popup(circle, fire) {
     let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
     circle.bindPopup(popup_text);
  }
- 
+
 function fire_filter(fire) {
     if (document.getElementById(fire.type).checked == true) {
         print_fire(fire);
@@ -112,4 +132,5 @@ var intervalId = window.setInterval(function(){
 }, 5000);
 
 put_fire_config();
+put_behavior_config();
 fetch_fire();

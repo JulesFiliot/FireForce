@@ -1,5 +1,7 @@
 package com.fireforce.vehic.serv;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +26,37 @@ public class vehicServ {
 	}
 
 	public void generateVehics() {
-		System.out.println("je suis dans la fonction generate");
 		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 12, LiquidType.CARBON_DIOXIDE, 1, 1, 1, 1, 1, 1, 1);
 		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 12, LiquidType.POWDER, 1, 1, 1, 1, 1, 1, 1);
 		this.addVehic(v1);
 		this.addVehic(v2);
+	}
+	
+	public vehic getVehic(Integer id) {
+		Optional<vehic> vOpt = vRepo.findById(id);
+		if (vOpt.isPresent()) return vOpt.get();
+		else return null;
+	}
+	
+	public void newCoord(vehic v, double lat, double lon) {
+		v.setLat(lat);
+		v.setLon(lon);
+		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void newLiquidType(vehic v, String type) {
+		if (type.equals("A")) v.setLiquidType(LiquidType.ALL);
+		else if (type.equals("W")) v.setLiquidType(LiquidType.WATER);
+		else if (type.equals("WA")) v.setLiquidType(LiquidType.WATER_WITH_ADDITIVES);
+		else if (type.equals("C")) v.setLiquidType(LiquidType.CARBON_DIOXIDE);
+		else if (type.equals("P")) v.setLiquidType(LiquidType.POWDER);
+		else {
+			System.out.println("Error : unknown liquid type.");
+			return;
+		}
+		vRepo.save(v);
+		System.out.println(v);
 	}
 
 }

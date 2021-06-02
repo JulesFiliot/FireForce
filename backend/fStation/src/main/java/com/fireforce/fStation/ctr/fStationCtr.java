@@ -27,9 +27,41 @@ public class fStationCtr {
     @Autowired
     fStationServ fSService;
     
-  /*  @RequestMapping(method=RequestMethod.POST,value="/card")
-    public void addCard(@RequestBody inter inter) {
-        iService.addCard(inter);
-    }*/
+    @RequestMapping(method=RequestMethod.POST,value="/createStation")
+    public void addStation(@RequestBody fStation fStation) {
+        fSService.add(fStation);
+    }
+    
+    @RequestMapping(value="/createSample")
+    public void createSample() {
+        fStation station1 = new fStation("Montgomery");
+        fStation station2 = new fStation("Rina");
+        
+        fSService.add(station1);
+        fSService.add(station2);
+    }
+    
+    @RequestMapping(value="/getStation/{id}")
+    public fStation getStation(@PathVariable Integer id) {
+    	return fSService.getStation(id);
+    }
+    
+    @RequestMapping(value="/test/{id}")
+    public double test(@PathVariable Integer id) {
+    	return fSService.getStation(id).getLat();
+    }
+    @RequestMapping(value="/editStationName/{id}/{name}")
+    public void editStationName(@PathVariable String name, @PathVariable Integer id) {
+        fSService.editStationName(id, name);
+    }
+    @RequestMapping(value="/editStationCapacity/{id}/{capacity}")
+    public void editStationCapacity(@PathVariable int capacity, @PathVariable Integer id) {
+        fSService.editStationCapacity(id, capacity);
+    }
+    
+	@RequestMapping(value = "/editStationCoord/{id}/{lat}/{lon}")
+	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
+		fSService.newCoord(fSService.getStation(id), lat, lon);
+	}
 }
 

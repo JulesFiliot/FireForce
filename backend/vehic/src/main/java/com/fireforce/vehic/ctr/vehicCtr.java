@@ -1,6 +1,7 @@
 package com.fireforce.vehic.ctr;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,8 +21,23 @@ public class vehicCtr {
 		vServ.addVehic(v);
 	}
 	
-	@RequestMapping(value="/generateVehics")
+	@RequestMapping(value = "/generateVehics")
 	public void generateVehics() {
 		vServ.generateVehics();
+	}
+	
+	@RequestMapping(value = "/getVehic/{id}")
+	public vehic getVehic(@PathVariable Integer id) {
+		return vServ.getVehic(id);
+	}
+	
+	@RequestMapping(value = "/editVehicCoord/{id}/{lat}/{lon}")
+	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
+		vServ.newCoord(vServ.getVehic(id), lat, lon);
+	}
+	
+	@RequestMapping(value = "/editVehicLiquidType/{id}/{type}")
+	public void newLiquidType(@PathVariable Integer id ,@PathVariable String type) {
+		vServ.newLiquidType(vServ.getVehic(id), type);
 	}
 }

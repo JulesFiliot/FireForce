@@ -33,7 +33,6 @@ public class vehic {
 			com.project.model.dto.LiquidType liquidType, float liquidQuantity, float liquidConsumption, float fuel,
 			float fuelConsumption, int crewMember, int crewMemberCapacity, Integer facilityRefID) {
 		super();
-		this.id=id;
 		this.lon = lon;
 		this.lat = lat;
 		this.type = type;
@@ -51,7 +50,7 @@ public class vehic {
 	public vehic() {}
 	
 	public String toString() {
-		return "Vehicule " + "[" + this.id + "] : position (" + this.lon + " ; " + this.lat + "), type : " 
+		return "Vehicule " + "[" + this.id + "] : position (" + this.lat + " ; " + this.lon + "), type : " 
 	+ this.type.toString() + ", efficiency : " + this.efficiency + ", liquid type : " + this.liquidType +
 	", liquid quantity : " + this.liquidQuantity + ", liquid consumption : " + this.liquidConsumption +
 	", fuel : " + this.fuel + ", fuel consumption : " + this.fuelConsumption + ", crew member : " 
