@@ -11,6 +11,9 @@ public class fStation {
 	@GeneratedValue
 	private Integer id;
 	private String name;
+	private int capacity;
+	private double lon;
+	private double lat;
 	
 	public fStation() {
 	}
@@ -18,6 +21,17 @@ public class fStation {
 	public fStation(String name) {
 		super();
 		this.setName(name);
+		this.capacity=100;
+		this.lon=0;
+		this.lat=0;
+		}
+	
+	public fStation(String name,int capacity, double lon, double lat) {
+		super();
+		this.setName(name);
+		this.capacity=capacity;
+		this.lon=lon;
+		this.lat=lat;
 		}
 
 	public String getName() {
@@ -26,5 +40,38 @@ public class fStation {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon=lon;
+	}
+	
+	public double getLat() {
+		return lat;
+	}
+	
+	public void setLat(double lat) {
+		this.lat=lat;
+	}
+	
+	public int getCapacity() {
+		return capacity;
+	}
+	
+	public void setCapacity(int capacity) {
+		this.capacity=capacity;
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+	
+	public String toString() {
+		return "Station "+this.name + " [id:" + this.id + "] : position (" + this.lon + " ; " + this.lat + "), capacity : " 
+	+ this.capacity;
 	}
 }
