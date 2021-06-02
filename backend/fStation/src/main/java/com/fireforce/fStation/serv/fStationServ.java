@@ -28,4 +28,33 @@ public class fStationServ {
 			return null;
 		}
 	}
+	
+	public void editStationName(int id, String name) {
+		Optional<fStation> fSOpt =fSRepo.findById(id);
+		if (fSOpt.isPresent()) {
+			fStation fS=fSOpt.get();
+			fS.setName(name);
+			fSRepo.save(fS);
+			System.out.println(fS);
+
+		}
+	}
+	
+	public void editStationCapacity(int id, int capacity) {
+		Optional<fStation> fSOpt =fSRepo.findById(id);
+		if (fSOpt.isPresent()) {
+			fStation fS=fSOpt.get();
+			fS.setCapacity(capacity);
+			fSRepo.save(fS);
+			System.out.println(fS);
+
+		}
+	}
+	
+	public void newCoord(fStation fS, double lat, double lon) {
+		fS.setLat(lat);
+		fS.setLon(lon);
+		fSRepo.save(fS);
+		System.out.println(fS);
+	}
 }
