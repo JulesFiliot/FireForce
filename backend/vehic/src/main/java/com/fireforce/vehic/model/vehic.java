@@ -33,7 +33,6 @@ public class vehic {
 			com.project.model.dto.LiquidType liquidType, float liquidQuantity, float liquidConsumption, float fuel,
 			float fuelConsumption, int crewMember, int crewMemberCapacity, Integer facilityRefID) {
 		super();
-		this.id=id;
 		this.lon = lon;
 		this.lat = lat;
 		this.type = type;
