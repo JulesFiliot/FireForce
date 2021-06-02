@@ -29,7 +29,7 @@ public class vehic {
 	private Integer facilityRefID;
 
 	
-	public vehic(int id,double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
+	public vehic(double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
 			com.project.model.dto.LiquidType liquidType, float liquidQuantity, float liquidConsumption, float fuel,
 			float fuelConsumption, int crewMember, int crewMemberCapacity, Integer facilityRefID) {
 		super();
@@ -47,6 +47,8 @@ public class vehic {
 		this.crewMemberCapacity = crewMemberCapacity;
 		this.facilityRefID = facilityRefID;
 	}
+	
+	public vehic() {}
 	
 	public String toString() {
 		return "Vehicule " + "[" + this.id + "] : position (" + this.lon + " ; " + this.lat + "), type : " 
