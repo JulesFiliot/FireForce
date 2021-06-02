@@ -1,4 +1,4 @@
-// FUNCTIONS
+// FUNCTIONS CONFIGURATION ----------------------------------------------------------------------------------------------------
 
 //PUT request to change the fire config
 function put_creation_config(creationProba, creationSleep) {
@@ -62,6 +62,9 @@ function reset_fire() {
 }
 
 
+
+// FUNCTIONS FIRE ----------------------------------------------------------------------------------------------------
+
 function fetch_fire() {
     const GET_FIRE_URL="http://127.0.0.1:8081/fire"; 
     let context = {
@@ -74,6 +77,7 @@ function fetch_fire() {
 
 function fireList_callback(reponse) {
     clear_fire();
+    fireList = [];
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
@@ -81,7 +85,18 @@ function fireList_callback(reponse) {
         fire_filter(fire);
     }
 }
-   
+
+//Filter fires and print only those in the range defined by the user
+function fire_filter(fire) {
+    if (document.getElementById(fire.type).checked == true) {
+        if (fire.intensity >= document.getElementById("intensitymin").value && fire.intensity <= document.getElementById("intensitymax").value) {
+            if (fire.range >= document.getElementById("rangemin").value && fire.range <= document.getElementById("rangemax").value) {
+                print_fire(fire);
+            }
+        }
+    }
+}
+
 function print_fire(fire) {
     var circle = L.circle([fire.lat, fire.lon],
         {
@@ -95,46 +110,22 @@ function print_fire(fire) {
     firePrinted.push(circle);
 }
 
+function create_fire_popup(circle, fire) {
+    let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
+    circle.bindPopup(popup_text);
+}
+
 //clear printed fires
 function clear_fire() {
     for (i of firePrinted) {
         i.remove();
     }
     firePrinted = [];
-    fireList = [];
-}
-
-function create_fire_popup(circle, fire) {
-    let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
-    circle.bindPopup(popup_text);
- }
-
-//Filter fires and print only those in the range defined by the user
-function fire_filter(fire) {
-    if (document.getElementById(fire.type).checked == true) {
-        if (fire.intensity >= document.getElementById("intensitymin").value && fire.intensity <= document.getElementById("intensitymax").value) {
-            if (fire.range >= document.getElementById("rangemin").value && fire.range <= document.getElementById("rangemax").value) {
-                print_fire(fire);
-            }
-        }
-    }
-}
-
-function hide(obj) {
-    var el = document.getElementById(obj);
-    if (el.style.display == 'none') {
-        var interface = document.getElementsByClassName("interface");
-        for (i of interface) {
-            i.style.display = 'none';
-        }
-        el.style.display = 'block';
-    } else {
-        el.style.display = 'none';
-    }
 }
 
 
 
+// FUNCTIONS VEHICLES ----------------------------------------------------------------------------------------------------
 
 function vehicle_creator() {
     var vehicle_type = document.getElementById("vehicle_type").value;
@@ -174,7 +165,6 @@ function create_vehicle(vehicle_type, liquid_type, lon, lat) {
             "liquidType":liquid_type
         })
     };
-    console.log("Create vehicle")
     fetch(POST_VEHICLE_URL, context)
         .catch(error => err_callback(error));
 }
@@ -184,7 +174,6 @@ function fetch_vehicles() {
     let context = {
         method: 'GET',
     };
-
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
         .catch(error => err_callback(error));
@@ -197,16 +186,12 @@ function vehiclesList_callback(response) {
         vehicleList[i] = response[i];
     }
     for(const vehicle of vehicleList) {
-        print_vehicle(vehicle);
+        vehicle_filter(vehicle);
     }
 }
 
-//clear printed vehicles
-function clear_vehicles() {
-    for (i of vehiclePrinted) {
-        i.remove();
-    }
-    vehiclePrinted = [];
+function vehicle_filter(vehicle) {
+    print_vehicle(vehicle);
 }
 
 function print_vehicle(vehicle) {
@@ -221,8 +206,34 @@ function print_vehicle(vehicle) {
     vehiclePrinted.push(circle);
 }
 
+//clear printed vehicles
+function clear_vehicles() {
+    for (i of vehiclePrinted) {
+        i.remove();
+    }
+    vehiclePrinted = [];
+}
 
-// --- CODE ---
+
+
+// FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
+
+function hide(obj) {
+    var el = document.getElementById(obj);
+    if (el.style.display == 'none') {
+        var interface = document.getElementsByClassName("interface");
+        for (i of interface) {
+            i.style.display = 'none';
+        }
+        el.style.display = 'block';
+    } else {
+        el.style.display = 'none';
+    }
+}
+
+
+
+// CODE ----------------------------------------------------------------------------------------------------
 
 let fireList = [];
 let firePrinted = [];
