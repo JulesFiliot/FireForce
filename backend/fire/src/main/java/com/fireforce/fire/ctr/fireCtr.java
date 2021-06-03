@@ -20,8 +20,8 @@ public class fireCtr {
 		fServ.stopDisplay();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/fire")
-	public void addVehic() {
-		fServ.addFire();
-	}
+	/*@RequestMapping(method = RequestMethod.GET, value = "/fire")
+	public void addFireA(fire f) {
+		fServ.addFireA(fire f);
+	}*/
 }

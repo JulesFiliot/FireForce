@@ -53,6 +53,12 @@ public class vehicCtr {
 		updateVehic(v);
 	}
 
+	@RequestMapping(value = "/getDispo")
+	public void getDispo() {
+		vServ.getDispo();
+	}
+	
+	
 	/*
 	@RequestMapping(value = "/editVehicLiquidType/{id}/{type}")
 	public void newLiquidType(@PathVariable Integer id ,@PathVariable String type) {

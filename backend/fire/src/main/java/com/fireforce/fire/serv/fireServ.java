@@ -48,23 +48,21 @@ public class fireServ {
 	}
 
 	
-	@Bean(initMethod="init")
+/*	@Bean(initMethod="init")
 	public void init() {
-		fire f1=new fire(FireType.B_Gasoline, 2, 30, 10,5);
-		fire f2=new fire(FireType.C_Flammable_Gases, 3 , 40 , 11,6);
+	//	fire f1=new fire();
+//		fire f2=new fire();
 		fRepo.save(f1);
 		fRepo.save(f2);
-	}
+	}*/
 
 
 
 
-	public void addFire() {  	
-		String reqUrl = "http://127.0.0.1:8081/fire";
-        RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<Object[]> reqFireDTO = restTemplate.getForEntity(reqUrl, Object[].class);
-		Object[] liste = reqFireDTO.getBody();
-		System.out.println(liste);		
+	public void addFireA(fire f) {  	
+		fire createdFireA = fRepo.save(f);
+		System.out.println(createdFireA);
+
 	}
 
 }

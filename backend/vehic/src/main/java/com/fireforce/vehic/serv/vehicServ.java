@@ -1,5 +1,6 @@
 package com.fireforce.vehic.serv;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,4 +138,11 @@ public class vehicServ {
 		System.out.println(v);
 	}
 
+	public vehic getDispo() {
+		for (vehic v : this.vRepo.findAll()) {
+			if (v.isDispo()) return v;
+			
+		}
+		return null;
+	}
 }
