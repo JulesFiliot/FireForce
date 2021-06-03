@@ -1,5 +1,6 @@
 package com.fireforce.vehic.serv;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.repo.vehicRepo;
+import com.project.model.dto.Coord;
 import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleDto;
 import com.project.model.dto.VehicleType;
@@ -124,4 +126,23 @@ public class vehicServ {
 		System.out.println(v);
 	}
 
+	public void moveVehic(Coord c, Integer id) {
+		vehic v = getVehic(id);
+
+		System.out.println(c);
+		
+		v.setLat(c.getLat());
+		v.setLon(c.getLon());
+		updateVehic(v);
+		
+		System.out.println(v);
+	}
+
+	public vehic getDispo() {
+		for (vehic v : this.vRepo.findAll()) {
+			if (v.isDispo()) return v;
+			
+		}
+		return null;
+	}
 }

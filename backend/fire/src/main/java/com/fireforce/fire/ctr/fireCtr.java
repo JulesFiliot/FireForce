@@ -15,8 +15,13 @@ public class fireCtr {
 	@Autowired
 	fireServ fServ;
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/fire")
-	public void addVehic() {
-		fServ.addFire();
+	@RequestMapping(method=RequestMethod.GET,value="/stopdisplay")
+	public void stopDisplay() {
+		fServ.stopDisplay();
 	}
+
+	/*@RequestMapping(method = RequestMethod.GET, value = "/fire")
+	public void addFireA(fire f) {
+		fServ.addFireA(fire f);
+	}*/
 }

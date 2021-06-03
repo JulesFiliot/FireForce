@@ -28,6 +28,7 @@ public class vehic {
 	private int crewMember;
 	private int crewMemberCapacity;
 	private Integer facilityRefID;
+	private boolean dispo=true;
 
 	
 	public vehic(double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
@@ -178,6 +179,14 @@ public class vehic {
 
 	public void setRemoteId(Integer remoteId) {
 		this.remoteId = remoteId;
+	}
+
+	public boolean isDispo() {
+		return dispo;
+	}
+
+	public void setDispo(boolean dispo) {
+		this.dispo = dispo;
 	}
 
 	
