@@ -37,6 +37,10 @@
     display: none;
 }
 
+#info_vehicle_id
+{
+    display: none;
+}
 
 .interface
 {

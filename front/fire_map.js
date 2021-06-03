@@ -166,9 +166,9 @@ function fetch_fire_fromMarker(event) {
 }
 
 function fill_popup_fire(fire) {
-    document.getElementById("info_fire_type").innerHTML = fire.type;
-    document.getElementById("info_fire_intensity").innerHTML = fire.intensity;
-    document.getElementById("info_fire_range").innerHTML = fire.range;
+    document.getElementById("info_fire_type").innerHTML = "Type : " + fire.type;
+    document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + fire.intensity;
+    document.getElementById("info_fire_range").innerHTML = "Range : " + fire.range;
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_fire").style.display = 'block';
     document.getElementById("info_vehicle").style.display = 'none';
@@ -248,7 +248,11 @@ function vehiclesList_callback(response) {
 
 //Calls the print_vehicle function to print each vehicle which fits the filter parameters provided by the user
 function vehicle_filter(vehicle) {
-    print_vehicle(vehicle);
+    if (document.getElementById(vehicle.type).checked == true) {
+        if (document.getElementById(vehicle.liquidType).checked == true) {
+            print_vehicle(vehicle);
+        }
+    }
 }
 
 //Displays on the map the vehicle given in parameter
@@ -286,8 +290,11 @@ function fetch_vehicle_fromMarker(event) {
 }
 
 function fill_popup_vehicle(vehicle) {
-    document.getElementById("info_vehicle_type").innerHTML = vehicle.type;
-    document.getElementById("info_vehicle_liquid_type").innerHTML = vehicle.liquidType;
+    document.getElementById("info_vehicle_id").value = vehicle.id;
+    document.getElementById("info_vehicle_type").innerHTML = "Type : " + vehicle.type;
+    document.getElementById("info_vehicle_fuel").innerHTML = "Fuel quantity : " + vehicle.fuel;
+    document.getElementById("info_vehicle_liquid_type").innerHTML = "Liquid type : " + vehicle.liquidType;
+    document.getElementById("info_vehicle_liquid_quantity").innerHTML = "Liquid quantity : " + vehicle.liquidQuantity;
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_vehicle").style.display = 'block';
     document.getElementById("info_fire").style.display = 'none';
@@ -300,6 +307,12 @@ function delete_vehicle(id_vehicle) {
     };
     fetch(DELETE_VEHICLE_URL, context)
         .catch(error => err_callback(error));
+}
+
+function button_delete_vehicle() {
+    id_vehicle = document.getElementById("info_vehicle_id").value;
+    delete_vehicle(id_vehicle);
+    document.getElementById("over_map_left").style.display = 'none';
 }
 
 
