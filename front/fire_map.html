@@ -88,9 +88,59 @@
 
 			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
 
-			<div class="interface" id="vehicle_interface">
+			<div class="interface" id="vehicle_interface" onchange="fetch_vehicles()">
 
-				<p>CAMION</p>
+				<p>Vehicle type :</p>
+				<div>
+					<div>
+						<input type="checkbox" id="CAR" name="CAR" checked>
+						<label for="CAR">Car</label>
+					</div>
+					<div>
+						<input type="checkbox" id="FIRE_ENGINE" name="FIRE_ENGINE" checked>
+						<label for="FIRE_ENGINE">Fire Engine</label>
+					</div>
+					<div>
+						<input type="checkbox" id="PUMPER_TRUCK" name="PUMPER_TRUCK" checked>
+						<label for="PUMPER_TRUCK">Pumper Truck</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER_TENDERS" name="WATER_TENDERS" checked>
+						<label for="WATER_TENDERS">Water Tender</label>
+					</div>
+					<div>
+						<input type="checkbox" id="TURNTABLE_LADDER_TRUCK" name="TURNTABLE_LADDER_TRUCK" checked>
+						<label for="TURNTABLE_LADDER_TRUCK">Turntable Ladder Truck</label>
+					</div>
+					<div>
+						<input type="checkbox" id="TRUCK" name="TRUCK" checked>
+						<label for="TRUCK">Truck</label>
+					</div>
+				</div>
+
+				<p>Liquid type :</p>
+				<div>
+					<div>
+						<input type="checkbox" id="ALL" name="ALL" checked>
+						<label for="ALL">All</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER" name="WATER" checked>
+						<label for="WATER">Water</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER_WITH_ADDITIVES" name="WATER_WITH_ADDITIVES" checked>
+						<label for="WATER_WITH_ADDITIVES">Water with Additives</label>
+					</div>
+					<div>
+						<input type="checkbox" id="CARBON_DIOXIDE" name="CARBON_DIOXIDE" checked>
+						<label for="CARBON_DIOXIDE">Carbon Dioxide</label>
+					</div>
+					<div>
+						<input type="checkbox" id="POWDER" name="POWDER" checked>
+						<label for="POWDER">Powder</label>
+					</div>
+				</div>
 
 			</div>
 
@@ -127,36 +177,23 @@
 
 		<div class="over_map" id="over_map_left">
 			
-			<div>
+			<div id="info_fire">
 			<h3>Fire informations</h3>
 			<p id="info_fire_type">FIRE_TYPE</p>
 			<p id="info_fire_intensity">FIRE INTENSITY</p>
 			<p id="info_fire_range">FIRE_RANGE</p>
 			</div>
 			
-			<div>
+			<div id="info_vehicle">
 			<h3>Vehicle informations</h3>
 			<p id="info_vehicle_type">VEHIC_TYPE</p>
 			<p id="info_vehicle_fuel">FUEL_VALUE</p>
 			<p id="info_vehicle_liquid_type">LIQUID_TYPE</p>
 			<p id="info_vehicle_liquidQuantity">LIQUID_QUANTITY</p>
+			</div>
+
 		</div>
 		
-
-		<script>
-
-			var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
-
-			L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-				maxZoom: 18,
-				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-					'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-				id: 'mapbox/streets-v11',
-				tileSize: 512,
-				zoomOffset: -1
-			}).addTo(mymap);
-
-		</script>
 
 		<script src="fire_map.js"></script>
 

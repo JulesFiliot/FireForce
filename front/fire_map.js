@@ -133,8 +133,8 @@ function print_fire(fire) {
             fillOpacity: fire.intensity/50, // MAX_INTENSITY
             radius: fire.range
         }
-    ).addTo(mymap);
-    create_fire_popup(circle, fire);
+    ).addTo(fireGroup);
+    //create_fire_popup(circle, fire);
     firePrinted.push(circle);
 }
 
@@ -150,6 +150,28 @@ function clear_fire() {
         i.remove();
     }
     firePrinted = [];
+}
+
+//Fetch fetch object when clicking on a fire marker 
+//and calls the fill_popup_fire function to display the corresponding fire info
+function fetch_fire_fromMarker(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+    for (fire of fireList) {
+        if (fire.lon == lng_marker && fire.lat == lat_marker) {
+            fill_popup_fire(fire);
+            return;
+        }
+    }
+}
+
+function fill_popup_fire(fire) {
+    document.getElementById("info_fire_type").innerHTML = fire.type;
+    document.getElementById("info_fire_intensity").innerHTML = fire.intensity;
+    document.getElementById("info_fire_range").innerHTML = fire.range;
+    document.getElementById("over_map_left").style.display = 'block';
+    document.getElementById("info_fire").style.display = 'block';
+    document.getElementById("info_vehicle").style.display = 'none';
 }
 
 
@@ -267,6 +289,8 @@ function fill_popup_vehicle(vehicle) {
     document.getElementById("info_vehicle_type").innerHTML = vehicle.type;
     document.getElementById("info_vehicle_liquid_type").innerHTML = vehicle.liquidType;
     document.getElementById("over_map_left").style.display = 'block';
+    document.getElementById("info_vehicle").style.display = 'block';
+    document.getElementById("info_fire").style.display = 'none';
 }
 
 function delete_vehicle(id_vehicle) {
@@ -315,7 +339,7 @@ let fireList = [];
 let firePrinted = [];
 let vehicleList = [];
 let vehiclePrinted = [];
-var fireGroup = L.featureGroup().addTo(mymap).on("click", fire_popup);
+var fireGroup = L.featureGroup().addTo(mymap).on("click", fetch_fire_fromMarker);
 var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
 
 //Instructions called every 5000 ms
