@@ -316,7 +316,8 @@ let fireList = [];
 let firePrinted = [];
 let vehicleList = [];
 let vehiclePrinted = [];
-var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", vehicle_popup);
+var fireGroup = L.featureGroup().addTo(mymap).on("click", fire_popup);
+var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
 
 //Instructions called every 5000 ms
 var intervalId = window.setInterval(function(){
