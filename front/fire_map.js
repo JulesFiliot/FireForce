@@ -264,10 +264,9 @@ function fetch_vehicle_fromMarker(event) {
 }
 
 function fill_popup_vehicle(vehicle) {
-    document.getElementById().innerHTML = vehicle.lat;
-    document.getElementById().innerHTML = vehicle.lon;
-    document.getElementById().innerHTML = vehicle.type;
-    document.getElementById().innerHTML = vehicle.liquidType;
+    document.getElementById("info_vehicle_type").innerHTML = vehicle.type;
+    document.getElementById("info_vehicle_liquid_type").innerHTML = vehicle.liquidType;
+    document.getElementById("over_map_left").style.display = 'block';
 }
 
 function delete_vehicle(id_vehicle) {
@@ -282,7 +281,7 @@ function delete_vehicle(id_vehicle) {
 
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
 
-//Hides the interface given in parameters (if class name is interface). Also hides all its childs
+//Hides the right interface given in parameters. Also hides all its childs
 function hide_interface(obj) {
     var el = document.getElementById(obj);
     if (el.style.display == 'none') {
@@ -316,7 +315,7 @@ let fireList = [];
 let firePrinted = [];
 let vehicleList = [];
 let vehiclePrinted = [];
-var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", vehicle_popup);
+var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
 
 //Instructions called every 5000 ms
 var intervalId = window.setInterval(function(){
