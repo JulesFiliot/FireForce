@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.repo.vehicRepo;
+import com.project.model.dto.Coord;
 import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleDto;
 import com.project.model.dto.VehicleType;
@@ -121,6 +122,18 @@ public class vehicServ {
 	public void newCrewMemberCapacity(vehic v, int val) {
 		v.setCrewMemberCapacity(val);
 		vRepo.save(v);
+		System.out.println(v);
+	}
+
+	public void moveVehic(Coord c, Integer id) {
+		vehic v = getVehic(id);
+
+		System.out.println(c);
+		
+		v.setLat(c.getLat());
+		v.setLon(c.getLon());
+		updateVehic(v);
+		
 		System.out.println(v);
 	}
 

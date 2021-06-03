@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.serv.vehicServ;
+import com.project.model.dto.Coord;
 import com.project.model.dto.VehicleDto;
 
 @RestController
@@ -26,6 +27,11 @@ public class vehicCtr {
 	@RequestMapping(method = RequestMethod.PUT, value = "/vehicle")
 	public void updateVehic(@RequestBody vehic v) {
 		vServ.updateVehic(v);
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/vehicMove/{id}")
+	public void vehicMove(@RequestBody Coord c, @PathVariable Integer id) {
+		vServ.moveVehic(c,id);
 	}
 	
 	@RequestMapping(value = "/generateVehics")
