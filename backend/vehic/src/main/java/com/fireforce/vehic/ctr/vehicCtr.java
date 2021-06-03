@@ -45,18 +45,15 @@ public class vehicCtr {
 		return vServ.getVehic(id);
 	}
 	
-	/*
+	
 	@RequestMapping(value = "/editVehicCoord/{id}/{lat}/{lon}")
 	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
-		System.out.println(id);
 		vehic v = vServ.getVehic(id);
-		System.out.println(v.getId());
 		vServ.newCoord(v, lat, lon);
-		System.out.println(v.getId());
-		updateVehic(v, id);
+		updateVehic(v);
 	}
 
-	
+	/*
 	@RequestMapping(value = "/editVehicLiquidType/{id}/{type}")
 	public void newLiquidType(@PathVariable Integer id ,@PathVariable String type) {
 		vehic v = vServ.getVehic(id);
