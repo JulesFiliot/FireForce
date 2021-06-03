@@ -60,8 +60,29 @@ function reset_fire() {
         method: 'GET',
     };
     fetch(RESET_URL, context)
-        .then(fetch_fire())
         .catch(error => err_callback(error));
+}
+
+// Reset all vehicle and unprint them from map
+function reset_vehicle() {
+    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    let context = {
+        method: 'GET',
+    };
+    fetch(GET_VEHICLE_URL, context)
+        .then(response => response.json().then(body => vehiclesList_callback_reset(body)))
+        .catch(error => err_callback(error));
+}
+
+function vehiclesList_callback_reset(response) {    
+    clear_vehicles();
+    vehicleList = [];
+    for(var i = 0; i < response.length; i++) {
+        vehicleList[i] = response[i];
+    }
+    for(const vehicle of vehicleList) {
+        delete_vehicle(vehicle.id);
+    }
 }
 
 
@@ -214,7 +235,7 @@ function print_vehicle(vehicle) {
         {
             color: 'blue',
             fillColor: 'blue',
-            fillOpacity: 100, // MAX_INTENSITY
+            fillOpacity: 100,
             radius: 5
         }
     ).addTo(mymap);
@@ -227,6 +248,15 @@ function clear_vehicles() {
         i.remove();
     }
     vehiclePrinted = [];
+}
+
+function delete_vehicle(id_vehicle) {
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    let context = {
+        method: 'DELETE',
+    };
+    fetch(DELETE_VEHICLE_URL, context)
+        .catch(error => err_callback(error));
 }
 
 
@@ -260,7 +290,7 @@ let vehiclePrinted = [];
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
-}, 5000);
+}, 1000);
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);

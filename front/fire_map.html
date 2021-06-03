@@ -25,7 +25,7 @@
 
 		<div id="over_map">
 
-			<h3 style="cursor: pointer" onclick="hide('config_interface')">Configuration interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('config_interface')">Configuration interface</h3>
 
 			<div class="interface" id="config_interface" onchange="put_config()">
 
@@ -35,10 +35,12 @@
 				<input type="number" id="creationSleep" name="creationSleep" min="5" max="30" step="1" value="20">
 				<br/><br/>
 				<button onclick="reset_fire()">Fire reset</button>
+				<br/><br/>
+				<button onclick="reset_vehicle()">Vehicle reset</button>
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('fire_interface')">Fire interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('fire_interface')">Fire interface</h3>
 
 			<div class="interface" id="fire_interface" onchange="fetch_fire()">
 
@@ -84,7 +86,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('vehicle_interface')">Vehicle interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
 
 			<div class="interface" id="vehicle_interface">
 
@@ -92,7 +94,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('vehicle_creator')">Vehicle creator</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_creator')">Vehicle creator</h3>
 
 			<div class="interface" id="vehicle_creator">
 
@@ -122,10 +124,7 @@
 			
 
 		</div>
-
-		<!--
-		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-		-->
+		
 
 		<script>
 
