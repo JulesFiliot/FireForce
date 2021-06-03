@@ -60,8 +60,29 @@ function reset_fire() {
         method: 'GET',
     };
     fetch(RESET_URL, context)
-        .then(fetch_fire())
         .catch(error => err_callback(error));
+}
+
+// Reset all vehicle and unprint them from map
+function reset_vehicle() {
+    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    let context = {
+        method: 'GET',
+    };
+    fetch(GET_VEHICLE_URL, context)
+        .then(response => response.json().then(body => vehiclesList_callback_reset(body)))
+        .catch(error => err_callback(error));
+}
+
+function vehiclesList_callback_reset(response) {    
+    clear_vehicles();
+    vehicleList = [];
+    for(var i = 0; i < response.length; i++) {
+        vehicleList[i] = response[i];
+    }
+    for(const vehicle of vehicleList) {
+        delete_vehicle(vehicle.id);
+    }
 }
 
 
@@ -112,8 +133,8 @@ function print_fire(fire) {
             fillOpacity: fire.intensity/50, // MAX_INTENSITY
             radius: fire.range
         }
-    ).addTo(mymap);
-    create_fire_popup(circle, fire);
+    ).addTo(fireGroup);
+    //create_fire_popup(circle, fire);
     firePrinted.push(circle);
 }
 
@@ -129,6 +150,28 @@ function clear_fire() {
         i.remove();
     }
     firePrinted = [];
+}
+
+//Fetch fetch object when clicking on a fire marker 
+//and calls the fill_popup_fire function to display the corresponding fire info
+function fetch_fire_fromMarker(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+    for (fire of fireList) {
+        if (fire.lon == lng_marker && fire.lat == lat_marker) {
+            fill_popup_fire(fire);
+            return;
+        }
+    }
+}
+
+function fill_popup_fire(fire) {
+    document.getElementById("info_fire_type").innerHTML = fire.type;
+    document.getElementById("info_fire_intensity").innerHTML = fire.intensity;
+    document.getElementById("info_fire_range").innerHTML = fire.range;
+    document.getElementById("over_map_left").style.display = 'block';
+    document.getElementById("info_fire").style.display = 'block';
+    document.getElementById("info_vehicle").style.display = 'none';
 }
 
 
@@ -191,7 +234,7 @@ function fetch_vehicles() {
         .catch(error => err_callback(error));
 }
 
-//Takes the list of all vehicles as parameter. Calls vehicle_filter functioin for each vehicle to print them 
+//Takes the list of all vehicles as parameter. Calls vehicle_filter function for each vehicle to print them
 function vehiclesList_callback(response) {    
     clear_vehicles();
     vehicleList = [];
@@ -214,10 +257,10 @@ function print_vehicle(vehicle) {
         {
             color: 'blue',
             fillColor: 'blue',
-            fillOpacity: 100, // MAX_INTENSITY
+            fillOpacity: 100,
             radius: 5
         }
-    ).addTo(mymap);
+    ).addTo(vehiclesGroup);
     vehiclePrinted.push(circle);
 }
 
@@ -229,11 +272,40 @@ function clear_vehicles() {
     vehiclePrinted = [];
 }
 
+//Fetch vehicle object when clicking on a vehicle marker 
+//and calls the fill_popup_vehicle function to display the corresponding vehicle info
+function fetch_vehicle_fromMarker(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+    for (vehicle of vehicleList) {
+        if (vehicle.lon == lng_marker && vehicle.lat == lat_marker) {
+            fill_popup_vehicle(vehicle);
+            return;
+        }
+    }
+}
+
+function fill_popup_vehicle(vehicle) {
+    document.getElementById("info_vehicle_type").innerHTML = vehicle.type;
+    document.getElementById("info_vehicle_liquid_type").innerHTML = vehicle.liquidType;
+    document.getElementById("over_map_left").style.display = 'block';
+    document.getElementById("info_vehicle").style.display = 'block';
+    document.getElementById("info_fire").style.display = 'none';
+}
+
+function delete_vehicle(id_vehicle) {
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    let context = {
+        method: 'DELETE',
+    };
+    fetch(DELETE_VEHICLE_URL, context)
+        .catch(error => err_callback(error));
+}
 
 
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
 
-//Hides the interface given in parameters (if class name is interface). Also hides all its childs
+//Hides the right interface given in parameters. Also hides all its childs
 function hide_interface(obj) {
     var el = document.getElementById(obj);
     if (el.style.display == 'none') {
@@ -247,20 +319,52 @@ function hide_interface(obj) {
     }
 }
 
+//Hides left interface when clicking at a random spot on the map
+function hide_interface_left(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+
+    for (vehicle of vehicleList) {
+        if (vehicle.lon == lng_marker && vehicle.lat == lat_marker) {
+            return;
+        }
+    }
+    for (fire of fireList) {
+        if (fire.lon == lng_marker && fire.lat == lat_marker) {
+            return;
+        }
+    }
+   document.getElementById("over_map_left").style.display = 'None';
+}
 
 
 // CODE ----------------------------------------------------------------------------------------------------
 
+//MAP INITIALISATION
+var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
+
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	maxZoom: 18,
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	id: 'mapbox/streets-v11',
+	tileSize: 512,
+	zoomOffset: -1
+}).addTo(mymap);
+mymap.on('click', hide_interface_left);
+
+//GLOBAL variables
 let fireList = [];
 let firePrinted = [];
 let vehicleList = [];
 let vehiclePrinted = [];
+var fireGroup = L.featureGroup().addTo(mymap).on("click", fetch_fire_fromMarker);
+var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
 
 //Instructions called every 5000 ms
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
-}, 5000);
+}, 1000);
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);

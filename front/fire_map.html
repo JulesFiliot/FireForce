@@ -23,9 +23,9 @@
 
 		<div id="mapid"></div>
 
-		<div id="over_map">
+		<div class="over_map" id="over_map_right">
 
-			<h3 style="cursor: pointer" onclick="hide('config_interface')">Configuration interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('config_interface')">Configuration interface</h3>
 
 			<div class="interface" id="config_interface" onchange="put_config()">
 
@@ -35,10 +35,12 @@
 				<input type="number" id="creationSleep" name="creationSleep" min="5" max="30" step="1" value="20">
 				<br/><br/>
 				<button onclick="reset_fire()">Fire reset</button>
+				<br/><br/>
+				<button onclick="reset_vehicle()">Vehicle reset</button>
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('fire_interface')">Fire interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('fire_interface')">Fire interface</h3>
 
 			<div class="interface" id="fire_interface" onchange="fetch_fire()">
 
@@ -84,35 +86,85 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('vehicle_interface')">Vehicle interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
 
-			<div class="interface" id="vehicle_interface">
+			<div class="interface" id="vehicle_interface" onchange="fetch_vehicles()">
 
-				<p>CAMION</p>
+				<p>Vehicle type :</p>
+				<div>
+					<div>
+						<input type="checkbox" id="CAR" name="CAR" checked>
+						<label for="CAR">Car</label>
+					</div>
+					<div>
+						<input type="checkbox" id="FIRE_ENGINE" name="FIRE_ENGINE" checked>
+						<label for="FIRE_ENGINE">Fire Engine</label>
+					</div>
+					<div>
+						<input type="checkbox" id="PUMPER_TRUCK" name="PUMPER_TRUCK" checked>
+						<label for="PUMPER_TRUCK">Pumper Truck</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER_TENDERS" name="WATER_TENDERS" checked>
+						<label for="WATER_TENDERS">Water Tender</label>
+					</div>
+					<div>
+						<input type="checkbox" id="TURNTABLE_LADDER_TRUCK" name="TURNTABLE_LADDER_TRUCK" checked>
+						<label for="TURNTABLE_LADDER_TRUCK">Turntable Ladder Truck</label>
+					</div>
+					<div>
+						<input type="checkbox" id="TRUCK" name="TRUCK" checked>
+						<label for="TRUCK">Truck</label>
+					</div>
+				</div>
+
+				<p>Liquid type :</p>
+				<div>
+					<div>
+						<input type="checkbox" id="ALL" name="ALL" checked>
+						<label for="ALL">All</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER" name="WATER" checked>
+						<label for="WATER">Water</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER_WITH_ADDITIVES" name="WATER_WITH_ADDITIVES" checked>
+						<label for="WATER_WITH_ADDITIVES">Water with Additives</label>
+					</div>
+					<div>
+						<input type="checkbox" id="CARBON_DIOXIDE" name="CARBON_DIOXIDE" checked>
+						<label for="CARBON_DIOXIDE">Carbon Dioxide</label>
+					</div>
+					<div>
+						<input type="checkbox" id="POWDER" name="POWDER" checked>
+						<label for="POWDER">Powder</label>
+					</div>
+				</div>
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('vehicle_creator')">Vehicle creator</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_creator')">Vehicle creator</h3>
 
 			<div class="interface" id="vehicle_creator">
 
 				<p>Vehicle type:</p>
 				<select id="vehicle_type" name="vehicle_type" class="select">
-					<option value="CAR">Car</option>  <!-- enum donc maybe "0" au lieu de CAR, etc -->
-					<option value="FIRE_ENGINE">Fire Engine</option>
-					<option value="PUMPER_TRUCK">Pumper Truck</option>
-					<option value="WATER_TENDER">Water Tender</option>
-					<option value="TURNTABLE_TRUCK">Turntable Ladder Truck</option>
-					<option value="TRUCK">Truck</option>
+					<option value="0">Car</option>  <!-- enum donc maybe "0" au lieu de CAR, etc -->
+					<option value="1">Fire Engine</option>
+					<option value="2">Pumper Truck</option>
+					<option value="3">Water Tender</option>
+					<option value="4">Turntable Ladder Truck</option>
+					<option value="5">Truck</option>
 				</select>
 
 				<p>Liquid type:</p>
 				<select id="liquid_type" name="liquid_type" class="select">
-					<option value="ALL">All</option>
-					<option value="WATER">Water</option>
-					<option value="WATER_WITH_ADDITIVES">Water with Additives</option>
-					<option value="CARBON_DIOXIDE">Carbon Dioxide</option>
-					<option value="POWDER">Powder</option>
+					<option value="0">All</option>
+					<option value="1">Water</option>
+					<option value="2">Water with Additives</option>
+					<option value="3">Carbon Dioxide</option>
+					<option value="4">Powder</option>
 				</select>
 
 				<br/><br/>
@@ -123,24 +175,25 @@
 
 		</div>
 
-		<!--
-		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-		-->
+		<div class="over_map" id="over_map_left">
+			
+			<div id="info_fire">
+			<h3>Fire informations</h3>
+			<p id="info_fire_type">FIRE_TYPE</p>
+			<p id="info_fire_intensity">FIRE INTENSITY</p>
+			<p id="info_fire_range">FIRE_RANGE</p>
+			</div>
+			
+			<div id="info_vehicle">
+			<h3>Vehicle informations</h3>
+			<p id="info_vehicle_type">VEHIC_TYPE</p>
+			<p id="info_vehicle_fuel">FUEL_VALUE</p>
+			<p id="info_vehicle_liquid_type">LIQUID_TYPE</p>
+			<p id="info_vehicle_liquidQuantity">LIQUID_QUANTITY</p>
+			</div>
 
-		<script>
-
-			var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
-
-			L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-				maxZoom: 18,
-				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-					'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-				id: 'mapbox/streets-v11',
-				tileSize: 512,
-				zoomOffset: -1
-			}).addTo(mymap);
-
-		</script>
+		</div>
+	
 
 		<script src="fire_map.js"></script>
 
