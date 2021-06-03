@@ -250,16 +250,24 @@ function clear_vehicles() {
     vehiclePrinted = [];
 }
 
-function vehicle_popup(event) {
+//Fetch vehicle object when clicking on a vehicle marker 
+//and calls the fill_popup_vehicle function to display the corresponding vehicle info
+function fetch_vehicle_fromMarker(event) {
     var lat_marker = event.latlng.lat;
     var lng_marker = event.latlng.lng;
     for (vehicle of vehicleList) {
         if (vehicle.lon == lng_marker && vehicle.lat == lat_marker) {
-            console.log(vehicle.type);
-            console.log(vehicle.id);
-            console.log(vehicle.liquidType);
+            fill_popup_vehicle(vehicle);
+            return;
         }
     }
+}
+
+function fill_popup_vehicle(vehicle) {
+    document.getElementById().innerHTML = vehicle.lat;
+    document.getElementById().innerHTML = vehicle.lon;
+    document.getElementById().innerHTML = vehicle.type;
+    document.getElementById().innerHTML = vehicle.liquidType;
 }
 
 function delete_vehicle(id_vehicle) {
