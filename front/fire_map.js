@@ -138,6 +138,7 @@ function print_fire(fire) {
     firePrinted.push(circle);
 }
 
+//DEPRECIATED
 //Display a popup when we click on a fire on the map. The popup display pertinents fire attributes 
 function create_fire_popup(circle, fire) {
     let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
@@ -178,16 +179,7 @@ function fill_popup_fire(fire) {
 
 // FUNCTIONS VEHICLES ----------------------------------------------------------------------------------------------------
 
-//Create vehicle from interface. Vehicle is created using create_vehicle
-function vehicle_creator() {
-    var vehicle_type = document.getElementById("vehicle_type").value;
-    var liquid_type = document.getElementById("liquid_type").value;
-    var lat = Math.random()*(45.7941125 - 45.7145454) + 45.7145454;
-    var lon = Math.random()*(4.9266428 - 4.7736324) + 4.7736324;
-    create_vehicle(vehicle_type, liquid_type, lon, lat);
-}
-
-/*
+/*  VEHICLES ATTRIBUTES
 		this.id=id;
 		this.lon = lon;
 		this.lat = lat;
@@ -201,7 +193,6 @@ function vehicle_creator() {
 		this.crewMember = crewMember;
 		this.crewMemberCapacity = crewMemberCapacity;
 		this.facilityRefID = facilityRefID;
-
 */
 
 //Uses a POST request to create a vehicle given some basic parameters of the vehicle
@@ -232,6 +223,45 @@ function fetch_vehicles() {
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
         .catch(error => err_callback(error));
+}
+
+//Delete the vehicule corresponding to the given id in parameters 
+function delete_vehicle(id_vehicle) {
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    let context = {
+        method: 'DELETE',
+    };
+    fetch(DELETE_VEHICLE_URL, context)
+        .catch(error => err_callback(error));
+}
+
+function modify_vehicle(id, vehicle_type, fuel, liquidQuantity, liquid_type, lon, lat) {
+    const PUT_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/" + id;
+    let context = {
+        method: 'PUT',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            "lon":lon,
+            "lat":lat,
+            "type":vehicle_type,
+            "liquidType":liquid_type,
+            "liquidQuantity":liquidQuantity,
+            "fuel":fuel
+        })
+    };
+    fetch(PUT_VEHICLE_URL, context)
+        .catch(error => err_callback(error));
+}
+
+//Create vehicle from interface. Vehicle is created using create_vehicle
+function vehicle_creator() {
+    var vehicle_type = document.getElementById("vehicle_type").value;
+    var liquid_type = document.getElementById("liquid_type").value;
+    var lat = Math.random()*(45.7941125 - 45.7145454) + 45.7145454;
+    var lon = Math.random()*(4.9266428 - 4.7736324) + 4.7736324;
+    create_vehicle(vehicle_type, liquid_type, lon, lat);
 }
 
 //Takes the list of all vehicles as parameter. Calls vehicle_filter function for each vehicle to print them
@@ -291,15 +321,6 @@ function fill_popup_vehicle(vehicle) {
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_vehicle").style.display = 'block';
     document.getElementById("info_fire").style.display = 'none';
-}
-
-function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
-    let context = {
-        method: 'DELETE',
-    };
-    fetch(DELETE_VEHICLE_URL, context)
-        .catch(error => err_callback(error));
 }
 
 
@@ -368,5 +389,6 @@ var intervalId = window.setInterval(function(){
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);
+modify_vehicle(10453, 1, 0, 0, 1, 4.4, 45.5);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
 fetch_fire();
 fetch_vehicles();
