@@ -25,7 +25,7 @@
 
 		<div id="over_map">
 
-			<h3 style="cursor: pointer" onclick="hide('config_interface')">Configuration interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('config_interface')">Configuration interface</h3>
 
 			<div class="interface" id="config_interface" onchange="put_config()">
 
@@ -38,7 +38,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('fire_interface')">Fire interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('fire_interface')">Fire interface</h3>
 
 			<div class="interface" id="fire_interface" onchange="fetch_fire()">
 
@@ -84,7 +84,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('vehicle_interface')">Vehicle interface</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
 
 			<div class="interface" id="vehicle_interface">
 
@@ -92,7 +92,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide('vehicle_creator')">Vehicle creator</h3>
+			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_creator')">Vehicle creator</h3>
 
 			<div class="interface" id="vehicle_creator">
 
@@ -129,7 +129,7 @@
 
 		<script>
 
-			var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
+			/*var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
 
 			L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 				maxZoom: 18,
@@ -138,7 +138,7 @@
 				id: 'mapbox/streets-v11',
 				tileSize: 512,
 				zoomOffset: -1
-			}).addTo(mymap);
+			}).addTo(mymap);*/
 
 		</script>
 

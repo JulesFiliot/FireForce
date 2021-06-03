@@ -191,7 +191,7 @@ function fetch_vehicles() {
         .catch(error => err_callback(error));
 }
 
-//Takes the list of all vehicles as parameter. Calls vehicle_filter functioin for each vehicle to print them 
+//Takes the list of all vehicles as parameter. Calls vehicle_filter function for each vehicle to print them
 function vehiclesList_callback(response) {    
     clear_vehicles();
     vehicleList = [];
@@ -217,7 +217,7 @@ function print_vehicle(vehicle) {
             fillOpacity: 100, // MAX_INTENSITY
             radius: 5
         }
-    ).addTo(mymap);
+    ).addTo(vehiclesGroup);
     vehiclePrinted.push(circle);
 }
 
@@ -227,6 +227,18 @@ function clear_vehicles() {
         i.remove();
     }
     vehiclePrinted = [];
+}
+
+function vehicle_popup(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+    for (vehicle of vehicleList) {
+        if (vehicle.lon == lng_marker && vehicle.lat == lat_marker) {
+            console.log(vehicle.type);
+            console.log(vehicle.id);
+            console.log(vehicle.liquidType);
+        }
+    }
 }
 
 
@@ -251,10 +263,22 @@ function hide_interface(obj) {
 
 // CODE ----------------------------------------------------------------------------------------------------
 
+var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
+
+L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	maxZoom: 18,
+	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+	id: 'mapbox/streets-v11',
+	tileSize: 512,
+	zoomOffset: -1
+}).addTo(mymap);
+
+//GLOBAL variables
 let fireList = [];
 let firePrinted = [];
 let vehicleList = [];
 let vehiclePrinted = [];
+var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", vehicle_popup);
 
 //Instructions called every 5000 ms
 var intervalId = window.setInterval(function(){
