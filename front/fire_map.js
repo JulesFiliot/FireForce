@@ -1,6 +1,6 @@
 // FUNCTIONS CONFIGURATION ----------------------------------------------------------------------------------------------------
 
-//PUT request to change the fire config
+//PUT request to change the main fire configs
 function put_creation_config(creationProba, creationSleep) {
     console.log(creationProba);
     const PUT_CREATION_URL = "http://127.0.0.1:8081/config/creation";
@@ -23,6 +23,7 @@ function put_creation_config(creationProba, creationSleep) {
         .catch(error => err_callback(error));
 }
 
+//PUT request to change the configuration of fires and their child spawning rate
 function put_behavior_config() {
     const PUT_BEHAVIOR_URL = "http://127.0.0.1:8081/config/behavior";
     let context = {
@@ -45,12 +46,14 @@ function put_behavior_config() {
         .catch(error => err_callback(error));
 }
 
+//Fetch parameters from client interface and call put_creation_config to tweak the fire creation parameters
 function put_config() {
     creationProba = document.getElementById("creationProba").value;
     creationSleep = document.getElementById("creationSleep").value*1000;
     put_creation_config(creationProba,creationSleep);
 }
 
+//deletes all fires and unprint them from map
 function reset_fire() {
     const RESET_URL = "http://127.0.0.1:8081/fire/reset";
     let context = {
@@ -65,6 +68,7 @@ function reset_fire() {
 
 // FUNCTIONS FIRE ----------------------------------------------------------------------------------------------------
 
+//Fetch all existing fires
 function fetch_fire() {
     const GET_FIRE_URL="http://127.0.0.1:8081/fire"; 
     let context = {
@@ -75,6 +79,8 @@ function fetch_fire() {
         .catch(error => err_callback(error));
 }
 
+//Called when fetching fires => fill the fireList with all existing fires 
+//and call fire_filter function for each fire to print them
 function fireList_callback(reponse) {
     clear_fire();
     fireList = [];
@@ -86,7 +92,7 @@ function fireList_callback(reponse) {
     }
 }
 
-//Filter fires and print only those in the range defined by the user
+//Filter fires and call the function to print only those in the range defined by the user
 function fire_filter(fire) {
     if (document.getElementById(fire.type).checked == true) {
         if (fire.intensity >= document.getElementById("intensitymin").value && fire.intensity <= document.getElementById("intensitymax").value) {
@@ -97,6 +103,7 @@ function fire_filter(fire) {
     }
 }
 
+//Print on the map the fire given in parameter
 function print_fire(fire) {
     var circle = L.circle([fire.lat, fire.lon],
         {
@@ -110,12 +117,13 @@ function print_fire(fire) {
     firePrinted.push(circle);
 }
 
+//Display a popup when we click on a fire on the map. The popup display pertinents fire attributes 
 function create_fire_popup(circle, fire) {
     let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
     circle.bindPopup(popup_text);
 }
 
-//clear printed fires
+//clear all printed fires
 function clear_fire() {
     for (i of firePrinted) {
         i.remove();
@@ -127,6 +135,7 @@ function clear_fire() {
 
 // FUNCTIONS VEHICLES ----------------------------------------------------------------------------------------------------
 
+//Create vehicle from interface. Vehicle is created using create_vehicle
 function vehicle_creator() {
     var vehicle_type = document.getElementById("vehicle_type").value;
     var liquid_type = document.getElementById("liquid_type").value;
@@ -151,6 +160,8 @@ function vehicle_creator() {
 		this.facilityRefID = facilityRefID;
 
 */
+
+//Uses a POST request to create a vehicle given some basic parameters of the vehicle
 function create_vehicle(vehicle_type, liquid_type, lon, lat) {
     const POST_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
     let context = {
@@ -169,6 +180,7 @@ function create_vehicle(vehicle_type, liquid_type, lon, lat) {
         .catch(error => err_callback(error));
 }
 
+//GET request to fetch all existing vehicles. Calls the vehiclesList_callback when vehicles are fetched
 function fetch_vehicles() {
     const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
     let context = {
@@ -179,6 +191,7 @@ function fetch_vehicles() {
         .catch(error => err_callback(error));
 }
 
+//Takes the list of all vehicles as parameter. Calls vehicle_filter functioin for each vehicle to print them 
 function vehiclesList_callback(response) {    
     clear_vehicles();
     vehicleList = [];
@@ -190,10 +203,12 @@ function vehiclesList_callback(response) {
     }
 }
 
+//Calls the print_vehicle function to print each vehicle which fits the filter parameters provided by the user
 function vehicle_filter(vehicle) {
     print_vehicle(vehicle);
 }
 
+//Displays on the map the vehicle given in parameter
 function print_vehicle(vehicle) {
     var circle = L.circle([vehicle.lat, vehicle.lon],
         {
@@ -218,7 +233,8 @@ function clear_vehicles() {
 
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
 
-function hide(obj) {
+//Hides the interface given in parameters (if class name is interface). Also hides all its childs
+function hide_interface(obj) {
     var el = document.getElementById(obj);
     if (el.style.display == 'none') {
         var interface = document.getElementsByClassName("interface");
@@ -240,11 +256,13 @@ let firePrinted = [];
 let vehicleList = [];
 let vehiclePrinted = [];
 
+//Instructions called every 5000 ms
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
 }, 5000);
 
+//Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);
 fetch_fire();
 fetch_vehicles();
