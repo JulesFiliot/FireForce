@@ -319,10 +319,28 @@ function hide_interface(obj) {
     }
 }
 
+//Hides left interface when clicking at a random spot on the map
+function hide_interface_left(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+
+    for (vehicle of vehicleList) {
+        if (vehicle.lon == lng_marker && vehicle.lat == lat_marker) {
+            return;
+        }
+    }
+    for (fire of fireList) {
+        if (fire.lon == lng_marker && fire.lat == lat_marker) {
+            return;
+        }
+    }
+   document.getElementById("over_map_left").style.display = 'None';
+}
 
 
 // CODE ----------------------------------------------------------------------------------------------------
 
+//MAP INITIALISATION
 var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -332,7 +350,7 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 	tileSize: 512,
 	zoomOffset: -1
 }).addTo(mymap);
-
+mymap.on('click', hide_interface_left);
 
 //GLOBAL variables
 let fireList = [];
