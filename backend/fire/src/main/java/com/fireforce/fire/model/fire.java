@@ -15,28 +15,22 @@ public class fire {
 	
 	@Id
 	private Integer id;
-	private Integer remoteId = -1;
-	
-	@Embedded
-	private List<Integer> linkedVehic = new ArrayList<Integer>();
+	private ArrayList<Integer> linkedVehic;
 
 
 	public fire() {
 		super();
+		linkedVehic = new ArrayList<Integer>();
 	}
+
 	
-	public fire(Integer remoteId) {
-		super();
-		this.remoteId=remoteId;
-	}
-	
-	public fire(List<Integer> linkedVehic) {
+	public fire(ArrayList<Integer> linkedVehic) {
 		super();
 		this.linkedVehic=linkedVehic;
 	}
 
 	public String toString() {
-		return "Fire [" + this.id + "] [" + this.remoteId + "] : list of linked vehicles :"+this.linkedVehic;
+		return "Fire [" + this.id + "] : list of linked vehicles :"+this.linkedVehic;
 	}
 	
 	public Integer getId() {
@@ -47,13 +41,18 @@ public class fire {
 		this.id=id;
 	}
 	
-
-	public Integer getRemoteId() {
-		return remoteId;
+	
+	public List<Integer> getLinkedVehic(){
+		if (this.linkedVehic != null) {
+			List<Integer> newList = new ArrayList<>(this.linkedVehic);	
+			return newList;
+		}
+		return new ArrayList<Integer>();
 	}
-
-	public void setRemoteId(Integer remoteId) {
-		this.remoteId = remoteId;
+	
+	public void addLinkedVehic(Integer id) {
+		this.linkedVehic.add(id);
+		System.out.println(this.linkedVehic);
 	}
 
 }

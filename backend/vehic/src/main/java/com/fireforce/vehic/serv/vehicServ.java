@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.repo.vehicRepo;
 import com.project.model.dto.Coord;
+import com.project.model.dto.FireDto;
 import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleDto;
 import com.project.model.dto.VehicleType;
@@ -40,10 +42,15 @@ public class vehicServ {
 	}
 
 	public void generateVehics() {
-		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 12, LiquidType.CARBON_DIOXIDE, 1, 1, 1, 1, 1, 1, 1);
-		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 12, LiquidType.POWDER, 1, 1, 1, 1, 1, 1, 1);
+		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v3 = new vehic(0,0, VehicleType.CAR, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v4 = new vehic(0,0, VehicleType.WATER_TENDERS, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+
 		this.addVehic(v1);
 		this.addVehic(v2);
+		this.addVehic(v3);
+		this.addVehic(v4);
 	}
 	
 	public void updateVehic(vehic v) {
@@ -138,11 +145,51 @@ public class vehicServ {
 		System.out.println(v);
 	}
 
-	public vehic getDispo() {
+	public Integer getDispo() {
+		System.out.println(this.vRepo.findAll());
 		for (vehic v : this.vRepo.findAll()) {
-			if (v.isDispo()) return v;
+			System.out.println(v+" <=> "+v.isDispo());
+			if (v.isDispo()) {
+				System.out.println("====vGetId getDispo===="+v.getId());
+				return v.getId();
+				}
 			
 		}
 		return null;
 	}
+
+	public void switchDispo(Integer id) {
+		vehic v = getVehic(id);
+		v.setDispo(!getVehic(id).isDispo());
+		vRepo.save(v);
+	}
+
+	public void endMission(Integer id) {
+		Integer fSId = getVehic(id).getFacilityRefID();
+		
+		String reqUrl = "http://127.0.0.1:8098/getFSCoord/"+fSId;
+        RestTemplate restTemplate = new RestTemplate();
+    	ResponseEntity<Coord> reqCoord = restTemplate.getForEntity(reqUrl, Coord.class);
+		Coord cFS = reqCoord.getBody();
+		Coord c = new Coord(cFS.getLon(),cFS.getLat());
+		this.switchDispo(id);
+		this.moveVehic(c, id);		
+	}
+	
+
+	@Bean(initMethod="init")
+	public void init() {
+		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v3 = new vehic(0,0, VehicleType.CAR, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v4 = new vehic(0,0, VehicleType.WATER_TENDERS, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+
+		this.addVehic(v1);
+		this.addVehic(v2);
+		this.addVehic(v3);
+		this.addVehic(v4);
+	}
+
+
+	
 }

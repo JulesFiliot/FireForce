@@ -2,7 +2,6 @@
 
 //PUT request to change the main fire configs
 function put_creation_config(creationProba, creationSleep) {
-    console.log(creationProba);
     const PUT_CREATION_URL = "http://127.0.0.1:8081/config/creation";
     let context = {
         method: 'PUT',
@@ -364,9 +363,10 @@ function fill_popup_vehicle(vehicle) {
 
     console.log(vehicle);
     document.getElementById("info_vehicle_id").value = vehicle.id;
-    document.getElementById("info_vehicle_type").innerHTML = "Type : " + vehicle.type;
+    document.getElementById("info_vehicle_img").src = "images/" + vehicle.type;
+    document.getElementById("info_vehicle_type").innerHTML = "Type : " + pretty_text(vehicle.type);
     document.getElementById("info_vehicle_fuel").innerHTML = "Fuel quantity : " + vehicle.fuel;
-    document.getElementById("info_vehicle_liquid_type").innerHTML = "Liquid type : " + vehicle.liquidType;
+    document.getElementById("info_vehicle_liquid_type").innerHTML = "Liquid type : " + pretty_text(vehicle.liquidType);
     document.getElementById("info_vehicle_liquid_quantity").innerHTML = "Liquid quantity : " + vehicle.liquidQuantity;
 
     document.getElementById("over_map_left").style.display = 'block';
@@ -440,6 +440,25 @@ function hide_interface_left(event) {
    document.getElementById("over_map_left").style.display = 'None';
 }
 
+function pretty_text (name) {
+    var pretty_name = "";
+    var lower_flag = 0;
+    for (i of name) {
+        if (i == "_") {
+            lower_flag = 0;
+            pretty_name += " ";
+        } else {
+            if (lower_flag == 1) {
+                pretty_name += i.toLowerCase();
+            } else {
+                pretty_name += i;
+                lower_flag = 1;
+            }
+        }
+    }
+    return pretty_name;
+}
+
 //Manages the display of the left panel when it's clicked
 function switch_left_interface_display(obj) {
     var el = document.getElementById(obj);
@@ -469,11 +488,13 @@ function err_callback(error) {
 var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-	maxZoom: 18,
+	maxZoom: 17,
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	id: 'mapbox/streets-v11',
 	tileSize: 512,
-	zoomOffset: -1
+	zoomOffset: -1,
+    //id: 'mapbox/dark-v10'
+    //id: 'mapbox/satellite-v9',
 }).addTo(mymap);
 mymap.on('click', hide_interface_left);
 
