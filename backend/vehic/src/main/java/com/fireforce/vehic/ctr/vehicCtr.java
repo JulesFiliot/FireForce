@@ -2,6 +2,7 @@ package com.fireforce.vehic.ctr;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +20,13 @@ public class vehicCtr {
 	@Autowired
 	vehicServ vServ;
 	
+	@CrossOrigin
 	@RequestMapping(method = RequestMethod.POST, value = "/vehicle")
 	public void addVehic(@RequestBody vehic v) {
 		vServ.addVehic(v);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(method = RequestMethod.PUT, value = "/vehicle")
 	public void updateVehic(@RequestBody vehic v) {
 		vServ.updateVehic(v);
@@ -39,7 +42,7 @@ public class vehicCtr {
 		vServ.generateVehics();
 	}
 	
-	
+	@CrossOrigin
 	@RequestMapping(value = "/getVehic/{id}")
 	public vehic getVehic(@PathVariable Integer id) {
 		return vServ.getVehic(id);
