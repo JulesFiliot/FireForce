@@ -317,18 +317,8 @@ function vehicle_filter(vehicle) {
 
 //Displays on the map the vehicle given in parameter
 function print_vehicle(vehicle) {
-    /*var circle = L.circle([vehicle.lat, vehicle.lon],
-        {
-            color: 'blue',
-            fillColor: 'blue',
-            fillOpacity: 1,
-            radius: 50
-        }
-    ).addTo(vehiclesGroup);
-    vehiclePrinted.push(circle);*/
-
     var fireIcon = L.icon({
-        iconUrl: 'icons/car_map.png',    
+        iconUrl: 'icons/car_map_filled.png',    
         iconSize: [51, 51], // size of the icon
         iconAnchor: [25.5, 40], // point of the icon which will correspond to marker's location
         popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
@@ -570,6 +560,12 @@ function switch_map_style() {
 //LOGS errors on console
 function err_callback(error) {
     console.log(error);
+}
+
+//START the simulation by showing the map and the interface
+function start_simulation() {
+   // Simulate an HTTP redirect:
+    window.location.replace("fire_map.html");
 }
 
 // CODE ----------------------------------------------------------------------------------------------------
