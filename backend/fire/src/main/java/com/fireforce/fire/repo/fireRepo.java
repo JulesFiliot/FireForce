@@ -8,6 +8,6 @@ import com.fireforce.fire.model.fire;
 
 public interface fireRepo extends CrudRepository<fire, Integer>{
 
-	public List<fire> findByName(String name);
+	//public List<fire> findByName(String name);
 	
 }

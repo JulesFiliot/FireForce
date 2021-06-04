@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fireforce.fStation.model.fStation;
 import com.fireforce.fStation.serv.fStationServ;
+import com.project.model.dto.Coord;
 
 @RestController
 public class fStationCtr {
@@ -56,6 +57,15 @@ public class fStationCtr {
     	fSService.updateFS(fS);
     	
     }
+    
+    @RequestMapping("/getFSCoord/{id}")
+    public Coord getFSCoord(@PathVariable Integer id) {
+    	Coord c = new Coord (fSService.getStation(id).getLon(),fSService.getStation(id).getLat());
+    	return c;
+    	
+    }
+    
+    
     /*@RequestMapping(value="/editStationName/{id}/{name}")
     public void editStationName(@PathVariable String name, @PathVariable Integer id) {
         fSService.editStationName(id, name);

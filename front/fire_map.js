@@ -133,8 +133,19 @@ function print_fire(fire) {
             radius: fire.range
         }
     ).addTo(fireGroup);
-    //create_fire_popup(circle, fire);
     firePrinted.push(circle);
+
+    var fireIcon = L.icon({
+        iconUrl: 'icons/fire_map.png',    
+        iconSize: [34, 34], // size of the icon
+        iconAnchor: [17, 30], // point of the icon which will correspond to marker's location
+        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+    var marker = L.marker([fire.lat, fire.lon], {icon: fireIcon}).addTo(fireGroup);
+    firePrinted.push(marker);
+    
+
+
 }
 
 //DEPRECIATED
@@ -178,22 +189,6 @@ function fill_popup_fire(fire) {
 
 // FUNCTIONS VEHICLES ----------------------------------------------------------------------------------------------------
 
-/*  VEHICLES ATTRIBUTES
-		this.id=id;
-		this.lon = lon;
-		this.lat = lat;
-		this.type = type;
-		this.efficiency = efficiency;
-		this.liquidType = liquidType;
-		this.liquidQuantity = liquidQuantity;
-		this.liquidConsumption = liquidConsumption;
-		this.fuel = fuel;
-		this.fuelConsumption = fuelConsumption;
-		this.crewMember = crewMember;
-		this.crewMemberCapacity = crewMemberCapacity;
-		this.facilityRefID = facilityRefID;
-*/
-
 //Uses a POST request to create a vehicle given some basic parameters of the vehicle
 function create_vehicle(vehicle_type, liquid_type, lon, lat) {
     const POST_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
@@ -224,7 +219,7 @@ function fetch_vehicles() {
         .catch(error => err_callback(error));
 }
 
-//GET request to fetch a vehicle infos using its ID in URL parameter. Returns the fetched vehicle.
+//GET request to fetch a vehicle infos using its ID in URL parameter. Call the function to update the vehicle.
 function fetch_vehicle_byId(id_vehicle, vehicle_update_callback) {
     const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
     let context = {
@@ -232,6 +227,18 @@ function fetch_vehicle_byId(id_vehicle, vehicle_update_callback) {
     };
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehicle_update_callback(body)))
+        .catch(error => err_callback(error));
+}
+
+//GET request to fetch a vehicle infos using its ID in URL parameter. 
+//Call the function to only update the left visual panel displaying vehicle infos.
+function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
+    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    let context = {
+        method: 'GET',
+    };
+    fetch(GET_VEHICLE_URL, context)
+        .then(response => response.json().then(body => {console.log(body); fill_popup_vehicle(body);}))
         .catch(error => err_callback(error));
 }
 
@@ -245,6 +252,8 @@ function delete_vehicle(id_vehicle) {
         .catch(error => err_callback(error));
 }
 
+//PUT request to update the vehicle infos given in parameters. 
+//Then calls the fetch_vehicle_byId_visu to update vehicle info panel 
 function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
     crewMember, crewMemberCapacity, efficiency, facilityRefID) {
 
@@ -270,7 +279,9 @@ function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity,
             "fuel":fuel
         })
     };
+    //return if needed
     fetch(PUT_VEHICLE_URL, context)
+        .then(response => {fetch_vehicle_byId_visu(id, fill_popup_vehicle);})
         .catch(error => err_callback(error));
 }
 
@@ -306,15 +317,24 @@ function vehicle_filter(vehicle) {
 
 //Displays on the map the vehicle given in parameter
 function print_vehicle(vehicle) {
-    var circle = L.circle([vehicle.lat, vehicle.lon],
+    /*var circle = L.circle([vehicle.lat, vehicle.lon],
         {
             color: 'blue',
             fillColor: 'blue',
-            fillOpacity: 100,
-            radius: 5
+            fillOpacity: 1,
+            radius: 50
         }
     ).addTo(vehiclesGroup);
-    vehiclePrinted.push(circle);
+    vehiclePrinted.push(circle);*/
+
+    var fireIcon = L.icon({
+        iconUrl: 'icons/car_map.png',    
+        iconSize: [51, 51], // size of the icon
+        iconAnchor: [25.5, 40], // point of the icon which will correspond to marker's location
+        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+    var marker = L.marker([vehicle.lat, vehicle.lon], {icon: fireIcon}).addTo(vehiclesGroup);
+    vehiclePrinted.push(marker);
 }
 
 //clear printed vehicles
@@ -339,6 +359,9 @@ function fetch_vehicle_fromMarker(event) {
 }
 
 function fill_popup_vehicle(vehicle) {
+    
+
+    console.log(vehicle);
     document.getElementById("info_vehicle_id").value = vehicle.id;
     document.getElementById("info_vehicle_img").src = "images/" + vehicle.type;
     document.getElementById("info_vehicle_type").innerHTML = "Type : " + pretty_text(vehicle.type);
@@ -372,15 +395,14 @@ function button_delete_vehicle() {
 function button_update_vehicle() {
     //get vehicle id
     let vId = document.getElementById("info_vehicle_id").value;
-    fetch_vehicle_byId(vId,vehicle_update_callback);
+    fetch_vehicle_byId(vId, vehicle_update_callback);
 }
 
-function vehicle_update_callback(vJSON){
+function vehicle_update_callback(vJSON) {
     console.log(vJSON);
     modify_vehicle(vJSON.id, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
     vJSON.fuelConsumption, document.getElementById("liquid_quantity_update").value, document.getElementById("liquid_type_update").value, 
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
-    
 }
 
 
@@ -544,6 +566,11 @@ function switch_map_style() {
     }
 }
 
+
+//LOGS errors on console
+function err_callback(error) {
+    console.log(error);
+}
 
 // CODE ----------------------------------------------------------------------------------------------------
 

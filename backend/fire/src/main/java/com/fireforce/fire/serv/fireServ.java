@@ -26,11 +26,11 @@ public class fireServ {
 		this.fRepo=fRepo;
 		
 		//Create a Runnable is charge of executing cyclic actions 
-		this.dRunnable=new DisplayRunnable(this.fRepo);
+		this.dRunnable=new DisplayRunnable(this.fRepo,this);
 		
 		// A Runnable is held by a Thread which manage lifecycle of the Runnable
 		displayThread=new Thread(dRunnable);
-		
+		System.out.println("le thread va démarrer");
 		// The Thread is started and the method run() of the associated DisplayRunnable is launch
 		displayThread.start();
 		
@@ -63,6 +63,16 @@ public class fireServ {
 		fire createdFireA = fRepo.save(f);
 		System.out.println(createdFireA);
 
+	}
+
+	public void addLinkedVehic(fire f,Integer vId) {
+		f.addLinkedVehic(vId);
+		fRepo.save(f);		
+		
+		String reqVehic = "http://127.0.0.1:8094/switchDispo/"+vId;
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.getForEntity(reqVehic, Integer.class);
+		
 	}
 
 }
