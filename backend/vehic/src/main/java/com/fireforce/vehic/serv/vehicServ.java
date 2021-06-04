@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -175,4 +176,20 @@ public class vehicServ {
 		this.moveVehic(c, id);		
 	}
 	
+	
+
+	@Bean(initMethod="init")
+	public void init() {
+		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v3 = new vehic(0,0, VehicleType.CAR, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+		vehic v4 = new vehic(0,0, VehicleType.WATER_TENDERS, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
+
+		this.addVehic(v1);
+		this.addVehic(v2);
+		this.addVehic(v3);
+		this.addVehic(v4);
+	}
+
+
 }
