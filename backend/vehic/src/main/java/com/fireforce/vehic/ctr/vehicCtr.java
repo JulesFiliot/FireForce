@@ -34,6 +34,12 @@ public class vehicCtr {
 		vServ.updateVehic(v);
 	}
 	
+	@RequestMapping(value = "/vehicle/reset")
+	public void resetVehic() {
+		vServ.resetVehic();
+	}
+	
+	
 	@RequestMapping(method = RequestMethod.PUT, value = "/vehicMove/{id}")
 	public void vehicMove(@RequestBody Coord c, @PathVariable Integer id) {
 		vServ.moveVehic(c,id);
