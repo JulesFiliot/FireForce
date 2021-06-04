@@ -37,6 +37,11 @@
     display: none;
 }
 
+#map_style
+{
+    left: 3%;
+}
+
 #info_vehicle_id
 {
     display: none;

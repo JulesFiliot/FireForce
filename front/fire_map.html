@@ -23,6 +23,17 @@
 
 		<div id="mapid"></div>
 
+		<div class="over_map" id="map_style" onchange="switch_map_style()">
+
+			<input type="radio" name="map_style" id="map_style1" value="streets-v11" checked>
+			<label for="map_style1">Street</label>
+			<input type="radio" name="map_style" id="map_style2" value="dark-v10">
+			<label for="map_style2">Dark</label>
+			<input type="radio" name="map_style" id="map_style3" value="satellite-v9">
+			<label for="map_style3">Satellite</label>
+
+		</div>
+
 		<div class="over_map" id="over_map_right">
 
 			<h3 onclick="hide_interface('config_interface')">Configuration interface</h3>
@@ -176,7 +187,7 @@
 		</div>
 
 		<div class="over_map" id="over_map_left">
-			
+
 			<div id="info_fire">
 				<h3>Fire informations</h3>
 				<p id="info_fire_type">FIRE_TYPE</p>
