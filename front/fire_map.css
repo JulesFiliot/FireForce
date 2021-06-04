@@ -53,3 +53,8 @@ img
     margin: auto;
     display: flex;
 }
+
+h3
+{
+    cursor: pointer;
+}

@@ -25,7 +25,7 @@
 
 		<div class="over_map" id="over_map_right">
 
-			<h3 style="cursor: pointer" onclick="hide_interface('config_interface')">Configuration interface</h3>
+			<h3 onclick="hide_interface('config_interface')">Configuration interface</h3>
 
 			<div class="interface" id="config_interface" onchange="put_config()">
 
@@ -40,7 +40,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide_interface('fire_interface')">Fire interface</h3>
+			<h3 onclick="hide_interface('fire_interface')">Fire interface</h3>
 
 			<div class="interface" id="fire_interface" onchange="fetch_fire()">
 
@@ -86,7 +86,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
+			<h3 onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
 
 			<div class="interface" id="vehicle_interface" onchange="fetch_vehicles()">
 
@@ -144,7 +144,7 @@
 
 			</div>
 
-			<h3 style="cursor: pointer" onclick="hide_interface('vehicle_creator')">Vehicle creator</h3>
+			<h3 onclick="hide_interface('vehicle_creator')">Vehicle creator</h3>
 
 			<div class="interface" id="vehicle_creator">
 
@@ -183,18 +183,46 @@
 				<p id="info_fire_intensity">FIRE INTENSITY</p>
 				<p id="info_fire_range">FIRE_RANGE</p>
 			</div>
-			
-			<div id="info_vehicle">
-				<h3>Vehicle informations</h3>
-				<p id="info_vehicle_id"></p>
-				<img id="info_vehicle_img" width="200">
-				<p id="info_vehicle_type">VEHIC_TYPE</p>
-				<p id="info_vehicle_fuel">FUEL_VALUE</p>
-				<p id="info_vehicle_liquid_type">LIQUID_TYPE</p>
-				<p id="info_vehicle_liquid_quantity">LIQUID_QUANTITY</p>
-				<button onclick="button_delete_vehicle()">Delete</button>
-			</div>
 
+			<div id="over_map_left_bottom">
+				<h3 onclick = "switch_left_interface_display('info_vehicle')">Vehicle informations</h3>
+				<div id="info_vehicle">
+					<p id="info_vehicle_id"></p>
+					<img id="info_vehicle_img" width="200">
+					<p id="info_vehicle_type">VEHIC_TYPE</p>
+					<p id="info_vehicle_fuel">FUEL_VALUE</p>
+					<p id="info_vehicle_liquid_type">LIQUID_TYPE</p>
+					<p id="info_vehicle_liquid_quantity">LIQUID_QUANTITY</p>
+					<button onclick="button_delete_vehicle()">Delete</button>
+				</div>	
+				<h3 onclick="switch_left_interface_display('info_vehicle_update')">Tweak Selected Vehicle Info</h3>
+				<div id="info_vehicle_update">
+					<p>Vehicle type :</p>
+					<select id="vehicle_type_update" name="vehicle_type" class="select">
+						<option value="0">Car</option>
+						<option value="1">Fire Engine</option>
+						<option value="2">Pumper Truck</option>
+						<option value="3">Water Tender</option>
+						<option value="4">Turntable Ladder Truck</option>
+						<option value="5">Truck</option>
+					</select>
+					<p>Fuel quantity :</p>
+					<input type="number" id="fuel_value_update" name="fuel_quantity" min="0" max="100" value="0">
+					<p>Liquid type :</p>
+					<select id="liquid_type_update" name="liquid_type" class="select">
+						<option value="0">All</option>
+						<option value="1">Water</option>
+						<option value="2">Water with Additives</option>
+						<option value="3">Carbon Dioxide</option>
+						<option value="4">Powder</option>
+					</select>
+					<p>Liquid quantity :</p>
+					<input type="number" id="liquid_quantity_update" name="liquid_quantity" min="0" max="100" value="0">
+					<br/><br/>
+					<button onclick="button_update_vehicle()">Update</button>
+				</div>
+			</div>
+			
 		</div>
 	
 
