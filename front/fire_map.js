@@ -170,10 +170,10 @@ function fill_popup_fire(fire) {
     document.getElementById("info_fire_type").innerHTML = "Type : " + fire.type;
     document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + fire.intensity;
     document.getElementById("info_fire_range").innerHTML = "Range : " + fire.range;
+
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_fire").style.display = 'block';
-    document.getElementById("info_vehicle").style.display = 'none';
-}
+    document.getElementById("over_map_left_bottom").style.display = 'none';}
 
 
 
@@ -225,6 +225,17 @@ function fetch_vehicles() {
         .catch(error => err_callback(error));
 }
 
+//GET request to fetch a vehicle infos using its ID in URL parameter. Returns the fetched vehicle.
+function fetch_vehicle_byId(id_vehicle, vehicle_update_callback) {
+    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    let context = {
+        method: 'GET',
+    };
+    fetch(GET_VEHICLE_URL, context)
+        .then(response => response.json().then(body => vehicle_update_callback(body)))
+        .catch(error => err_callback(error));
+}
+
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
     const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
@@ -235,7 +246,9 @@ function delete_vehicle(id_vehicle) {
         .catch(error => err_callback(error));
 }
 
-function modify_vehicle(id, vehicle_type, fuel, liquidQuantity, liquid_type, lon, lat) {
+function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
+    crewMember, crewMemberCapacity, efficiency, facilityRefID) {
+
     const PUT_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/" + id;
     let context = {
         method: 'PUT',
@@ -243,6 +256,13 @@ function modify_vehicle(id, vehicle_type, fuel, liquidQuantity, liquid_type, lon
             'Content-type': 'application/json'
         },
         body: JSON.stringify({
+            "id":id,
+            "efficiency":efficiency,
+            "liquidConsumption":liquidConsumption,
+            "fuelConsumption":fuelConsumption,
+            "crewMember":crewMember,
+            "crewMemberCapacity":crewMemberCapacity,
+            "facilityRefID":facilityRefID,
             "lon":lon,
             "lat":lat,
             "type":vehicle_type,
@@ -325,7 +345,10 @@ function fill_popup_vehicle(vehicle) {
     document.getElementById("info_vehicle_fuel").innerHTML = "Fuel quantity : " + vehicle.fuel;
     document.getElementById("info_vehicle_liquid_type").innerHTML = "Liquid type : " + vehicle.liquidType;
     document.getElementById("info_vehicle_liquid_quantity").innerHTML = "Liquid quantity : " + vehicle.liquidQuantity;
+
     document.getElementById("over_map_left").style.display = 'block';
+    document.getElementById("over_map_left_bottom").style.display = 'block';
+    document.getElementById("info_vehicle_update").style.display = 'none';
     document.getElementById("info_vehicle").style.display = 'block';
     document.getElementById("info_fire").style.display = 'none';
 }
@@ -343,6 +366,21 @@ function button_delete_vehicle() {
     id_vehicle = document.getElementById("info_vehicle_id").value;
     delete_vehicle(id_vehicle);
     document.getElementById("over_map_left").style.display = 'none';
+}
+
+//Triggers the fecth vehicle by id then calls the vehicle_update_callback to update vehicle attributes
+function button_update_vehicle() {
+    //get vehicle id
+    let vId = document.getElementById("info_vehicle_id").value;
+    fetch_vehicle_byId(vId,vehicle_update_callback);
+}
+
+function vehicle_update_callback(vJSON){
+    console.log(vJSON);
+    modify_vehicle(vJSON.id, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
+    vJSON.fuelConsumption, document.getElementById("liquid_quantity_update").value, document.getElementById("liquid_type_update").value, 
+    vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
+    
 }
 
 
@@ -380,6 +418,23 @@ function hide_interface_left(event) {
    document.getElementById("over_map_left").style.display = 'None';
 }
 
+//Manages the display of the left panel when it's clicked
+function switch_left_interface_display(obj) {
+    var el = document.getElementById(obj);
+    if (el.id == "info_vehicle") {
+        if (el.style.display == 'none') {
+            el.style.display = 'block';
+        } else {
+            el.style.display = 'none';
+        }
+    } else if (el.id == "info_vehicle_update") {
+        if (el.style.display != 'none') {
+            el.style.display = 'none';
+        } else {
+            el.style.display = 'block';
+        }
+    }
+}
 
 // CODE ----------------------------------------------------------------------------------------------------
 
@@ -403,7 +458,7 @@ let vehiclePrinted = [];
 var fireGroup = L.featureGroup().addTo(mymap).on("click", fetch_fire_fromMarker);
 var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
 
-//Instructions called every 5000 ms
+//Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
@@ -411,6 +466,8 @@ var intervalId = window.setInterval(function(){
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);
-modify_vehicle(10453, 1, 0, 0, 1, 4.4, 45.5);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
+//modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
+//crewMember, crewMemberCapacity, efficiency, facilityRefID)
+//modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
 fetch_fire();
 fetch_vehicles();

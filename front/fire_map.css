@@ -46,3 +46,8 @@
 {
     display: none;
 }
+
+h3
+{
+    cursor: pointer;
+}
