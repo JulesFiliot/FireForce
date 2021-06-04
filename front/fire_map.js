@@ -129,7 +129,7 @@ function print_fire(fire) {
         {
             color: 'red',
             fillColor: '#f03',
-            fillOpacity: fire.intensity/50, // MAX_INTENSITY
+            fillOpacity: fire.intensity/55, // MAX_INTENSITY + 10%
             radius: fire.range
         }
     ).addTo(fireGroup);
@@ -191,7 +191,7 @@ function fill_popup_fire(fire) {
 
 //Uses a POST request to create a vehicle given some basic parameters of the vehicle
 function create_vehicle(vehicle_type, liquid_type, lon, lat) {
-    const POST_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    const POST_VEHICLE_URL = "http://127.0.0.1:8094/vehicle";
     let context = {
         method: 'POST',
         headers: {
@@ -546,7 +546,7 @@ function switch_map_style() {
             mymap.removeLayer(map_layer);
             map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 	            minZoom: 10,
-                maxZoom: 17,
+                maxZoom: 20,
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 id: 'mapbox/' + map_style.value,
                 tileSize: 512,
@@ -576,7 +576,7 @@ var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12); 
 
 var map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 	minZoom: 10,
-    maxZoom: 17,
+    maxZoom: 20,
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	id: 'mapbox/streets-v11',
 	tileSize: 512,

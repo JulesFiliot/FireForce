@@ -1,5 +1,8 @@
 package com.fireforce.vehic.serv;
 
+import java.util.ArrayList;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -175,9 +178,30 @@ public class vehicServ {
 		this.switchDispo(id);
 		this.moveVehic(c, id);		
 	}
+
+	public void resetVehic() {
+		String reqUrl = "http://127.0.0.1:8081/vehicle";
+        RestTemplate restTemplate = new RestTemplate();
+    	ResponseEntity<VehicleDto[]> reqVehic = restTemplate.getForEntity(reqUrl, VehicleDto[].class);
+    	VehicleDto[] SimuVehics = reqVehic.getBody();
+    	
+    	for(VehicleDto vD : SimuVehics) {
+    		Integer rId = vD.getId();
+    		String reqUrl2 = "http://127.0.0.1:8081/vehicle/"+rId;
+	    	restTemplate.delete(reqUrl2);;
+    		
+    	}
+		vRepo.deleteAll();
+
+    	
+    	
+		// TODO Auto-generated method stub
+		
+	}
 	
 
-	@Bean(initMethod="init")
+
+	/*@Bean(initMethod="init")
 	public void init() {
 		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
 		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
@@ -188,8 +212,19 @@ public class vehicServ {
 		this.addVehic(v2);
 		this.addVehic(v3);
 		this.addVehic(v4);
+	}*/
+
+	public ArrayList<vehic> getAllVehic() {
+		ArrayList<vehic> ListVehic = new ArrayList<vehic>();
+		Iterable<vehic> allVehic = vRepo.findAll();
+		Iterator<vehic> iterator = allVehic.iterator();
+		while(iterator.hasNext()) {
+		    vehic it = iterator.next();
+		    ListVehic.add(it);
+		}
+		return ListVehic;
 	}
-
-
 	
+
+
 }

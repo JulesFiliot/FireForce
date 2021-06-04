@@ -1,7 +1,10 @@
 package com.fireforce.vehic.ctr;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +32,23 @@ public class vehicCtr {
 		vServ.updateVehic(v);
 	}
 	
+	@RequestMapping(value = "/vehicle/reset")
+	public void resetVehic() {
+		vServ.resetVehic();
+	}
+	
+	
 	@RequestMapping(method = RequestMethod.PUT, value = "/vehicMove/{id}")
 	public void vehicMove(@RequestBody Coord c, @PathVariable Integer id) {
 		vServ.moveVehic(c,id);
 	}
+	
+	@CrossOrigin
+	@RequestMapping(value = "/getAllVehic") //Si ca marche pas cf dto et non repo
+	public ArrayList<vehic> getAllVehic() {
+    	ArrayList<vehic> vList = vServ.getAllVehic();
+    	return vList;
+    }
 	
 	@RequestMapping(value = "/generateVehics")
 	public void generateVehics() {
