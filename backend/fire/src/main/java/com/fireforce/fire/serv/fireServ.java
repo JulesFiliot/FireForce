@@ -1,5 +1,7 @@
 package com.fireforce.fire.serv;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +75,23 @@ public class fireServ {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getForEntity(reqVehic, Integer.class);
 		
+	}
+
+	public ArrayList<FireDto> getAllFire() {
+		ArrayList<FireDto> ListFire = new ArrayList<FireDto>();
+		
+		String reqUrl = "http://127.0.0.1:8081/fire";
+        RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<FireDto[]> reqFireDto = restTemplate.getForEntity(reqUrl,FireDto[].class);
+		FireDto[] fArray = reqFireDto.getBody();
+		
+		for (FireDto fD : fArray) {
+			ListFire.add(fD);
+		}
+		
+		if (ListFire.isEmpty()) return null;
+		
+		return ListFire;
 	}
 
 }
