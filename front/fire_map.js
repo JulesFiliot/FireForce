@@ -64,7 +64,7 @@ function reset_fire() {
 
 // Reset all vehicle and unprint them from map
 function reset_vehicle() {
-    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    const GET_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/reset";
     let context = {
         method: 'GET',
     };
@@ -74,6 +74,7 @@ function reset_vehicle() {
 }
 
 function vehiclesList_callback_reset(response) {    
+    /*
     clear_vehicles();
     vehicleList = [];
     for(var i = 0; i < response.length; i++) {
@@ -82,6 +83,7 @@ function vehiclesList_callback_reset(response) {
     for(const vehicle of vehicleList) {
         delete_vehicle(vehicle.id);
     }
+    */
 }
 
 
@@ -90,7 +92,7 @@ function vehiclesList_callback_reset(response) {
 
 //Fetch all existing fires
 function fetch_fire() {
-    const GET_FIRE_URL="http://127.0.0.1:8081/fire"; // 8081/fire
+    const GET_FIRE_URL="http://127.0.0.1:8092/getAllFire"; // 8081/fire
     let context = {
         method: 'GET'
     };
@@ -253,7 +255,7 @@ function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
 
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/
     let context = {
         method: 'DELETE',
     };

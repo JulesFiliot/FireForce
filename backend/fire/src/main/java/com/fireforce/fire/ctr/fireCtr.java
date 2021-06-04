@@ -25,7 +25,7 @@ public class fireCtr {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value = "/getAllfire")
+	@RequestMapping(value = "/getAllFire")
 	public ArrayList<FireDto> getAllVehic() {
     	ArrayList<FireDto> fList = fServ.getAllFire();
     	return fList;
