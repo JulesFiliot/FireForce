@@ -1,5 +1,7 @@
 package com.fireforce.vehic.serv;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -190,6 +192,18 @@ public class vehicServ {
 		this.addVehic(v3);
 		this.addVehic(v4);
 	}
+
+	public ArrayList<vehic> getAllVehic() {
+		ArrayList<vehic> ListVehic = new ArrayList<vehic>();
+		Iterable<vehic> allVehic = vRepo.findAll();
+		Iterator<vehic> iterator = allVehic.iterator();
+		while(iterator.hasNext()) {
+		    vehic it = iterator.next();
+		    ListVehic.add(it);
+		}
+		return ListVehic;
+	}
+	
 
 
 }

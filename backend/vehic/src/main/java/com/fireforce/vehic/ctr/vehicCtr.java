@@ -1,5 +1,7 @@
 package com.fireforce.vehic.ctr;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +35,12 @@ public class vehicCtr {
 	public void vehicMove(@RequestBody Coord c, @PathVariable Integer id) {
 		vServ.moveVehic(c,id);
 	}
+	
+	@RequestMapping(value = "/getAllVehic")
+	public ArrayList<vehic> getAllVehic() {
+    	ArrayList<vehic> vList = vServ.getAllVehic();
+    	return vList;
+    }
 	
 	@RequestMapping(value = "/generateVehics")
 	public void generateVehics() {
