@@ -384,6 +384,77 @@ function vehicle_update_callback(vJSON){
 }
 
 
+
+// FUNCTIONS FIRE STATION ----------------------------------------------------------------------------------------------------
+
+/*
+    POST
+    GET
+    Print (purple)
+    Vehicle pop here + fuel + liquid
+*/
+
+
+//Uses a POST request to create a station given some basic parameters of the station
+function create_station(lon, lat) {
+    const POST_STATION_URL = "";
+    let context = {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            "lon":lon,
+            "lat":lat
+        })
+    };
+    fetch(POST_STATION_URL, context)
+        .catch(error => err_callback(error));
+}
+
+function fetch_stations() {
+    const GET_STATION_URL = "";
+    let context = {
+        method: 'GET',
+    };
+    fetch(GET_STATION_URL, context)
+        .then(response => response.json().then(body => stationList_callback(body)))
+        .catch(error => err_callback(error));
+}
+
+//Takes the list of all stations as parameter. Calls print_station function for each vehicle to print them
+function stationList_callback(response) {    
+    clear_stations();
+    stationList = [];
+    for(var i = 0; i < response.length; i++) {
+        stationList[i] = response[i];
+    }
+    for(const station of stationList) {
+        print_station(station);
+    }
+}
+
+//Displays on the map the station given in parameter
+function print_station(station) {
+    var circle = L.circle([station.lat, station.lon],
+        {
+            color: 'purple',
+            fillColor: 'purple',
+            fillOpacity: 100,
+            radius: 20
+        }
+    ).addTo(mymap);
+    stationPrinted.push(circle);
+}
+
+//clear printed stations
+function clear_stations() {
+    for (i of stationPrinted) {
+        i.remove();
+    }
+    stationPrinted = [];
+}
+
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
 
 //Hides the right interface given in parameters. Also hides all its childs
@@ -455,13 +526,34 @@ function switch_left_interface_display(obj) {
     }
 }
 
+function switch_map_style() {
+    var map_style;
+    for (var i = 1; i < 4; i++) {
+        map_style = document.getElementById("map_style"+i);
+        if (map_style.checked) {
+            mymap.removeLayer(map_layer);
+            map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	            minZoom: 10,
+                maxZoom: 17,
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                id: 'mapbox/' + map_style.value,
+                tileSize: 512,
+                zoomOffset: -1,
+            }).addTo(mymap);
+        }
+    }
+}
+
+
 // CODE ----------------------------------------------------------------------------------------------------
 
 //MAP INITIALISATION
 var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
 
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-	maxZoom: 17,
+
+var map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+	minZoom: 10,
+    maxZoom: 17,
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	id: 'mapbox/streets-v11',
 	tileSize: 512,
@@ -469,20 +561,26 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     //id: 'mapbox/dark-v10'
     //id: 'mapbox/satellite-v9',
 }).addTo(mymap);
+
+
+switch_map_style();
 mymap.on('click', hide_interface_left);
 
 //GLOBAL variables
 let fireList = [];
 let firePrinted = [];
+var fireGroup = L.featureGroup().addTo(mymap).on("click", fetch_fire_fromMarker);
 let vehicleList = [];
 let vehiclePrinted = [];
-var fireGroup = L.featureGroup().addTo(mymap).on("click", fetch_fire_fromMarker);
 var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
+let stationList = [];
+let stationPrinted = [];
 
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
+    //fetch_stations();
 }, 1000);
 
 //Functions called every time the page is refreshed
@@ -492,3 +590,4 @@ var intervalId = window.setInterval(function(){
 //modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
 fetch_fire();
 fetch_vehicles();
+//fetch_stations()
