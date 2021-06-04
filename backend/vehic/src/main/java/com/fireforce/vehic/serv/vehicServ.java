@@ -176,7 +176,7 @@ public class vehicServ {
 		this.moveVehic(c, id);		
 	}
 	
-	
+
 
 	@Bean(initMethod="init")
 	public void init() {
