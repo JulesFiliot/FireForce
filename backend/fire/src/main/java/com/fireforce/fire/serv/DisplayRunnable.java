@@ -41,19 +41,23 @@ public class DisplayRunnable implements Runnable {
 					System.out.println(fRepo.findById(fD.getId()));
 					//System.out.println(fRepo.findById(fD.getId()) == null);
 					if (fRepo.findById(fD.getId()).isEmpty()){
-						System.out.println("on veut ajouter feuA");
+						System.out.println("on veut ajouter feu "+fD.getId());
 						fire f = new fire();
 						f.setId(fD.getId());
-						System.out.println(fServ);
+						//System.out.println(fServ);
 						fServ.addFireA(f);
 					}					
 				}
 				
+				System.out.println(this.fRepo.findAll());
+				System.out.println(fArray);
 				for (fire f : this.fRepo.findAll()) {
 					Integer id=f.getId();
 					boolean present=false;
 					for (FireDto fD : fArray) {
-						if (fD.getId()==id)  {
+						System.out.println("fd get id"+fD.getId()+"et id "+id);
+						if (fD.getId().equals(id))  {
+							System.out.println(id+" est bien présent");
 							present=true;
 							break;
 						}
@@ -82,6 +86,9 @@ public class DisplayRunnable implements Runnable {
 						Integer vId = reqVID.getBody();
 						//System.out.println("=========================="+vId.toString());
 						// -> Dire au Simulator que tel vehicule est maintenant assigné à tel feu
+						
+						if(vId!=null) {
+						
 						fServ.addLinkedVehic(f,vId);
 
 
@@ -104,7 +111,7 @@ public class DisplayRunnable implements Runnable {
 						restTemplate.put(reqMov, c);
 						
 
-						
+						}
 						
 						
 					}
