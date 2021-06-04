@@ -57,7 +57,7 @@ public class vehic {
 	", liquid quantity : " + this.liquidQuantity + ", liquid consumption : " + this.liquidConsumption +
 	", fuel : " + this.fuel + ", fuel consumption : " + this.fuelConsumption + ", crew member : " 
 	+ this.crewMember + ", crew member capacity : " + this.crewMemberCapacity + ", facility ref ID : "
-	+ this.facilityRefID;
+	+ this.facilityRefID + ", Dispo : " + this.isDispo();
 	}
 
 	

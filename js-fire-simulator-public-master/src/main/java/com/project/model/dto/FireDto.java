@@ -8,6 +8,8 @@ public class FireDto {
 	private float range;
 	private double lon;
 	private double lat;
+	public FireDto() {
+	}
 	
 	public FireDto(Integer id, String type, float intensity, float range, double lon, double lat) {
 		super();
