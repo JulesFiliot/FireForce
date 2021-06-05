@@ -574,10 +574,10 @@ function err_callback(error) {
 }
 
 //START the simulation by showing the map and the interface
-function start_simulation() {
+/*function start_simulation() {
    // Simulate an HTTP redirect:
     window.location.replace("fire_map.html");
-}
+}*/
 
 // CODE ----------------------------------------------------------------------------------------------------
 
