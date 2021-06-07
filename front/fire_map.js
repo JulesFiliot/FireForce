@@ -195,6 +195,7 @@ function live_fill_popup_fire(clkA) {
     var lat = clkA.lat;
     var long = clkA.lng;
     var good_fire;
+    console.log(fireList);
     for (fire of fireList) {
         console.log("=====");
         console.log(fire.lat);
@@ -637,11 +638,11 @@ let clickedArea;
 
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
-    fetch_fire();
-    fetch_vehicles();
     if (document.getElementById("info_fire").style.display == 'block') {
         live_fill_popup_fire(clickedArea);
     }
+    fetch_fire();
+    fetch_vehicles();
     //fetch_stations();
 }, 1000);
 
@@ -650,6 +651,7 @@ var intervalId = window.setInterval(function(){
 //modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
 //crewMember, crewMemberCapacity, efficiency, facilityRefID)
 //modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
+put_config();
 fetch_fire();
 fetch_vehicles();
 fetch_stations()
