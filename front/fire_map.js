@@ -96,8 +96,8 @@ function fetch_fire() {
     let context = {
         method: 'GET'
     };
-    clear_fire();
-    fireList = [];
+    //clear_fire();
+    //fireList = [];
     fetch(GET_ALL_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
@@ -249,8 +249,8 @@ function fetch_vehicles() {
     let context = {
         method: 'GET',
     };
-    clear_vehicles();
-    vehicleList = [];
+    //clear_vehicles();
+    //vehicleList = [];
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
         .catch(error => err_callback(error));
@@ -643,7 +643,7 @@ var intervalId = window.setInterval(function(){
     }
     fetch_fire();
     fetch_vehicles();
-    //fetch_stations();
+    fetch_stations();
 }, 1000);
 
 //Functions called every time the page is refreshed
