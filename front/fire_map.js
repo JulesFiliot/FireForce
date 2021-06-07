@@ -96,8 +96,8 @@ function fetch_fire() {
     let context = {
         method: 'GET'
     };
-    //clear_fire();
-    //fireList = [];
+    clear_fire();
+    fireList = [];
     fetch(GET_ALL_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
@@ -249,8 +249,8 @@ function fetch_vehicles() {
     let context = {
         method: 'GET',
     };
-    //clear_vehicles();
-    //vehicleList = [];
+    clear_vehicles();
+    vehicleList = [];
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
         .catch(error => err_callback(error));
@@ -446,7 +446,7 @@ function vehicle_update_callback(vJSON) {
 
 
 //Uses a POST request to create a station given some basic parameters of the station
-function create_station(name,capacity,lon, lat) {
+function create_station(name, capacity,lon, lat) {
     const POST_STATION_URL = "http://127.0.0.1:8098/createStation";
     let context = {
         method: 'POST',
@@ -504,6 +504,15 @@ function clear_stations() {
         i.remove();
     }
     stationPrinted = [];
+}
+
+//Create fire station from interface. Station is created using create_station
+function station_creator() {
+    var name = document.getElementById("station_name").value;
+    var capacity = document.getElementById("station_capacity").value;
+    var lat = document.getElementById("station_lat").value;
+    var lon = document.getElementById("station_long").value;
+    create_station(name, capacity, lon, lat);
 }
 
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
@@ -655,4 +664,4 @@ put_config();
 fetch_fire();
 fetch_vehicles();
 fetch_stations()
-create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+//create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
