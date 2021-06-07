@@ -150,13 +150,6 @@ function print_fire(fire) {
 
 }
 
-//DEPRECIATED
-//Display a popup when we click on a fire on the map. The popup display pertinents fire attributes 
-function create_fire_popup(circle, fire) {
-    let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
-    circle.bindPopup(popup_text);
-}
-
 //clear all printed fires
 function clear_fire() {
     for (i of firePrinted) {
@@ -188,6 +181,7 @@ function fill_popup_fire(fire) {
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_fire").style.display = 'block';
     document.getElementById("over_map_left_bottom").style.display = 'none';
+    document.getElementById("info_station").style.display = 'none';
 }
 
 //Updates the fire popup when it's already open
@@ -262,18 +256,6 @@ function fetch_vehicle_byId(id_vehicle, vehicle_update_callback) {
         .catch(error => err_callback(error));
 }
 
-//GET request to fetch a vehicle infos using its ID in URL parameter. 
-//Call the function to only update the left visual panel displaying vehicle infos.
-function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
-    const GET_VEHICLE_URL = "http://127.0.0.1:8094/getVehic/"+id_vehicle; // 8081/vehicle/
-    let context = {
-        method: 'GET',
-    };
-    fetch(GET_VEHICLE_URL, context)
-        .then(response => response.json().then(body => {console.log(body); fill_popup_vehicle(body);}))
-        .catch(error => err_callback(error));
-}
-
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
     const DELETE_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/"+id_vehicle; // 8081/vehicle/
@@ -314,7 +296,6 @@ function modify_vehicle(id, remoteId, vehicle_type, fuel, fuelConsumption, liqui
     };
     //return if needed
     fetch(PUT_VEHICLE_URL, context)
-        //.then(response => {fetch_vehicle_byId_visu(id, fill_popup_vehicle);})
         .catch(error => err_callback(error));
 }
 
@@ -384,9 +365,6 @@ function fetch_vehicle_fromMarker(event) {
 }
 
 function fill_popup_vehicle(vehicle) {
-    
-
-    console.log(vehicle);
     document.getElementById("info_vehicle_id").value = vehicle.id;
     document.getElementById("info_vehicle_img").src = "images/" + vehicle.type;
     document.getElementById("info_vehicle_type").innerHTML = "Type : " + pretty_text(vehicle.type);
@@ -399,6 +377,7 @@ function fill_popup_vehicle(vehicle) {
     document.getElementById("info_vehicle_update").style.display = 'none';
     document.getElementById("info_vehicle").style.display = 'block';
     document.getElementById("info_fire").style.display = 'none';
+    document.getElementById("info_station").style.display = 'none';
 }
 
 //Updates the vehicle popup when it's already open
@@ -520,6 +499,31 @@ function clear_stations() {
     stationPrinted = [];
 }
 
+//Fills the popup concerning the Fire Station
+function fill_popup_station(station) {
+    document.getElementById("info_station_name").innerHTML = "Nom : "  + station.name;
+    document.getElementById("info_station_capacity").innerHTML = "Capacité : " + station.capacity;
+
+
+    document.getElementById("over_map_left").style.display = 'block';
+    document.getElementById("over_map_left_bottom").style.display = 'none';
+    document.getElementById("info_vehicle_update").style.display = 'none';
+    document.getElementById("info_vehicle").style.display = 'none';
+    document.getElementById("info_fire").style.display = 'none';
+    document.getElementById("info_station").style.display = 'block';
+}
+
+function fetch_station_fromMarker(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+    for (station of stationList) {
+        if (station.lon == lng_marker && station.lat == lat_marker) {
+            fill_popup_station(station);
+            return;
+        }
+    }
+}
+
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
 
 //Hides the right interface given in parameters. Also hides all its childs
@@ -548,6 +552,11 @@ function hide_interface_left(event) {
     }
     for (fire of fireList) {
         if (fire.lon == lng_marker && fire.lat == lat_marker) {
+            return;
+        }
+    }
+    for (station of stationList) {
+        if (station.lon == lng_marker && station.lat == lat_marker) {
             return;
         }
     }
@@ -646,7 +655,7 @@ var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_from
 
 let stationList = [];
 let stationPrinted = [];
-let stationGroup = L.featureGroup().addTo(mymap);
+let stationGroup = L.featureGroup().addTo(mymap).on("click", fetch_station_fromMarker);
 
 let clickedArea;
 
