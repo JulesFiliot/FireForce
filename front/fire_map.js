@@ -269,10 +269,10 @@ function delete_vehicle(id_vehicle) {
 
 //PUT request to update the vehicle infos given in parameters. 
 //Then calls the fetch_vehicle_byId_visu to update vehicle info panel 
-function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
+function modify_vehicle(id, remoteId, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
     crewMember, crewMemberCapacity, efficiency, facilityRefID) {
 
-    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/" + id; // 8081/vehicle/
+    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle"; // 8081/vehicle/
     let context = {
         method: 'PUT',
         headers: {
@@ -280,6 +280,7 @@ function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity,
         },
         body: JSON.stringify({
             "id":id,
+            "remoteId":remoteId,
             "efficiency":efficiency,
             "liquidConsumption":liquidConsumption,
             "fuelConsumption":fuelConsumption,
@@ -405,7 +406,7 @@ function button_update_vehicle() {
 
 function vehicle_update_callback(vJSON) {
     console.log(vJSON);
-    modify_vehicle(vJSON.id, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
+    modify_vehicle(vJSON.id, vJSON.remoteId, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
     vJSON.fuelConsumption, document.getElementById("liquid_quantity_update").value, document.getElementById("liquid_type_update").value, 
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
 }
@@ -575,7 +576,7 @@ function switch_map_style() {
 
 //LOGS errors on console
 function err_callback(error) {
-    console.log(error);
+    //console.log(error);
 }
 
 // CODE ----------------------------------------------------------------------------------------------------
