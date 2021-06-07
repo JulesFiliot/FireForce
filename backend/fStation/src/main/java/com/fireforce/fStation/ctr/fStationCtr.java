@@ -30,6 +30,7 @@ public class fStationCtr {
     @Autowired
     fStationServ fSService;
     
+    @CrossOrigin
     @RequestMapping(method=RequestMethod.POST,value="/createStation")
     public void addStation(@RequestBody fStation fStation) {
         fSService.add(fStation);
@@ -44,6 +45,7 @@ public class fStationCtr {
         fSService.add(station2);
     }
     
+    @CrossOrigin
     @RequestMapping(value="/getStation/{id}")
     public fStation getStation(@PathVariable Integer id) {
     	return fSService.getStation(id);
@@ -54,6 +56,7 @@ public class fStationCtr {
     	return fSService.getStation(id).getLat();
     }
     
+    @CrossOrigin
     @RequestMapping(method=RequestMethod.PUT, value="/updateFStation")
     public void updateFSTATION(@RequestBody fStation fS) {
     	fSService.updateFS(fS);

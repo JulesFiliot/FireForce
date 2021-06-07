@@ -25,9 +25,9 @@ public class hqCtr {
     	hqServ.affectVehicSimple();
     }
     
-    @RequestMapping("/affectOptiStraight/{fId}")
-    public void affectOptiStraight(@PathVariable Integer fId) {
-    	fId=2;
+    @RequestMapping("/affectOptiStraight")
+    public void affectOptiStraight() {
+    	hqServ.affectOptiStraight();
     	return;
     	
     }
