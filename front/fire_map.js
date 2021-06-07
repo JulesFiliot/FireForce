@@ -86,6 +86,15 @@ function vehiclesList_callback_reset(response) {
     */
 }
 
+function reset_station() {
+    const RESET_URL = "http://127.0.0.1:8098/resetFStation";
+    let context = {
+        method: 'GET',
+    };
+    fetch(RESET_URL, context)
+        .then(station_vehicle_creator())
+        .catch(error => err_callback(error));
+}
 
 
 // FUNCTIONS FIRE ----------------------------------------------------------------------------------------------------
@@ -447,6 +456,20 @@ function vehicle_update_callback(vJSON) {
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
 }
 
+//////---------------------------------------------------------- ERREUR
+function station_vehicle_creator() {
+    var text_html = "";
+    for (station of stationList) {
+        text_html += "<option value="+station.id+">"+station.name+"</option>";
+    }
+    t_html = document.getElementById("vehicle_station").innerHTML;
+    console.log("=====");
+    console.log(text_html);
+    console.log(t_html);
+    if (text_html != "") {
+        document.getElementById("vehicle_station").innerHTML = text_html;
+    }
+}
 
 
 // FUNCTIONS FIRE STATION ----------------------------------------------------------------------------------------------------
@@ -475,6 +498,7 @@ function create_station(name, capacity,lon, lat) {
         })
     };
     fetch(POST_STATION_URL, context)
+        .then(station_vehicle_creator())
         .catch(error => err_callback(error));
 }
 
@@ -495,6 +519,7 @@ function stationList_callback(response) {
     for(var i = 0; i < response.length; i++) {
         stationList[i] = response[i];
     }
+    station_vehicle_creator();
     for(const station of stationList) {
         print_station(station);
     }
@@ -670,7 +695,7 @@ var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
     fetch_stations();
-}, 1000);
+}, 5000);
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);

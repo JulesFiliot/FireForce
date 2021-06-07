@@ -53,6 +53,8 @@
 				<button onclick="reset_fire()">Fire reset</button>
 				<br/><br/>
 				<button onclick="reset_vehicle()">Vehicle reset</button>
+				<br/><br/>
+				<button onclick="reset_station()">Station reset</button>
 
 			</div>
 
@@ -182,7 +184,7 @@
 
 			<div class="interface" id="vehicle_creator">
 
-				<p>Vehicle type:</p>
+				<p>Vehicle type :</p>
 				<select id="vehicle_type" name="vehicle_type" class="select">
 					<option value="0">Car</option>  <!-- enum donc maybe "0" au lieu de CAR, etc -->
 					<option value="1">Fire Engine</option>
@@ -192,13 +194,17 @@
 					<option value="5">Truck</option>
 				</select>
 
-				<p>Liquid type:</p>
+				<p>Liquid type :</p>
 				<select id="liquid_type" name="liquid_type" class="select">
 					<option value="0">All</option>
 					<option value="1">Water</option>
 					<option value="2">Water with Additives</option>
 					<option value="3">Carbon Dioxide</option>
 					<option value="4">Powder</option>
+				</select>
+
+				<p>Fire Station :</p>
+				<select id="vehicle_station" name="vehicle_station" class="select">
 				</select>
 
 				<br/><br/>
