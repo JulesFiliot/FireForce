@@ -200,13 +200,12 @@ function live_fill_popup_fire(clkA) {
     for (fire of fireList) {
         if (fire.lon == long && fire.lat == lat) {
             good_fire = fire;
+            document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
+            document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
+            document.getElementById("info_fire_range").innerHTML = "Range : " + good_fire.range;
         }
     }
-    if (document.getElementById("info_fire").style.display == 'block') {
-        document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
-        document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
-        document.getElementById("info_fire_range").innerHTML = "Range : " + good_fire.range;
-    }
+    
 }
 
 
@@ -650,8 +649,10 @@ var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
     fetch_stations();
-    live_fill_popup_fire(clickedArea);
-}, 1000);
+    if (document.getElementById("info_fire").style.display == 'block') {
+        live_fill_popup_fire(clickedArea);
+    }
+}, 2000);
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);
