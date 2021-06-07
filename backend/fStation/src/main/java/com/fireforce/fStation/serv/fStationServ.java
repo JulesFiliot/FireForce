@@ -74,6 +74,7 @@ public class fStationServ {
 		}
 	}
 	
+	/*
 	@Bean(initMethod="init")
 	public void init() {
         fStation station1 = new fStation("Montgomery");
@@ -82,6 +83,7 @@ public class fStationServ {
         this.add(station1);
         this.add(station2);
 	}
+	*/
 
 	public ArrayList<fStation> getAllStation() {
 		ArrayList<fStation> ListFStation = new ArrayList<fStation>();

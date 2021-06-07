@@ -34,6 +34,7 @@ public class vehicCtr {
 		vServ.updateVehic(v);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value = "/vehicle/reset")
 	public void resetVehic() {
 		vServ.resetVehic();

@@ -2,7 +2,7 @@
 
 //PUT request to change the main fire configs
 function put_creation_config(creationProba, creationSleep) {
-    const PUT_CREATION_URL = "http://127.0.0.1:8081/config/creation"; /////-------------------
+    const PUT_CREATION_URL = "http://127.0.0.1:8092/config/creation";
     let context = {
         method: 'PUT',
         headers: {
@@ -24,7 +24,7 @@ function put_creation_config(creationProba, creationSleep) {
 
 //PUT request to change the configuration of fires and their child spawning rate
 function put_behavior_config() {
-    const PUT_BEHAVIOR_URL = "http://127.0.0.1:8081/config/behavior"; /////-------------------
+    const PUT_BEHAVIOR_URL = "http://127.0.0.1:8092/config/behavior";
     let context = {
         method: 'PUT',
         headers: {
@@ -54,7 +54,7 @@ function put_config() {
 
 //deletes all fires and unprint them from map
 function reset_fire() {
-    const RESET_URL = "http://127.0.0.1:8081/fire/reset"; /////-------------------
+    const RESET_URL = "http://127.0.0.1:8092/fire/reset";
     let context = {
         method: 'GET',
     };
@@ -96,6 +96,8 @@ function fetch_fire() {
     let context = {
         method: 'GET'
     };
+    clear_fire();
+    fireList = [];
     fetch(GET_ALL_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
@@ -225,6 +227,8 @@ function fetch_vehicles() {
     let context = {
         method: 'GET',
     };
+    clear_vehicles();
+    vehicleList = [];
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
         .catch(error => err_callback(error));
@@ -255,7 +259,7 @@ function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
 
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/"+id_vehicle; // 8081/vehicle/
     let context = {
         method: 'DELETE',
     };
@@ -268,7 +272,7 @@ function delete_vehicle(id_vehicle) {
 function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
     crewMember, crewMemberCapacity, efficiency, facilityRefID) {
 
-    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/" + id; // 8081/vehicle/ /////-------------------
+    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/" + id; // 8081/vehicle/
     let context = {
         method: 'PUT',
         headers: {
@@ -420,7 +424,7 @@ function vehicle_update_callback(vJSON) {
 
 //Uses a POST request to create a station given some basic parameters of the station
 function create_station(name,capacity,lon, lat) {
-    const POST_STATION_URL = "localhost:8098/createStation";
+    const POST_STATION_URL = "http://127.0.0.1:8098/createStation";
     let context = {
         method: 'POST',
         headers: {
@@ -438,7 +442,7 @@ function create_station(name,capacity,lon, lat) {
 }
 
 function fetch_stations() {
-    const GET_STATION_URL = "localhost:8098/getStation/1";
+    const GET_STATION_URL = "http://127.0.0.1:8098/getAllStation";
     let context = {
         method: 'GET',
     };
@@ -609,7 +613,7 @@ let stationPrinted = [];
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
-    //fetch_stations();
+    fetch_stations();
 }, 1000);
 
 //Functions called every time the page is refreshed
@@ -619,5 +623,5 @@ var intervalId = window.setInterval(function(){
 //modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
 fetch_fire();
 fetch_vehicles();
-//fetch_stations()
-//create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+fetch_stations()
+create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
