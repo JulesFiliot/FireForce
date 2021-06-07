@@ -16,6 +16,7 @@ import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.repo.vehicRepo;
 import com.project.model.dto.Coord;
 import com.project.model.dto.FireDto;
+import com.project.model.dto.FireType;
 import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleDto;
 import com.project.model.dto.VehicleType;
@@ -227,6 +228,20 @@ public class vehicServ {
 		return ListVehic;
 	}
 
+	public ArrayList<vehic> getAllDisp() {
+		ArrayList<vehic> ListVehic = new ArrayList<vehic>();
+		Iterable<vehic> allVehic = vRepo.findAll();
+		Iterator<vehic> iterator = allVehic.iterator();
+		while(iterator.hasNext()) {
+		    vehic it = iterator.next();
+		    if (it.isDispo()) {
+		    	ListVehic.add(it);
+		    }
+		}
+		return ListVehic;
+	}
+
+	
 	public void delVehic(Integer id) {
 		vehic v =getVehic(id);
 		String reqUrl = "http://127.0.0.1:8081/vehicle/" + v.getRemoteId().toString();
@@ -234,7 +249,19 @@ public class vehicServ {
 		restTemplate.delete(reqUrl);
 		vRepo.delete(v);
 	}
-	
 
+	public ArrayList<VehicleDto> getOptiTypeVehic(FireType type) {
+		float initEff = 0;
+		ArrayList<VehicleDto> ListVDto = new ArrayList<VehicleDto>();
+		ArrayList<vehic> ListVehic = this.getAllDisp();
+		for (vehic v: ListVehic) {
+			if (v.getLiquidType().getEfficiency(type.toString())>=0.8) {
+				VehicleDto t = new VehicleDto(v.getRemoteId(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
+				ListVDto.add(t);
+			}
+		}
+		return ListVDto;
+	
+	}
 
 }

@@ -137,5 +137,49 @@ public class hqServ {
         
         this.add(hq1);
 	}
+
+	public void affectOptiStraight() {
+		String reqUrl = "http://127.0.0.1:8081/fire";
+        RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<FireDto[]> reqFireDto = restTemplate.getForEntity(reqUrl,FireDto[].class);
+		FireDto[] fArray=reqFireDto.getBody();
+		for (FireDto fD : fArray) {
+			Integer fId = fD.getId();
+			reqUrl = "http://127.0.0.1:8092/getLinkedVehic/"+fId;
+			ResponseEntity<ArrayList> reqLV = restTemplate.getForEntity(reqUrl,ArrayList.class);
+			ArrayList<Integer> LV = reqLV.getBody();
+			//System.out.println(LV);
+			if (LV.isEmpty()){
+				
+				// -> Dire au Simulator que tel vehicule est maintenant assigné à tel feu
+
+				reqUrl = "http://127.0.0.1:8094/getDispo";
+				ResponseEntity<Integer> reqVID = restTemplate.getForEntity(reqUrl, Integer.class);
+				Integer vId = reqVID.getBody();
+				System.out.println(vId);
+				if (vId!=null) {
+					//System.out.println("Oui Oui Oui");					
+					reqUrl = "http://127.0.0.1:8092/addLinkedVehic/"+fId+"/"+vId;
+					restTemplate.getForEntity(reqUrl, null);
+					
+				}
+				//on a l'id du vehic, on veut deplacer le vehic aux coordonnées du feu concerné
+				Coord c = new Coord();
+
+				
+				
+				c.setLat(fD.getLat());
+				c.setLon(fD.getLon());
+						
+				if(vId!=null) {
+				String reqMov = "http://127.0.0.1:8094/vehicMove/"+vId;
+				restTemplate.put(reqMov, c);
+				}
+				
+				return;
+				
+			}
+		}
+	}
 	
 }

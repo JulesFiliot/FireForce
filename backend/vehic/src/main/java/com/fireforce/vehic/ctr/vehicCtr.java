@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fireforce.vehic.model.vehic;
 import com.fireforce.vehic.serv.vehicServ;
 import com.project.model.dto.Coord;
+import com.project.model.dto.FireType;
+import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleDto;
 
 @RestController
@@ -81,6 +83,13 @@ public class vehicCtr {
 	public void switchDispo(@PathVariable Integer id) {
 		vServ.switchDispo(id);
 		return ;
+	}
+	
+	@RequestMapping("/getOptiTypeVehic/{type}")
+	public ArrayList<VehicleDto> getOptiTypeVehic(@PathVariable FireType type) {
+		ArrayList<VehicleDto> LVD = vServ.getOptiTypeVehic(type);
+		return LVD;
+		
 	}
 	
 	@RequestMapping(value = "/endMission/{id}")
