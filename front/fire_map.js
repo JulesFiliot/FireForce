@@ -195,13 +195,8 @@ function live_fill_popup_fire(clkA) {
     var lat = clkA.lat;
     var long = clkA.lng;
     var good_fire;
-    console.log(fireList);
     for (fire of fireList) {
-        console.log("=====");
-        console.log(fire.lat);
-        console.log(fire.long);
         if (fire.lon == long && fire.lat == lat) {
-            console.log("OK");
             good_fire = fire;
             document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
             document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
@@ -319,7 +314,7 @@ function modify_vehicle(id, remoteId, vehicle_type, fuel, fuelConsumption, liqui
     };
     //return if needed
     fetch(PUT_VEHICLE_URL, context)
-        .then(response => {fetch_vehicle_byId_visu(id, fill_popup_vehicle);})
+        //.then(response => {fetch_vehicle_byId_visu(id, fill_popup_vehicle);})
         .catch(error => err_callback(error));
 }
 
@@ -376,6 +371,8 @@ function clear_vehicles() {
 //Fetch vehicle object when clicking on a vehicle marker 
 //and calls the fill_popup_vehicle function to display the corresponding vehicle info
 function fetch_vehicle_fromMarker(event) {
+    clickedArea = event.latlng;
+
     var lat_marker = event.latlng.lat;
     var lng_marker = event.latlng.lng;
     for (vehicle of vehicleList) {
@@ -404,6 +401,24 @@ function fill_popup_vehicle(vehicle) {
     document.getElementById("info_fire").style.display = 'none';
 }
 
+//Updates the vehicle popup when it's already open
+function live_fill_popup_vehicle(clkA) {
+    var lat = clkA.lat;
+    var long = clkA.lng;
+    var good_vehicle;
+    for (vehicle of vehicleList) {
+        if (vehicle.lon == long && vehicle.lat == lat) {
+            good_vehicle = vehicle;
+            document.getElementById("info_vehicle_id").value = good_vehicle.id;
+            document.getElementById("info_vehicle_img").src = "images/" + good_vehicle.type;
+            document.getElementById("info_vehicle_type").innerHTML = "Type : " + pretty_text(good_vehicle.type);
+            document.getElementById("info_vehicle_fuel").innerHTML = "Fuel quantity : " + good_vehicle.fuel;
+            document.getElementById("info_vehicle_liquid_type").innerHTML = "Liquid type : " + pretty_text(good_vehicle.liquidType);
+            document.getElementById("info_vehicle_liquid_quantity").innerHTML = "Liquid quantity : " + good_vehicle.liquidQuantity;
+        }
+    }
+}
+
 function delete_vehicle(id_vehicle) {
     const DELETE_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
     let context = {
@@ -427,7 +442,6 @@ function button_update_vehicle() {
 }
 
 function vehicle_update_callback(vJSON) {
-    console.log(vJSON);
     modify_vehicle(vJSON.id, vJSON.remoteId, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
     vJSON.fuelConsumption, document.getElementById("liquid_quantity_update").value, document.getElementById("liquid_type_update").value, 
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
@@ -650,6 +664,9 @@ var intervalId = window.setInterval(function(){
     if (document.getElementById("info_fire").style.display == 'block') {
         live_fill_popup_fire(clickedArea);
     }
+    if (document.getElementById("info_vehicle").style.display == 'block') {
+        live_fill_popup_vehicle(clickedArea);
+    }
     fetch_fire();
     fetch_vehicles();
     fetch_stations();
@@ -663,5 +680,7 @@ var intervalId = window.setInterval(function(){
 put_config();
 fetch_fire();
 fetch_vehicles();
-fetch_stations()
-//create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+fetch_stations();
+
+create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);

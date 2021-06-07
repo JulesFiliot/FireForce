@@ -76,6 +76,12 @@ public class fStationCtr {
     	return fSService.getAllStation();
     }
     
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.GET, value = "/resetFStation")
+    public void resetFStation() {
+    	fSService.resetFStation();
+    }
+    
     
     /*@RequestMapping(value="/editStationName/{id}/{name}")
     public void editStationName(@PathVariable String name, @PathVariable Integer id) {
