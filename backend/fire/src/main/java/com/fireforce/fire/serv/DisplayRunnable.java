@@ -30,7 +30,8 @@ public class DisplayRunnable implements Runnable {
 	public void run() {
 		while (!this.isEnd) {
 			try {
-				System.out.println("On est DANS le thread");
+				//System.out.println("On est DANS le thread");
+
 				Thread.sleep(1000);
 				String reqUrl = "http://127.0.0.1:8081/fire";
 		        RestTemplate restTemplate = new RestTemplate();
@@ -38,7 +39,7 @@ public class DisplayRunnable implements Runnable {
 				FireDto[] fArray=reqFireDto.getBody();
 				for (FireDto fD : fArray) {
 					//System.out.println(fD.getId());
-					System.out.println(fRepo.findById(fD.getId()));
+					//System.out.println(fRepo.findById(fD.getId()));
 					//System.out.println(fRepo.findById(fD.getId()) == null);
 					if (fRepo.findById(fD.getId()).isEmpty()){
 						System.out.println("on veut ajouter feu "+fD.getId());
@@ -49,15 +50,15 @@ public class DisplayRunnable implements Runnable {
 					}					
 				}
 				
-				System.out.println(this.fRepo.findAll());
-				System.out.println(fArray);
+				//System.out.println(this.fRepo.findAll());
+				//System.out.println(fArray);
 				for (fire f : this.fRepo.findAll()) {
 					Integer id=f.getId();
 					boolean present=false;
 					for (FireDto fD : fArray) {
-						System.out.println("fd get id"+fD.getId()+"et id "+id);
+						//System.out.println("fd get id"+fD.getId()+"et id "+id);
 						if (fD.getId().equals(id))  {
-							System.out.println(id+" est bien présent");
+							System.out.println(id+" est bien présent dans sim ET repo");
 							present=true;
 							break;
 						}
@@ -76,15 +77,21 @@ public class DisplayRunnable implements Runnable {
 						
 					
 				}
+				
+				
 				// Maintenant on assigne les véhicules là où il faut
-				for (fire f : this.fRepo.findAll()) {
+				
+				String reqVehic = "http://127.0.0.1:8095/affectVehicSimple";
+				restTemplate.getForEntity(reqVehic, null);
+				
+			/*	for (fire f : this.fRepo.findAll()) {
 					Integer id=f.getId();
 					if (f.getLinkedVehic().isEmpty()) {
 						String reqVehic = "http://127.0.0.1:8094/getDispo";
 						ResponseEntity<Integer> reqVID = restTemplate.getForEntity(reqVehic, Integer.class);
 						
 						Integer vId = reqVID.getBody();
-						//System.out.println("=========================="+vId.toString());
+						System.out.println("=========================="+vId.toString());
 						// -> Dire au Simulator que tel vehicule est maintenant assigné à tel feu
 						
 						if(vId!=null) {
@@ -99,10 +106,13 @@ public class DisplayRunnable implements Runnable {
 						String reqUrl2 = "http://127.0.0.1:8081/fire";
 						ResponseEntity<FireDto[]> reqFireDto2 = restTemplate.getForEntity(reqUrl2,FireDto[].class);
 						FireDto[] fArray2=reqFireDto2.getBody();
+						System.out.println("test fArray"+fArray.toString());
 						for (FireDto fD : fArray) {
-							if (fD.getId()==id)  {
+							System.out.println("fDgetId"+fD.getId()+"et id"+id);
+							if (fD.getId().equals(id))  {
 								c.setLat(fD.getLat());
 								c.setLon(fD.getLon());
+								System.out.println("nouvelles coord"+c.getLat()+","+c.getLon());
 								break;
 							}
 								
@@ -115,7 +125,7 @@ public class DisplayRunnable implements Runnable {
 						
 						
 					}
-				}
+				}*/
 				
 				
 				System.out.println("dans le repo"+this.fRepo.findAll().toString());

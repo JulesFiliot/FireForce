@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fireforce.fStation.model.fStation;
 
 
 @RestController
@@ -21,10 +20,18 @@ public class hqCtr {
         hqServ.add(hq);
     }
     
+    @RequestMapping("/affectVehicSimple")
+    public void affectVehicSimple() {
+    	hqServ.affectVehicSimple();
+    }
+    
     @RequestMapping("/affectOptiStraight/{fId}")
-    public void (@PathVariable Integer fId) {
+    public void affectOptiStraight(@PathVariable Integer fId) {
+    	fId=2;
     	return;
     	
     }
+    
+    
     
 }
