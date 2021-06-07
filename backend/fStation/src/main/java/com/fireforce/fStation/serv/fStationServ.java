@@ -95,4 +95,11 @@ public class fStationServ {
 		}
 		return ListFStation;	
 	}
+
+	public void resetFStation() {
+		ArrayList<fStation> L = getAllStation();
+		for (fStation station : L) {
+			fSRepo.delete(station);
+		}
+	}
 }
