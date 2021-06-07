@@ -1,5 +1,7 @@
 package com.fireforce.fStation.serv;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Optional;
 
 import org.springframework.context.annotation.Bean;
@@ -79,5 +81,16 @@ public class fStationServ {
         
         this.add(station1);
         this.add(station2);
+	}
+
+	public ArrayList<fStation> getAllStation() {
+		ArrayList<fStation> ListFStation = new ArrayList<fStation>();
+		Iterable<fStation> allFStation = fSRepo.findAll();
+		Iterator<fStation> iterator = allFStation.iterator();
+		while(iterator.hasNext()) {
+		    fStation it = iterator.next();
+		    ListFStation.add(it);
+		}
+		return ListFStation;	
 	}
 }

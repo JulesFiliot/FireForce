@@ -18,7 +18,8 @@ public class fireCtr {
 	
 	@Autowired
 	fireServ fServ;
-	
+
+
 	@RequestMapping(method=RequestMethod.GET,value="/stopdisplay")
 	public void stopDisplay() {
 		fServ.stopDisplay();
@@ -26,13 +27,27 @@ public class fireCtr {
 	
 	@CrossOrigin
 	@RequestMapping(value = "/getAllFire")
-	public ArrayList<FireDto> getAllVehic() {
+	public ArrayList<FireDto> getAllFire() {
     	ArrayList<FireDto> fList = fServ.getAllFire();
     	return fList;
     }
-
-	/*@RequestMapping(method = RequestMethod.GET, value = "/fire")
-	public void addFireA(fire f) {
-		fServ.addFireA(fire f);
-	}*/
+	
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.PUT, value = "/config/creation")
+	public void configCreation(@RequestBody Object conf) {
+		fServ.configCreation(conf);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.PUT, value = "/config/behavior")
+	public void configBehavior(@RequestBody Object conf) {
+		fServ.configBehavior(conf);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.GET, value = "/fire/reset")
+	public void fireReset() {
+		fServ.fireReset();
+	}
 }
+
