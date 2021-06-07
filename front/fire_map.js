@@ -439,7 +439,7 @@ function vehicle_update_callback(vJSON) {
 
 
 //Uses a POST request to create a station given some basic parameters of the station
-function create_station(name,capacity,lon, lat) {
+function create_station(name, capacity,lon, lat) {
     const POST_STATION_URL = "http://127.0.0.1:8098/createStation";
     let context = {
         method: 'POST',
@@ -522,6 +522,15 @@ function fetch_station_fromMarker(event) {
             return;
         }
     }
+}
+
+//Create fire station from interface. Station is created using create_station
+function station_creator() {
+    var name = document.getElementById("station_name").value;
+    var capacity = document.getElementById("station_capacity").value;
+    var lat = document.getElementById("station_lat").value;
+    var lon = document.getElementById("station_long").value;
+    create_station(name, capacity, lon, lat);
 }
 
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------

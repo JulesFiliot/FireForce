@@ -160,6 +160,24 @@
 
 			</div>
 
+			<h3 onclick="hide_interface('station_creator')">Fire Station creator</h3>
+
+			<div class="interface" id="station_creator">
+
+				<p>Fire station name :</p>
+				<input type="text" id="station_name" name="station_name" value="FireStation">
+				<p>Capacity :</p>
+				<input type="number" id="station_capacity" max="200" min="10" step="10" value="100">
+				<p>Latitude :</p>
+				<input type="number" id="station_lat" max="45.7941125" min="45.7145454" step="0.001" value="45.783">
+				<p>Longitude :</p>
+				<input type="number" id="station_long" max="4.9266428" min="4.7736324" step="0.001" value="4.869">
+
+				<br/><br/>
+				<button onclick="station_creator()">Create</button>
+
+			</div>
+
 			<h3 onclick="hide_interface('vehicle_creator')">Vehicle creator</h3>
 
 			<div class="interface" id="vehicle_creator">
