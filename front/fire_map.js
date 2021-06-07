@@ -383,7 +383,7 @@ function fill_popup_vehicle(vehicle) {
 }
 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
     let context = {
         method: 'DELETE',
     };
