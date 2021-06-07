@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fireforce.fire.model.fire;
 import com.fireforce.fire.serv.fireServ;
+
 import com.project.model.dto.FireDto;
 
 @RestController
@@ -19,7 +20,8 @@ public class fireCtr {
 	
 	@Autowired
 	fireServ fServ;
-	
+
+
 	@RequestMapping(method=RequestMethod.GET,value="/stopdisplay")
 	public void stopDisplay() {
 		fServ.stopDisplay();
@@ -27,7 +29,7 @@ public class fireCtr {
 	
 	@CrossOrigin
 	@RequestMapping(value = "/getAllFire")
-	public ArrayList<FireDto> getAllVehic() {
+	public ArrayList<FireDto> getAllFire() {
     	ArrayList<FireDto> fList = fServ.getAllFire();
     	return fList;
     }
@@ -47,4 +49,24 @@ public class fireCtr {
 	public void addFireA(fire f) {
 		fServ.addFireA(fire f);
 	}*/
+    
+	
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.PUT, value = "/config/creation")
+	public void configCreation(@RequestBody Object conf) {
+		fServ.configCreation(conf);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.PUT, value = "/config/behavior")
+	public void configBehavior(@RequestBody Object conf) {
+		fServ.configBehavior(conf);
+	}
+	
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.GET, value = "/fire/reset")
+	public void fireReset() {
+		fServ.fireReset();
+	}
 }
+

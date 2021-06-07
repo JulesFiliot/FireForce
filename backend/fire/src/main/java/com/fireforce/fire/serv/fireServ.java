@@ -119,4 +119,21 @@ public class fireServ {
 		
 	}
 
+	public void configCreation(Object conf) {
+		String reqUrl = "http://127.0.0.1:8081/config/creation";
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(reqUrl, conf);
+	}
+
+	public void configBehavior(Object conf) {
+		String reqUrl = "http://127.0.0.1:8081/config/behavior";
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.put(reqUrl, conf);
+	}
+
+	public void fireReset() {
+		String reqUrl = "http://127.0.0.1:8081/fire/reset";
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getForEntity(reqUrl, Object.class);
+	}
 }

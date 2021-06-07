@@ -2,7 +2,7 @@
 
 //PUT request to change the main fire configs
 function put_creation_config(creationProba, creationSleep) {
-    const PUT_CREATION_URL = "http://127.0.0.1:8081/config/creation";
+    const PUT_CREATION_URL = "http://127.0.0.1:8081/config/creation"; /////-------------------
     let context = {
         method: 'PUT',
         headers: {
@@ -24,7 +24,7 @@ function put_creation_config(creationProba, creationSleep) {
 
 //PUT request to change the configuration of fires and their child spawning rate
 function put_behavior_config() {
-    const PUT_BEHAVIOR_URL = "http://127.0.0.1:8081/config/behavior";
+    const PUT_BEHAVIOR_URL = "http://127.0.0.1:8081/config/behavior"; /////-------------------
     let context = {
         method: 'PUT',
         headers: {
@@ -54,7 +54,7 @@ function put_config() {
 
 //deletes all fires and unprint them from map
 function reset_fire() {
-    const RESET_URL = "http://127.0.0.1:8081/fire/reset";
+    const RESET_URL = "http://127.0.0.1:8081/fire/reset"; /////-------------------
     let context = {
         method: 'GET',
     };
@@ -168,6 +168,8 @@ function clear_fire() {
 //Fetch fetch object when clicking on a fire marker 
 //and calls the fill_popup_fire function to display the corresponding fire info
 function fetch_fire_fromMarker(event) {
+    clickedArea = event.latlng;
+
     var lat_marker = event.latlng.lat;
     var lng_marker = event.latlng.lng;
     for (fire of fireList) {
@@ -185,7 +187,26 @@ function fill_popup_fire(fire) {
 
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_fire").style.display = 'block';
-    document.getElementById("over_map_left_bottom").style.display = 'none';}
+    document.getElementById("over_map_left_bottom").style.display = 'none';
+}
+
+//Updates the fire popup when it's already open
+function live_fill_popup_fire(clkA) {
+    var lat = clkA.lat;
+    var long = clkA.lng;
+    var good_fire;
+    for (fire of fireList) {
+        if (fire.lon == long && fire.lat == lat) {
+            good_fire = fire;
+        }
+    }
+    if (document.getElementById("info_fire").style.display == 'block') {
+        document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
+        document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
+        document.getElementById("info_fire_range").innerHTML = "Range : " + good_fire.range;
+    }
+}
+
 
 
 
@@ -255,7 +276,7 @@ function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
 
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
     let context = {
         method: 'DELETE',
     };
@@ -268,7 +289,7 @@ function delete_vehicle(id_vehicle) {
 function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
     crewMember, crewMemberCapacity, efficiency, facilityRefID) {
 
-    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/" + id; // 8081/vehicle/
+    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/" + id; // 8081/vehicle/ /////-------------------
     let context = {
         method: 'PUT',
         headers: {
@@ -378,7 +399,7 @@ function fill_popup_vehicle(vehicle) {
 }
 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
     let context = {
         method: 'DELETE',
     };
@@ -419,14 +440,16 @@ function vehicle_update_callback(vJSON) {
 
 
 //Uses a POST request to create a station given some basic parameters of the station
-function create_station(lon, lat) {
-    const POST_STATION_URL = "";
+function create_station(name,capacity,lon, lat) {
+    const POST_STATION_URL = "localhost:8098/createStation";
     let context = {
         method: 'POST',
         headers: {
             'Content-type': 'application/json'
         },
         body: JSON.stringify({
+            "name":name,
+            "capacity":capacity,
             "lon":lon,
             "lat":lat
         })
@@ -463,11 +486,20 @@ function print_station(station) {
         {
             color: 'purple',
             fillColor: 'purple',
-            fillOpacity: 100,
-            radius: 20
+            fillOpacity: 0.4,
+            radius: 500
         }
-    ).addTo(mymap);
+    ).addTo(stationGroup);
     stationPrinted.push(circle);
+
+    var stationIcon = L.icon({
+        iconUrl: 'icons/fire_station.png',    
+        iconSize: [34, 34], // size of the icon
+        iconAnchor: [17, 30], // point of the icon which will correspond to marker's location
+        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+    var marker = L.marker([station.lat, station.lon], {icon: stationIcon}).addTo(stationGroup);
+    stationPrinted.push(marker);
 }
 
 //clear printed stations
@@ -597,16 +629,22 @@ mymap.on('click', hide_interface_left);
 let fireList = [];
 let firePrinted = [];
 var fireGroup = L.featureGroup().addTo(mymap).on("click", fetch_fire_fromMarker);
+
 let vehicleList = [];
 let vehiclePrinted = [];
 var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
+
 let stationList = [];
 let stationPrinted = [];
+let stationGroup = L.featureGroup().addTo(mymap);
+
+let clickedArea;
 
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
+    live_fill_popup_fire(clickedArea);
     //fetch_stations();
 }, 1000);
 
@@ -618,3 +656,4 @@ var intervalId = window.setInterval(function(){
 fetch_fire();
 fetch_vehicles();
 //fetch_stations()
+create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);

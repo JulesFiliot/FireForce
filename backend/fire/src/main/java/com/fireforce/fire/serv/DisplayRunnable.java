@@ -31,6 +31,7 @@ public class DisplayRunnable implements Runnable {
 		while (!this.isEnd) {
 			try {
 				//System.out.println("On est DANS le thread");
+
 				Thread.sleep(1000);
 				String reqUrl = "http://127.0.0.1:8081/fire";
 		        RestTemplate restTemplate = new RestTemplate();
