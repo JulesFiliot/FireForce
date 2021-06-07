@@ -106,8 +106,6 @@ function fetch_fire() {
 //Called when fetching fires => fill the fireList with all existing fires 
 //and call fire_filter function for each fire to print them
 function fireList_callback(reponse) {
-    clear_fire();
-    fireList = [];
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
@@ -197,8 +195,16 @@ function live_fill_popup_fire(clkA) {
     var lat = clkA.lat;
     var long = clkA.lng;
     var good_fire;
+    console.log("~~~~~~~~");
+    console.log(lat);
+    console.log(long);
+    console.log(fireList);
     for (fire of fireList) {
+        console.log("=====");
+        console.log(fire.lat);
+        console.log(fire.long);
         if (fire.lon == long && fire.lat == lat) {
+            console.log("OK");
             good_fire = fire;
             document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
             document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
