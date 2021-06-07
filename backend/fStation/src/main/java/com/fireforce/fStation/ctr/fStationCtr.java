@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class fStationCtr {
     @Autowired
     fStationServ fSService;
     
+    @CrossOrigin
     @RequestMapping(method=RequestMethod.POST,value="/createStation")
     public void addStation(@RequestBody fStation fStation) {
         fSService.add(fStation);
@@ -42,6 +44,7 @@ public class fStationCtr {
         fSService.add(station2);
     }
     
+    @CrossOrigin
     @RequestMapping(value="/getStation/{id}")
     public fStation getStation(@PathVariable Integer id) {
     	return fSService.getStation(id);
@@ -52,6 +55,7 @@ public class fStationCtr {
     	return fSService.getStation(id).getLat();
     }
     
+    @CrossOrigin
     @RequestMapping(method=RequestMethod.PUT, value="/updateFStation")
     public void updateFSTATION(@RequestBody fStation fS) {
     	fSService.updateFS(fS);

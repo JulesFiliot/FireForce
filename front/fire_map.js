@@ -92,11 +92,11 @@ function vehiclesList_callback_reset(response) {
 
 //Fetch all existing fires
 function fetch_fire() {
-    const GET_FIRE_URL="http://127.0.0.1:8092/getAllFire"; // 8081/fire
+    const GET_ALL_FIRE_URL="http://127.0.0.1:8092/getAllFire"; // 8081/fire
     let context = {
         method: 'GET'
     };
-    fetch(GET_FIRE_URL, context)
+    fetch(GET_ALL_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
 }
@@ -438,7 +438,7 @@ function create_station(name,capacity,lon, lat) {
 }
 
 function fetch_stations() {
-    const GET_STATION_URL = "";
+    const GET_STATION_URL = "localhost:8098/getStation/1";
     let context = {
         method: 'GET',
     };
@@ -620,4 +620,4 @@ var intervalId = window.setInterval(function(){
 fetch_fire();
 fetch_vehicles();
 //fetch_stations()
-create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+//create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
