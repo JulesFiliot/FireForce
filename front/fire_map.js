@@ -491,11 +491,20 @@ function print_station(station) {
         {
             color: 'purple',
             fillColor: 'purple',
-            fillOpacity: 100,
-            radius: 20
+            fillOpacity: 0.4,
+            radius: 500
         }
-    ).addTo(mymap);
+    ).addTo(stationGroup);
     stationPrinted.push(circle);
+
+    var stationIcon = L.icon({
+        iconUrl: 'icons/fire_station.png',    
+        iconSize: [34, 34], // size of the icon
+        iconAnchor: [17, 30], // point of the icon which will correspond to marker's location
+        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+    var marker = L.marker([station.lat, station.lon], {icon: stationIcon}).addTo(stationGroup);
+    stationPrinted.push(marker);
 }
 
 //clear printed stations
@@ -625,11 +634,15 @@ mymap.on('click', hide_interface_left);
 let fireList = [];
 let firePrinted = [];
 var fireGroup = L.featureGroup().addTo(mymap).on("click", fetch_fire_fromMarker);
+
 let vehicleList = [];
 let vehiclePrinted = [];
 var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
+
 let stationList = [];
 let stationPrinted = [];
+let stationGroup = L.featureGroup().addTo(mymap);
+
 let clickedArea;
 
 //Instructions called every 1000 ms
