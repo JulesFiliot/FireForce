@@ -22,15 +22,23 @@ public class vehicCtr {
 	@Autowired
 	vehicServ vServ;
 	
+	@CrossOrigin
 	@RequestMapping(method = RequestMethod.POST, value = "/vehicle")
 	public void addVehic(@RequestBody vehic v) {
 		vServ.addVehic(v);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(method = RequestMethod.PUT, value = "/vehicle")
 	public void updateVehic(@RequestBody vehic v) {
 		vServ.updateVehic(v);
 	}
+	
+	@RequestMapping(value = "/vehicle/reset")
+	public void resetVehic() {
+		vServ.resetVehic();
+	}
+	
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/vehicMove/{id}")
 	public void vehicMove(@RequestBody Coord c, @PathVariable Integer id) {
@@ -49,7 +57,7 @@ public class vehicCtr {
 		vServ.generateVehics();
 	}
 	
-	
+	@CrossOrigin
 	@RequestMapping(value = "/getVehic/{id}")
 	public vehic getVehic(@PathVariable Integer id) {
 		return vServ.getVehic(id);

@@ -4,12 +4,12 @@
 
 	<head>
 	
-		<title>Test Map</title>
+		<title>FireForce</title>
 
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-		<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+		<link rel="icon" type="image/png" href="icons/index_icon.png" />
 
 		<link rel="stylesheet" href="fire_map.css">
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
@@ -21,9 +21,14 @@
 
 	<body>
 
+		<!--<div id="home_page">
+			<button onclick="start_simulation()">START</button>
+		</div>-->
 		<div id="mapid"></div>
-
+		
 		<div class="over_map" id="map_style" onchange="switch_map_style()">
+
+			<!--<button onclick="start_simulation()">START</button>-->
 
 			<input type="radio" name="map_style" id="map_style1" value="streets-v11" checked>
 			<label for="map_style1">Street</label>

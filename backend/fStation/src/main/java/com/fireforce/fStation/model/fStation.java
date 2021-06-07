@@ -22,8 +22,8 @@ public class fStation {
 		super();
 		this.setName(name);
 		this.capacity=100;
-		this.lon=0;
-		this.lat=0;
+		this.lon=4.86904827217447;
+		this.lat=45.78391737991209;
 		}
 	
 	public fStation(String name,int capacity, double lon, double lat) {

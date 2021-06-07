@@ -1,3 +1,4 @@
+
 package com.fireforce.fire.ctr;
 
 import java.util.ArrayList;
@@ -36,3 +37,4 @@ public class fireCtr {
 		fServ.addFireA(fire f);
 	}*/
 }
+

@@ -64,7 +64,7 @@ function reset_fire() {
 
 // Reset all vehicle and unprint them from map
 function reset_vehicle() {
-    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    const GET_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/reset";
     let context = {
         method: 'GET',
     };
@@ -74,6 +74,7 @@ function reset_vehicle() {
 }
 
 function vehiclesList_callback_reset(response) {    
+    /*
     clear_vehicles();
     vehicleList = [];
     for(var i = 0; i < response.length; i++) {
@@ -82,6 +83,7 @@ function vehiclesList_callback_reset(response) {
     for(const vehicle of vehicleList) {
         delete_vehicle(vehicle.id);
     }
+    */
 }
 
 
@@ -90,7 +92,7 @@ function vehiclesList_callback_reset(response) {
 
 //Fetch all existing fires
 function fetch_fire() {
-    const GET_FIRE_URL="http://127.0.0.1:8081/fire"; 
+    const GET_FIRE_URL="http://127.0.0.1:8092/getAllFire"; // 8081/fire
     let context = {
         method: 'GET'
     };
@@ -191,7 +193,7 @@ function fill_popup_fire(fire) {
 
 //Uses a POST request to create a vehicle given some basic parameters of the vehicle
 function create_vehicle(vehicle_type, liquid_type, lon, lat) {
-    const POST_VEHICLE_URL = "http://127.0.0.1:8094/vehicle";
+    const POST_VEHICLE_URL = "http://127.0.0.1:8094/vehicle";  // 8081/vehicle
     let context = {
         method: 'POST',
         headers: {
@@ -201,7 +203,16 @@ function create_vehicle(vehicle_type, liquid_type, lon, lat) {
             "lon":lon,
             "lat":lat,
             "type":vehicle_type,
-            "liquidType":liquid_type
+            "efficiency":10,
+            "liquidType":liquid_type,
+            "liquidQuantity":1000,
+            "liquidConsumption":1,
+            "fuel":1,
+            "fuelConsumption":1,
+            "crewMember":4,
+            "crewMemberCapacity":4,
+            "facilityRefID":1
+
         })
     };
     fetch(POST_VEHICLE_URL, context)
@@ -210,7 +221,7 @@ function create_vehicle(vehicle_type, liquid_type, lon, lat) {
 
 //GET request to fetch all existing vehicles. Calls the vehiclesList_callback when vehicles are fetched
 function fetch_vehicles() {
-    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle";
+    const GET_VEHICLE_URL = "http://127.0.0.1:8094/getAllVehic"; // 8081/vehicle
     let context = {
         method: 'GET',
     };
@@ -221,7 +232,7 @@ function fetch_vehicles() {
 
 //GET request to fetch a vehicle infos using its ID in URL parameter. Call the function to update the vehicle.
 function fetch_vehicle_byId(id_vehicle, vehicle_update_callback) {
-    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    const GET_VEHICLE_URL = "http://127.0.0.1:8094/getVehic/"+id_vehicle; // 8081/vehicle/
     let context = {
         method: 'GET',
     };
@@ -233,7 +244,7 @@ function fetch_vehicle_byId(id_vehicle, vehicle_update_callback) {
 //GET request to fetch a vehicle infos using its ID in URL parameter. 
 //Call the function to only update the left visual panel displaying vehicle infos.
 function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
-    const GET_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    const GET_VEHICLE_URL = "http://127.0.0.1:8094/getVehic/"+id_vehicle; // 8081/vehicle/
     let context = {
         method: 'GET',
     };
@@ -244,7 +255,7 @@ function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
 
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle;
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/
     let context = {
         method: 'DELETE',
     };
@@ -257,7 +268,7 @@ function delete_vehicle(id_vehicle) {
 function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
     crewMember, crewMemberCapacity, efficiency, facilityRefID) {
 
-    const PUT_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/" + id;
+    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/" + id; // 8081/vehicle/
     let context = {
         method: 'PUT',
         headers: {
@@ -317,18 +328,8 @@ function vehicle_filter(vehicle) {
 
 //Displays on the map the vehicle given in parameter
 function print_vehicle(vehicle) {
-    /*var circle = L.circle([vehicle.lat, vehicle.lon],
-        {
-            color: 'blue',
-            fillColor: 'blue',
-            fillOpacity: 1,
-            radius: 50
-        }
-    ).addTo(vehiclesGroup);
-    vehiclePrinted.push(circle);*/
-
     var fireIcon = L.icon({
-        iconUrl: 'icons/car_map.png',    
+        iconUrl: 'icons/car_map_filled.png',    
         iconSize: [51, 51], // size of the icon
         iconAnchor: [25.5, 40], // point of the icon which will correspond to marker's location
         popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
@@ -555,7 +556,7 @@ function switch_map_style() {
         if (map_style.checked) {
             mymap.removeLayer(map_layer);
             map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-	            minZoom: 10,
+	            //minZoom: 10,
                 maxZoom: 20,
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 id: 'mapbox/' + map_style.value,
@@ -565,7 +566,6 @@ function switch_map_style() {
         }
     }
 }
-
 
 //LOGS errors on console
 function err_callback(error) {
@@ -579,7 +579,7 @@ var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12); 
 
 
 var map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-	minZoom: 10,
+	//minZoom: 10,
     maxZoom: 20,
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	id: 'mapbox/streets-v11',
