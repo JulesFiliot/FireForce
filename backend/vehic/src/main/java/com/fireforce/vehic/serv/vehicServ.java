@@ -151,9 +151,9 @@ public class vehicServ {
 	public Integer getDispo() {
 		System.out.println(this.vRepo.findAll());
 		for (vehic v : this.vRepo.findAll()) {
-			System.out.println(v+" <=> "+v.isDispo());
+			//System.out.println(v+" <=> "+v.isDispo());
 			if (v.isDispo()) {
-				System.out.println("====vGetId getDispo===="+v.getId());
+				System.out.println("Vehic "+v.getId() +" est dispo (out getDispo)");
 				return v.getId();
 				}
 			
@@ -165,6 +165,7 @@ public class vehicServ {
 		vehic v = getVehic(id);
 		v.setDispo(!getVehic(id).isDispo());
 		vRepo.save(v);
+		System.out.println("Vehic "+v.getId()+" -> switchDispo");
 	}
 
 	public void endMission(Integer id) {
@@ -176,7 +177,8 @@ public class vehicServ {
 		Coord cFS = reqCoord.getBody();
 		Coord c = new Coord(cFS.getLon(),cFS.getLat());
 		this.switchDispo(id);
-		this.moveVehic(c, id);		
+		this.moveVehic(c, id);	
+		System.out.println("Fin mission véhicule"+id);
 	}
 
 	public void resetVehic() {
