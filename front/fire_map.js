@@ -195,10 +195,6 @@ function live_fill_popup_fire(clkA) {
     var lat = clkA.lat;
     var long = clkA.lng;
     var good_fire;
-    console.log("~~~~~~~~");
-    console.log(lat);
-    console.log(long);
-    console.log(fireList);
     for (fire of fireList) {
         console.log("=====");
         console.log(fire.lat);
@@ -211,7 +207,6 @@ function live_fill_popup_fire(clkA) {
             document.getElementById("info_fire_range").innerHTML = "Range : " + good_fire.range;
         }
     }
-    
 }
 
 
@@ -492,16 +487,6 @@ function stationList_callback(response) {
 
 //Displays on the map the station given in parameter
 function print_station(station) {
-    var circle = L.circle([station.lat, station.lon],
-        {
-            color: 'purple',
-            fillColor: 'purple',
-            fillOpacity: 0.4,
-            radius: 500
-        }
-    ).addTo(stationGroup);
-    stationPrinted.push(circle);
-
     var stationIcon = L.icon({
         iconUrl: 'icons/fire_station.png',    
         iconSize: [34, 34], // size of the icon
@@ -654,11 +639,11 @@ let clickedArea;
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
-    fetch_stations();
     if (document.getElementById("info_fire").style.display == 'block') {
         live_fill_popup_fire(clickedArea);
     }
-}, 2000);
+    //fetch_stations();
+}, 1000);
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);
