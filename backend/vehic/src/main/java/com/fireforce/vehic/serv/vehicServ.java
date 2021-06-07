@@ -227,7 +227,7 @@ public class vehicServ {
 
 	public void delVehic(Integer id) {
 		vehic v =getVehic(id);
-		String reqUrl = "http://127.0.0.1:8081/vehic/" + v.getRemoteId().toString();
+		String reqUrl = "http://127.0.0.1:8081/vehicle/" + v.getRemoteId().toString();
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.delete(reqUrl);
 		vRepo.delete(v);
