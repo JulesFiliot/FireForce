@@ -170,6 +170,8 @@ function clear_fire() {
 //Fetch fetch object when clicking on a fire marker 
 //and calls the fill_popup_fire function to display the corresponding fire info
 function fetch_fire_fromMarker(event) {
+    clickedArea = event.latlng;
+
     var lat_marker = event.latlng.lat;
     var lng_marker = event.latlng.lng;
     for (fire of fireList) {
@@ -187,7 +189,26 @@ function fill_popup_fire(fire) {
 
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_fire").style.display = 'block';
-    document.getElementById("over_map_left_bottom").style.display = 'none';}
+    document.getElementById("over_map_left_bottom").style.display = 'none';
+}
+
+//Updates the fire popup when it's already open
+function live_fill_popup_fire(clkA) {
+    var lat = clkA.lat;
+    var long = clkA.lng;
+    var good_fire;
+    for (fire of fireList) {
+        if (fire.lon == long && fire.lat == lat) {
+            good_fire = fire;
+        }
+    }
+    if (document.getElementById("info_fire").style.display == 'block') {
+        document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
+        document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
+        document.getElementById("info_fire_range").innerHTML = "Range : " + good_fire.range;
+    }
+}
+
 
 
 
@@ -609,12 +630,14 @@ let vehiclePrinted = [];
 var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_fromMarker);
 let stationList = [];
 let stationPrinted = [];
+let clickedArea;
 
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
     fetch_stations();
+    live_fill_popup_fire(clickedArea);
 }, 1000);
 
 //Functions called every time the page is refreshed
