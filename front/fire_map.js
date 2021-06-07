@@ -2,7 +2,7 @@
 
 //PUT request to change the main fire configs
 function put_creation_config(creationProba, creationSleep) {
-    const PUT_CREATION_URL = "http://127.0.0.1:8081/config/creation"; /////-------------------
+    const PUT_CREATION_URL = "http://127.0.0.1:8092/config/creation";
     let context = {
         method: 'PUT',
         headers: {
@@ -24,7 +24,7 @@ function put_creation_config(creationProba, creationSleep) {
 
 //PUT request to change the configuration of fires and their child spawning rate
 function put_behavior_config() {
-    const PUT_BEHAVIOR_URL = "http://127.0.0.1:8081/config/behavior"; /////-------------------
+    const PUT_BEHAVIOR_URL = "http://127.0.0.1:8092/config/behavior";
     let context = {
         method: 'PUT',
         headers: {
@@ -54,7 +54,7 @@ function put_config() {
 
 //deletes all fires and unprint them from map
 function reset_fire() {
-    const RESET_URL = "http://127.0.0.1:8081/fire/reset"; /////-------------------
+    const RESET_URL = "http://127.0.0.1:8092/fire/reset";
     let context = {
         method: 'GET',
     };
@@ -92,11 +92,13 @@ function vehiclesList_callback_reset(response) {
 
 //Fetch all existing fires
 function fetch_fire() {
-    const GET_FIRE_URL="http://127.0.0.1:8092/getAllFire"; // 8081/fire
+    const GET_ALL_FIRE_URL="http://127.0.0.1:8092/getAllFire"; // 8081/fire
     let context = {
         method: 'GET'
     };
-    fetch(GET_FIRE_URL, context)
+    clear_fire();
+    fireList = [];
+    fetch(GET_ALL_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
         .catch(error => err_callback(error));
 }
@@ -104,8 +106,6 @@ function fetch_fire() {
 //Called when fetching fires => fill the fireList with all existing fires 
 //and call fire_filter function for each fire to print them
 function fireList_callback(reponse) {
-    clear_fire();
-    fireList = [];
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
@@ -195,9 +195,13 @@ function live_fill_popup_fire(clkA) {
     var lat = clkA.lat;
     var long = clkA.lng;
     var good_fire;
-
+    console.log(fireList);
     for (fire of fireList) {
+        console.log("=====");
+        console.log(fire.lat);
+        console.log(fire.long);
         if (fire.lon == long && fire.lat == lat) {
+            console.log("OK");
             good_fire = fire;
             document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
             document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
@@ -245,6 +249,8 @@ function fetch_vehicles() {
     let context = {
         method: 'GET',
     };
+    clear_vehicles();
+    vehicleList = [];
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
         .catch(error => err_callback(error));
@@ -275,7 +281,7 @@ function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
 
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/"+id_vehicle; // 8081/vehicle/
     let context = {
         method: 'DELETE',
     };
@@ -285,10 +291,10 @@ function delete_vehicle(id_vehicle) {
 
 //PUT request to update the vehicle infos given in parameters. 
 //Then calls the fetch_vehicle_byId_visu to update vehicle info panel 
-function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
+function modify_vehicle(id, remoteId, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
     crewMember, crewMemberCapacity, efficiency, facilityRefID) {
 
-    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/" + id; // 8081/vehicle/ /////-------------------
+    const PUT_VEHICLE_URL = "http://127.0.0.1:8094/vehicle"; // 8081/vehicle/
     let context = {
         method: 'PUT',
         headers: {
@@ -296,6 +302,7 @@ function modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity,
         },
         body: JSON.stringify({
             "id":id,
+            "remoteId":remoteId,
             "efficiency":efficiency,
             "liquidConsumption":liquidConsumption,
             "fuelConsumption":fuelConsumption,
@@ -398,7 +405,7 @@ function fill_popup_vehicle(vehicle) {
 }
 
 function delete_vehicle(id_vehicle) {
-    const DELETE_VEHICLE_URL = "http://127.0.0.1:8081/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
+    const DELETE_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/"+id_vehicle; // 8081/vehicle/ /////-------------------
     let context = {
         method: 'DELETE',
     };
@@ -421,7 +428,7 @@ function button_update_vehicle() {
 
 function vehicle_update_callback(vJSON) {
     console.log(vJSON);
-    modify_vehicle(vJSON.id, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
+    modify_vehicle(vJSON.id, vJSON.remoteId, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
     vJSON.fuelConsumption, document.getElementById("liquid_quantity_update").value, document.getElementById("liquid_type_update").value, 
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
 }
@@ -440,7 +447,7 @@ function vehicle_update_callback(vJSON) {
 
 //Uses a POST request to create a station given some basic parameters of the station
 function create_station(name,capacity,lon, lat) {
-    const POST_STATION_URL = "localhost:8098/createStation";
+    const POST_STATION_URL = "http://127.0.0.1:8098/createStation";
     let context = {
         method: 'POST',
         headers: {
@@ -458,7 +465,7 @@ function create_station(name,capacity,lon, lat) {
 }
 
 function fetch_stations() {
-    const GET_STATION_URL = "";
+    const GET_STATION_URL = "http://127.0.0.1:8098/getAllStation";
     let context = {
         method: 'GET',
     };
@@ -590,7 +597,7 @@ function switch_map_style() {
 
 //LOGS errors on console
 function err_callback(error) {
-    console.log(error);
+    //console.log(error);
 }
 
 // CODE ----------------------------------------------------------------------------------------------------
@@ -644,7 +651,8 @@ var intervalId = window.setInterval(function(){
 //modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
 //crewMember, crewMemberCapacity, efficiency, facilityRefID)
 //modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
+put_config();
 fetch_fire();
 fetch_vehicles();
-//fetch_stations()
+fetch_stations()
 create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
