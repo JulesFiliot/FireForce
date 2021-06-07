@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fireforce.fStation.model.fStation;
 import com.fireforce.fStation.serv.fStationServ;
 import com.project.model.dto.Coord;
+import com.project.model.dto.FireDto;
 
 @RestController
 public class fStationCtr {
@@ -67,6 +68,12 @@ public class fStationCtr {
     	Coord c = new Coord (fSService.getStation(id).getLon(),fSService.getStation(id).getLat());
     	return c;
     	
+    }
+    
+    @CrossOrigin
+    @RequestMapping(method = RequestMethod.GET, value = "/getAllStation")
+    public ArrayList<fStation> getAllStation() {
+    	return fSService.getAllStation();
     }
     
     

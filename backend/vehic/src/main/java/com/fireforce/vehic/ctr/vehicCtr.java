@@ -63,7 +63,7 @@ public class vehicCtr {
 		return vServ.getVehic(id);
 	}
 	
-	
+	@CrossOrigin
 	@RequestMapping(value = "/editVehicCoord/{id}/{lat}/{lon}")
 	public void newCoord(@PathVariable Integer id, @PathVariable double lat, @PathVariable double lon) {
 		vehic v = vServ.getVehic(id);
@@ -86,6 +86,12 @@ public class vehicCtr {
 	public void endMission(@PathVariable Integer id) {
 		vServ.endMission(id);
 		return ;
+	}
+	
+	@CrossOrigin
+	@RequestMapping(method = RequestMethod.DELETE, value = "/vehicle/{id}")
+	public void delVehic(@PathVariable Integer id) {
+		vServ.delVehic(id);
 	}
 
 	/*
@@ -110,7 +116,7 @@ public class vehicCtr {
 		updateVehic(v, id);
 	}
 	
-	@RequestMapping(value = "/editVehicLiquidConsumption/{id}/{val}")
+	@RequestMapping(value = "/editVehicLiquidPathVariableConsumption/{id}/{val}")
 	public void newLiquidConsumption(@PathVariable Integer id, @PathVariable float val) {
 		vehic v = vServ.getVehic(id);
 		vServ.newLiquidConsumption(v, val);

@@ -224,6 +224,12 @@ public class vehicServ {
 		}
 		return ListVehic;
 	}
+
+	public void delVehic(Integer id) {
+		String reqUrl = "http://127.0.0.1:8081/vehic/" + id.toString();
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.delete(reqUrl);		
+	}
 	
 
 
