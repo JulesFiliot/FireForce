@@ -631,11 +631,11 @@ let clickedArea;
 
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
-    fetch_fire();
-    fetch_vehicles();
     if (document.getElementById("info_fire").style.display == 'block') {
         live_fill_popup_fire(clickedArea);
     }
+    fetch_fire();
+    fetch_vehicles();
     //fetch_stations();
 }, 1000);
 
