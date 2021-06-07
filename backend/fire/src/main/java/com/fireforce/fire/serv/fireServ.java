@@ -1,6 +1,7 @@
 package com.fireforce.fire.serv;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -92,6 +93,30 @@ public class fireServ {
 		if (ListFire.isEmpty()) return null;
 		
 		return ListFire;
+	}
+
+	public ArrayList<Integer> getLinkedVehic(Integer id) {
+		Optional<fire> fOpt = fRepo.findById(id);
+		if (fOpt.isPresent()) {
+			fire f=fOpt.get();
+			return f.getLinkedVehic();
+		}
+		return null;
+	}
+	
+	public void addLinkedVehic(Integer fId, Integer vId) {
+		Optional<fire> fOpt =fRepo.findById(fId);
+		if (fOpt.isPresent()) {
+			fire f = fOpt.get();
+			f.addLinkedVehic(vId);
+			fRepo.save(f);		
+			
+			String reqVehic = "http://127.0.0.1:8094/switchDispo/"+vId;
+			System.out.println("Le véhicule "+vId+" a été associé au feu "+fId);
+	        RestTemplate restTemplate = new RestTemplate();
+	        restTemplate.getForEntity(reqVehic, Integer.class);
+		}
+		
 	}
 
 }

@@ -42,9 +42,9 @@ public class fire {
 	}
 	
 	
-	public List<Integer> getLinkedVehic(){
+	public ArrayList<Integer> getLinkedVehic(){
 		if (this.linkedVehic != null) {
-			List<Integer> newList = new ArrayList<>(this.linkedVehic);	
+			ArrayList<Integer> newList = new ArrayList<>(this.linkedVehic);	
 			return newList;
 		}
 		return new ArrayList<Integer>();
