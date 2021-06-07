@@ -195,15 +195,14 @@ function live_fill_popup_fire(clkA) {
     var lat = clkA.lat;
     var long = clkA.lng;
     var good_fire;
+
     for (fire of fireList) {
         if (fire.lon == long && fire.lat == lat) {
             good_fire = fire;
+            document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
+            document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
+            document.getElementById("info_fire_range").innerHTML = "Range : " + good_fire.range;
         }
-    }
-    if (document.getElementById("info_fire").style.display == 'block') {
-        document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
-        document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
-        document.getElementById("info_fire_range").innerHTML = "Range : " + good_fire.range;
     }
 }
 
@@ -482,16 +481,6 @@ function stationList_callback(response) {
 
 //Displays on the map the station given in parameter
 function print_station(station) {
-    var circle = L.circle([station.lat, station.lon],
-        {
-            color: 'purple',
-            fillColor: 'purple',
-            fillOpacity: 0.4,
-            radius: 500
-        }
-    ).addTo(stationGroup);
-    stationPrinted.push(circle);
-
     var stationIcon = L.icon({
         iconUrl: 'icons/fire_station.png',    
         iconSize: [34, 34], // size of the icon
@@ -644,7 +633,9 @@ let clickedArea;
 var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
-    live_fill_popup_fire(clickedArea);
+    if (document.getElementById("info_fire").style.display == 'block') {
+        live_fill_popup_fire(clickedArea);
+    }
     //fetch_stations();
 }, 1000);
 
