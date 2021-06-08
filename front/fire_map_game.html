@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+	<head>
+	
+		<title>FireForce</title>
+
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<link rel="icon" type="image/png" href="icons/index_icon.png" />
+
+		<link rel="stylesheet" href="fire_map_game.css">
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	</head>
+
+	<body>
+
+		<!--<div id="home_page">
+			<button onclick="start_simulation()">START</button>
+		</div>-->
+		<div id="mapid"></div>
+		
+		<div class="over_map" id="map_style" onchange="switch_map_style()">
+
+			<!--<button onclick="start_simulation()">START</button>-->
+
+			<input type="radio" name="map_style" id="map_style1" value="streets-v11" checked>
+			<label for="map_style1">Street</label>
+			<input type="radio" name="map_style" id="map_style2" value="dark-v10">
+			<label for="map_style2">Dark</label>
+			<input type="radio" name="map_style" id="map_style3" value="satellite-v9">
+			<label for="map_style3">Satellite</label>
+
+		</div>
+
+		<div class="over_map" id="over_map_play">
+			<p class="time">Time : </p>
+			<p class="time" id="time">00:00</p>
+			<br/>
+			<p class="money">Money : </p>
+			<p class="money" id="money">0 $</p>
+		</div>
+
+		<div class="over_map" id="over_map_right">
+
+			<h3 onclick="hide_interface('config_interface')">Configuration interface</h3>
+
+			<div class="interface" id="config_interface" onchange="put_config()">
+
+				<p>Fire creation probability :</p>
+				<input type="number" id="creationProba" name="creationProba" min="0" max="1" step="0.1" value="0">
+				<p>Fire creation sleep :</p>
+				<input type="number" id="creationSleep" name="creationSleep" min="5" max="30" step="1" value="20">
+				<br/><br/>
+				<button onclick="reset_fire()">Fire reset</button>
+				<br/><br/>
+				<button onclick="reset_vehicle()">Vehicle reset</button>
+				<br/><br/>
+				<!-- <button onclick="reset_station()">Station reset</button> -->
+				<button onclick="reset_all()">Reset all</button>
+
+			</div>
+
+			<h3 onclick="hide_interface('fire_interface')">Fire interface</h3>
+
+			<div class="interface" id="fire_interface">
+
+				<p>Fire intensity :</p>
+				<input type="number" id="intensitymin" name="intensitymin" min="0" max="50" value="0"> <br/>
+				<input type="number" id="intensitymax" name="intensitymax" min="0" max="50" value="50">
+
+				<p>Fire range :</p>
+				<input type="number" id="rangemin" name="rangemin" min="0" max="50" value="0"> <br/>
+				<input type="number" id="rangemax" name="rangemax" min="0" max="50" value="50">
+
+				<p>Fire type :</p>
+				<div>
+					<div>
+						<input type="checkbox" id="A" name="A" checked>
+						<label for="A">A-Organic</label>
+					</div>
+					<div>
+						<input type="checkbox" id="B_Gasoline" name="B_Gasoline" checked>
+						<label for="B_Gasoline">B-Gasoline</label>
+					</div>
+					<div>
+						<input type="checkbox" id="B_Alcohol" name="B_Alcohol" checked>
+						<label for="B_Alcohol">B-Alcohol</label>
+					</div>
+					<div>
+						<input type="checkbox" id="B_Plastics" name="B_Plastics" checked>
+						<label for="B_Plastics">B-Plastics</label>
+					</div>
+					<div>
+						<input type="checkbox" id="C_Flammable_Gases" name="C_Flammable_Gases" checked>
+						<label for="C_Flammable_Gases">C-Gases</label>
+					</div>
+					<div>
+						<input type="checkbox" id="D_Metals" name="D_Metals" checked>
+						<label for="D_Metals">D-Metals</label>
+					</div>
+					<div>
+						<input type="checkbox" id="E_Electric" name="E_Electric" checked>
+						<label for="E_Electric">E-Electric</label>
+					</div>
+				</div>
+
+			</div>
+
+			<h3 onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
+
+			<div class="interface" id="vehicle_interface">
+
+				<p>Vehicle type :</p>
+				<div>
+					<div>
+						<input type="checkbox" id="CAR" name="CAR" checked>
+						<label for="CAR">Car</label>
+					</div>
+					<div>
+						<input type="checkbox" id="FIRE_ENGINE" name="FIRE_ENGINE" checked>
+						<label for="FIRE_ENGINE">Fire Engine</label>
+					</div>
+					<div>
+						<input type="checkbox" id="PUMPER_TRUCK" name="PUMPER_TRUCK" checked>
+						<label for="PUMPER_TRUCK">Pumper Truck</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER_TENDERS" name="WATER_TENDERS" checked>
+						<label for="WATER_TENDERS">Water Tender</label>
+					</div>
+					<div>
+						<input type="checkbox" id="TURNTABLE_LADDER_TRUCK" name="TURNTABLE_LADDER_TRUCK" checked>
+						<label for="TURNTABLE_LADDER_TRUCK">Turntable Ladder Truck</label>
+					</div>
+					<div>
+						<input type="checkbox" id="TRUCK" name="TRUCK" checked>
+						<label for="TRUCK">Truck</label>
+					</div>
+				</div>
+
+				<p>Liquid type :</p>
+				<div>
+					<div>
+						<input type="checkbox" id="ALL" name="ALL" checked>
+						<label for="ALL">All</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER" name="WATER" checked>
+						<label for="WATER">Water</label>
+					</div>
+					<div>
+						<input type="checkbox" id="WATER_WITH_ADDITIVES" name="WATER_WITH_ADDITIVES" checked>
+						<label for="WATER_WITH_ADDITIVES">Water with Additives</label>
+					</div>
+					<div>
+						<input type="checkbox" id="CARBON_DIOXIDE" name="CARBON_DIOXIDE" checked>
+						<label for="CARBON_DIOXIDE">Carbon Dioxide</label>
+					</div>
+					<div>
+						<input type="checkbox" id="POWDER" name="POWDER" checked>
+						<label for="POWDER">Powder</label>
+					</div>
+				</div>
+
+				<p>Fire Station :</p>
+				<div id="vehicle_interface_station">
+				</div>
+
+			</div>
+
+			<h3 onclick="hide_interface('station_creator')">Fire Station creator</h3>
+
+			<div class="interface" id="station_creator">
+
+				<p>Fire station name :</p>
+				<input type="text" id="station_name" name="station_name" value="FireStation">
+				<p>Capacity :</p>
+				<input type="number" id="station_capacity" max="200" min="10" step="10" value="100">
+				<p>Latitude :</p>
+				<input type="number" id="station_lat" max="45.82" min="45.60" step="0.01" value="45.78">
+				<p>Longitude :</p>
+				<input type="number" id="station_long" max="5.10" min="4.7" step="0.01" value="4.87">
+
+				<br/><br/>
+				<button onclick="station_creator()">Create</button>
+
+			</div>
+
+			<h3 onclick="hide_interface('vehicle_creator')">Vehicle creator</h3>
+
+			<div class="interface" id="vehicle_creator">
+
+				<p>Vehicle type :</p>
+				<select id="vehicle_type" name="vehicle_type" class="select">
+					<option value="0">Car</option>  <!-- enum donc maybe "0" au lieu de CAR, etc -->
+					<option value="1">Fire Engine</option>
+					<option value="2">Pumper Truck</option>
+					<option value="3">Water Tender</option>
+					<option value="4">Turntable Ladder Truck</option>
+					<option value="5">Truck</option>
+				</select>
+
+				<p>Liquid type :</p>
+				<select id="liquid_type" name="liquid_type" class="select">
+					<option value="0">All</option>
+					<option value="1">Water</option>
+					<option value="2">Water with Additives</option>
+					<option value="3">Carbon Dioxide</option>
+					<option value="4">Powder</option>
+				</select>
+
+				<p>Fire Station :</p>
+				<select id="vehicle_station" name="vehicle_station" class="select">
+				</select>
+
+				<br/><br/>
+				<button onclick="vehicle_creator()">Create</button>
+
+			</div>
+			
+
+		</div>
+
+		<div class="over_map" id="over_map_left">
+
+			<div id="info_fire">
+				<h3>Fire informations</h3>
+				<p id="info_fire_type">FIRE_TYPE</p>
+				<p id="info_fire_intensity">FIRE INTENSITY</p>
+				<p id="info_fire_range">FIRE_RANGE</p>
+			</div>
+
+			<div id="over_map_left_bottom">
+				<h3 onclick = "switch_left_interface_display('info_vehicle')">Vehicle informations</h3>
+				<div id="info_vehicle">
+					<p id="info_vehicle_id"></p>
+					<img id="info_vehicle_img" width="200" src="images/CAR" alt="Image">
+					<p id="info_vehicle_type">VEHIC_TYPE</p>
+					<p id="info_vehicle_station">VEHIC STATION</p>
+					<p id="info_vehicle_fuel">FUEL_VALUE</p>
+					<p id="info_vehicle_liquid_type">LIQUID_TYPE</p>
+					<p id="info_vehicle_liquid_quantity">LIQUID_QUANTITY</p>
+					<button onclick="button_delete_vehicle()">Sell</button>
+				</div>
+				
+				<h3 style="display: none">Tweak Selected Vehicle Info</h3>
+				<div id="info_vehicle_update">
+					<p>Vehicle type :</p>
+					<select id="vehicle_type_update" name="vehicle_type" class="select">
+						<option value="0">Car</option>
+						<option value="1">Fire Engine</option>
+						<option value="2">Pumper Truck</option>
+						<option value="3">Water Tender</option>
+						<option value="4">Turntable Ladder Truck</option>
+						<option value="5">Truck</option>
+					</select>
+					<p>Fuel quantity :</p>
+					<input type="number" id="fuel_value_update" name="fuel_quantity" min="0" max="1000" value="0">
+					<p>Liquid type :</p>
+					<select id="liquid_type_update" name="liquid_type" class="select">
+						<option value="0">All</option>
+						<option value="1">Water</option>
+						<option value="2">Water with Additives</option>
+						<option value="3">Carbon Dioxide</option>
+						<option value="4">Powder</option>
+					</select>
+					<p>Liquid quantity :</p>
+					<input type="number" id="liquid_quantity_update" name="liquid_quantity" min="0" max="1000" value="0">
+					<br/><br/>
+					<button onclick="button_update_vehicle()">Update</button>
+				</div>
+			</div>
+
+			<div id="info_station">
+				<h3>Fire Station informations</h3>
+				<p id="info_station_name">STATION_NAME</p>
+				<p id="info_station_capacity">STATION_CAPACITY</p>
+			</div>
+			
+		</div>
+	
+
+		<script src="fire_map_game.js"></script>
+
+	</body>
+
+</html>
