@@ -92,8 +92,15 @@ function reset_station() {
         method: 'GET',
     };
     fetch(RESET_URL, context)
-        .then(station_vehicle_creator())
         .catch(error => err_callback(error));
+}
+
+function reset_all() {
+    localStorage["1stStation"] = false;
+    reset_station();
+    reset_vehicle();
+    reset_fire();
+    document.location.reload();
 }
 
 
@@ -214,7 +221,7 @@ function live_fill_popup_fire(clkA) {
 // FUNCTIONS VEHICLES ----------------------------------------------------------------------------------------------------
 
 //Uses a POST request to create a vehicle given some basic parameters of the vehicle
-function create_vehicle(vehicle_type, liquid_type, lon, lat) {
+function create_vehicle(vehicle_type, liquid_type, lon, lat, facility) {
     const POST_VEHICLE_URL = "http://127.0.0.1:8094/vehicle";  // 8081/vehicle
     let context = {
         method: 'POST',
@@ -233,7 +240,7 @@ function create_vehicle(vehicle_type, liquid_type, lon, lat) {
             "fuelConsumption":1,
             "crewMember":4,
             "crewMemberCapacity":4,
-            "facilityRefID":1
+            "facilityRefID":facility
 
         })
     };
@@ -312,9 +319,20 @@ function modify_vehicle(id, remoteId, vehicle_type, fuel, fuelConsumption, liqui
 function vehicle_creator() {
     var vehicle_type = document.getElementById("vehicle_type").value;
     var liquid_type = document.getElementById("liquid_type").value;
-    var lat = Math.random()*(45.7941125 - 45.7145454) + 45.7145454;
-    var lon = Math.random()*(4.9266428 - 4.7736324) + 4.7736324;
-    create_vehicle(vehicle_type, liquid_type, lon, lat);
+    var lat = 0;
+    var lon = 0;
+    var facility = 0;
+    for (station of stationList) {
+        vehicle_station = document.getElementById("vehicle_station").value;
+        if (vehicle_station == station.id) {
+            lat = station.lat;
+            lon = station.lon;
+            facility = station.id;
+        }
+    }
+    //var lat = Math.random()*(45.7941125 - 45.7145454) + 45.7145454;
+    //var lon = Math.random()*(4.9266428 - 4.7736324) + 4.7736324;
+    create_vehicle(vehicle_type, liquid_type, lon, lat, facility);
 }
 
 //Takes the list of all vehicles as parameter. Calls vehicle_filter function for each vehicle to print them
@@ -333,7 +351,12 @@ function vehiclesList_callback(response) {
 function vehicle_filter(vehicle) {
     if (document.getElementById(vehicle.type).checked == true) {
         if (document.getElementById(vehicle.liquidType).checked == true) {
-            print_vehicle(vehicle);
+            if (vehic_station_filter) {
+                if (document.getElementById("STATION"+vehicle.facilityRefID).checked == true) {
+                    print_vehicle(vehicle);
+                }
+            }
+            else (print_vehicle(vehicle));
         }
     }
 }
@@ -380,6 +403,11 @@ function fill_popup_vehicle(vehicle) {
     document.getElementById("info_vehicle_fuel").innerHTML = "Fuel quantity : " + vehicle.fuel;
     document.getElementById("info_vehicle_liquid_type").innerHTML = "Liquid type : " + pretty_text(vehicle.liquidType);
     document.getElementById("info_vehicle_liquid_quantity").innerHTML = "Liquid quantity : " + vehicle.liquidQuantity;
+    for (station of stationList) {
+        if (vehicle.facilityRefID == station.id) {
+            document.getElementById("info_vehicle_station").innerHTML = "Fire station : " + station.name;
+        }
+    }
 
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("over_map_left_bottom").style.display = 'block';
@@ -435,18 +463,28 @@ function vehicle_update_callback(vJSON) {
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
 }
 
-//////---------------------------------------------------------- ERREUR
 function station_vehicle_creator() {
-    var text_html = "";
-    for (station of stationList) {
-        text_html += "<option value="+station.id+">"+station.name+"</option>";
+    if (document.getElementById("vehicle_creator").style.display == "none") {
+        var text_html = "";
+        for (station of stationList) {
+            text_html += "<option value="+station.id+">"+station.name+"</option>";
+        }
+        if (text_html != "") {
+            document.getElementById("vehicle_station").innerHTML = text_html;
+        }
     }
-    t_html = document.getElementById("vehicle_station").innerHTML;
-    console.log("=====");
-    console.log(text_html);
-    console.log(t_html);
-    if (text_html != "") {
-        document.getElementById("vehicle_station").innerHTML = text_html;
+}
+
+function station_vehicle_interface() {
+    if (document.getElementById("vehicle_interface").style.display == "none") {
+        var text_html = "";
+        for (station of stationList) {
+            text_html += "<div><input type='checkbox' id=STATION"+station.id+" name="+station.name+" checked><label for="+station.name+">"+station.name+"</label></div>"
+        }
+        if (text_html != "") {
+            document.getElementById("vehicle_interface_station").innerHTML = text_html;
+            vehic_station_filter = true;
+        }
     }
 }
 
@@ -478,6 +516,7 @@ function create_station(name, capacity,lon, lat) {
     };
     fetch(POST_STATION_URL, context)
         .then(station_vehicle_creator())
+        .then(station_vehicle_interface())
         .catch(error => err_callback(error));
 }
 
@@ -499,6 +538,7 @@ function stationList_callback(response) {
         stationList[i] = response[i];
     }
     station_vehicle_creator();
+    station_vehicle_interface();
     for(const station of stationList) {
         print_station(station);
     }
@@ -527,7 +567,7 @@ function clear_stations() {
 //Fills the popup concerning the Fire Station
 function fill_popup_station(station) {
     document.getElementById("info_station_name").innerHTML = "Nom : "  + station.name;
-    document.getElementById("info_station_capacity").innerHTML = "Capacité : " + station.capacity;
+    document.getElementById("info_station_capacity").innerHTML = "Capacity : " + station.capacity;
 
 
     document.getElementById("over_map_left").style.display = 'block';
@@ -693,6 +733,33 @@ let stationGroup = L.featureGroup().addTo(mymap).on("click", fetch_station_fromM
 
 let clickedArea;
 
+let vehic_station_filter = false;
+
+//Functions called every time the page is refreshed
+//create_vehicle(0, 1, 4.5, 45.5);
+//modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
+//crewMember, crewMemberCapacity, efficiency, facilityRefID)
+//modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
+put_config();
+
+fetch_fire();
+fetch_vehicles();
+fetch_stations();
+
+setTimeout(function(){
+    if (stationList.length == 0) {
+        create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+        setTimeout(function(){
+            fetch_stations();
+            setTimeout(function(){
+                station = stationList[0];
+                create_vehicle(1, 1, 4.86904827217447, 45.78391737991209, station.id);
+            }, 250);
+        }, 250);
+    }
+}, 250);
+
+
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
     if (document.getElementById("info_fire").style.display == 'block') {
@@ -704,17 +771,8 @@ var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
     fetch_stations();
-}, 5000);
-
-//Functions called every time the page is refreshed
-//create_vehicle(0, 1, 4.5, 45.5);
-//modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
-//crewMember, crewMemberCapacity, efficiency, facilityRefID)
-//modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
-put_config();
-fetch_fire();
-fetch_vehicles();
-fetch_stations();
-
-create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
-create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    setTimeout(function(){
+        station_vehicle_creator()
+        station_vehicle_interface()
+    }, 250);
+}, 1000);

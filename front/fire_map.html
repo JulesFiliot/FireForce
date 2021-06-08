@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="fr">
 
 	<head>
 	
@@ -54,7 +54,8 @@
 				<br/><br/>
 				<button onclick="reset_vehicle()">Vehicle reset</button>
 				<br/><br/>
-				<button onclick="reset_station()">Station reset</button>
+				<!-- <button onclick="reset_station()">Station reset</button> -->
+				<button onclick="reset_all()">Reset all</button>
 
 			</div>
 
@@ -160,6 +161,10 @@
 					</div>
 				</div>
 
+				<p>Fire Station :</p>
+				<div id="vehicle_interface_station">
+				</div>
+
 			</div>
 
 			<h3 onclick="hide_interface('station_creator')">Fire Station creator</h3>
@@ -228,8 +233,9 @@
 				<h3 onclick = "switch_left_interface_display('info_vehicle')">Vehicle informations</h3>
 				<div id="info_vehicle">
 					<p id="info_vehicle_id"></p>
-					<img id="info_vehicle_img" width="200">
+					<img id="info_vehicle_img" width="200" src="images/CAR" alt="Image">
 					<p id="info_vehicle_type">VEHIC_TYPE</p>
+					<p id="info_vehicle_station">VEHIC STATION</p>
 					<p id="info_vehicle_fuel">FUEL_VALUE</p>
 					<p id="info_vehicle_liquid_type">LIQUID_TYPE</p>
 					<p id="info_vehicle_liquid_quantity">LIQUID_QUANTITY</p>
