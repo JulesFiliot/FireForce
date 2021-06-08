@@ -61,6 +61,12 @@ public class vehicCtr {
     	return vList;
     }
 	
+	@RequestMapping(value = "/getAllDispDto") 
+	public ArrayList<VehicleDto> getAllDispDto() {
+    	ArrayList<VehicleDto> vList = vServ.getAllDispDto();
+    	return vList;
+    }
+	
 	@RequestMapping(value = "/generateVehics")
 	public void generateVehics() {
 		vServ.generateVehics();
@@ -114,6 +120,11 @@ public class vehicCtr {
 	public void askMove(@RequestBody Coord c, @PathVariable Integer id) {
 		System.out.println("askMove avec coord"+c.getLat()+","+c.getLon()+" et id"+id);
 		vServ.askMoveVehic(c,id);
+	}
+	
+	@RequestMapping( value = "/getRepoId/{remoteId}")
+	public Integer getRepoId(@PathVariable Integer remoteId) {
+		return vServ.getRepoId(remoteId);
 	}
 	/*
 	@RequestMapping(value = "/editVehicLiquidType/{id}/{type}")

@@ -160,10 +160,11 @@ public class hqServ {
 				ResponseEntity<VehicleDto[]> reqVID = restTemplate.getForEntity(reqUrl, VehicleDto[].class);
 				ArrayList<VehicleDto> VDto = new ArrayList<VehicleDto>(Arrays.asList(reqVID.getBody()));
 				Integer vId = null;
-				System.out.println(VDto.toString());
+				System.out.println("affectOptiStraight : VDto size:"+VDto.size());
+				System.out.println("affectOptiStraight : VDto is Empty ?"+VDto.isEmpty());
 				if (VDto.isEmpty()) {
 					//On récupère le vehic le plus proche parmi tous les vehic	
-					reqUrl = "http://127.0.0.1:8094/getAllVehicDto";
+					reqUrl = "http://127.0.0.1:8094/getAllDispDto";
 					ResponseEntity<VehicleDto[]> reqClosest = restTemplate.getForEntity(reqUrl, VehicleDto[].class);
 					ArrayList<VehicleDto> lvdto = new ArrayList<VehicleDto>(Arrays.asList(reqClosest.getBody()));
 					vId=this.getClosestVehicFromArrayList(fD,lvdto);
@@ -179,14 +180,20 @@ public class hqServ {
 				
 				else {
 					//plusieurs vehic ont un type optimal donc on choisit le plus proche
+					System.out.println("affectOptiStraight : cas : plusieurs vehic optimaux");
 					vId=this.getClosestVehicFromArrayList(fD, VDto);
 				}
 				
 				
-				System.out.println(vId);
+				System.out.println("affectOptiStraight: sortie du if triple : vId = "+vId);
 				if (vId!=null) {
 					//System.out.println("Oui Oui Oui");					
-					reqUrl = "http://127.0.0.1:8092/addLinkedVehic/"+fId+"/"+vId;
+					Integer repoId;
+					reqUrl = "http://127.0.0.1:8094/getRepoId/"+vId;
+					ResponseEntity<Integer> resp = restTemplate.getForEntity(reqUrl, Integer.class);
+					repoId = resp.getBody();
+					
+					reqUrl = "http://127.0.0.1:8092/addLinkedVehic/"+fId+"/"+repoId; // avec le id Repo
 					restTemplate.getForEntity(reqUrl, null);
 					
 				}
@@ -222,18 +229,20 @@ public class hqServ {
 		double lat2=fD.getLat();
 		double lon1;
 		double lon2=fD.getLon();
-		
+		System.out.println(" GCVFAL : on parcourt la liste lvdto de taille"+lvdto.size());
 		for (VehicleDto t : lvdto) {
 			lat1=t.getLat();
 			lon1=t.getLon();
 			
 			distanceTampon = 6371*Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lon1)*Math.cos(lon2)*Math.cos(lon2-lon1));
+
+			System.out.println("GCVFAL : pour le vehic (remote ID "+t.getId()+" )on calcule la distance "+distanceTampon+" avec les coordonnées ("+ lat1+","+lat2+","+lon1+","+lon2+")");
 			if (distanceTampon < distance) {
 				distance=distanceTampon;
 				vId=t.getId();
 			}
 		}
-		System.out.println("________ Sortie de getClosestVehicFAL : vId ="+vId);
+		System.out.println("GCVFAL: Sortie de getClosestVehicFAL : vId ="+vId);
 		return vId;
 	
 	}

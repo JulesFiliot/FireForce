@@ -38,7 +38,8 @@ public class vehic {
 	private double endLon;
 	//private Coord endPoint;
 	private double progress=0;
-    private double dl=0.0004;
+    //private double dl=0.0004;
+	private double dl=0.004;
 	private double deltaLat;
 	private double deltaLon;
 	private double D;
