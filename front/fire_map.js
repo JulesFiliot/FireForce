@@ -23,7 +23,7 @@ function put_creation_config(creationProba, creationSleep) {
 }
 
 //PUT request to change the configuration of fires and their child spawning rate
-function put_behavior_config() {
+function put_behavior_config(childProba) {
     const PUT_BEHAVIOR_URL = "http://127.0.0.1:8092/config/behavior";
     let context = {
         method: 'PUT',
@@ -34,7 +34,7 @@ function put_behavior_config() {
             "propagationThreshold":5.0,
             "attenuationFactor":0.8,
             "intensityReplicationThreshold":10.0,
-            "replicationProbability":0.0,
+            "replicationProbability":childProba,
             "maxFireRange":50.0,
             "maxFireIntensity":50.0,
             "intensity_inc":0.1,
@@ -69,21 +69,7 @@ function reset_vehicle() {
         method: 'GET',
     };
     fetch(GET_VEHICLE_URL, context)
-        .then(response => response.json().then(body => vehiclesList_callback_reset(body)))
         .catch(error => err_callback(error));
-}
-
-function vehiclesList_callback_reset(response) {    
-    /*
-    clear_vehicles();
-    vehicleList = [];
-    for(var i = 0; i < response.length; i++) {
-        vehicleList[i] = response[i];
-    }
-    for(const vehicle of vehicleList) {
-        delete_vehicle(vehicle.id);
-    }
-    */
 }
 
 
@@ -145,13 +131,12 @@ function print_fire(fire) {
     });
     var marker = L.marker([fire.lat, fire.lon], {icon: fireIcon}).addTo(fireGroup);
     firePrinted.push(marker);
-    
-
-
 }
 
 //clear all printed fires
 function clear_fire() {
+    //console.log("printed :");
+    //console.log(firePrinted);
     for (i of firePrinted) {
         i.remove();
     }
@@ -238,8 +223,8 @@ function fetch_vehicles() {
     let context = {
         method: 'GET',
     };
-    clear_vehicles();
-    vehicleList = [];
+    //clear_vehicles();
+    //vehicleList = [];
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
         .catch(error => err_callback(error));
@@ -572,7 +557,7 @@ function hide_interface_left(event) {
    document.getElementById("over_map_left").style.display = 'None';
 }
 
-function pretty_text (name) {
+function pretty_text(name) {
     var pretty_name = "";
     var lower_flag = 0;
     for (i of name) {
@@ -627,6 +612,54 @@ function switch_map_style() {
     }
 }
 
+function simulation_preset_soft() {
+    //Reset
+    reset_fire();
+    reset_vehicle();
+
+    //Creates one fire station and two vehicles
+    create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+
+    //Set the spawn probability and frequency and the child spawn rate
+    put_creation_config(0.3, 10000);
+    put_behavior_config(0.0);
+}
+function simulation_preset_balanced() {
+    //Reset
+    reset_fire();
+    reset_vehicle();
+
+    //Creates one fire station and two vehicles
+    create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+    create_station("Gangsta FireMen", 200, 4.96904827217447, 45.88391737991209);
+    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+
+    //Set the spawn probability and frequency and the child spawn rate
+    put_creation_config(0.8, 8000);
+    put_behavior_config(0.2);
+}
+function simulation_preset_hell() {
+    //Reset
+    reset_fire();
+    reset_vehicle();
+
+    //Creates one fire station and two vehicles
+    create_station("Irithyll Dungeon", 50, 4.86904827217447, 45.78391737991209);
+    create_station("Kiln of the First Flame", 100, 4.96904827217447, 45.88391737991209);
+    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+
+    //Set the spawn probability and frequency and the child spawn rate
+    put_creation_config(1, 5000);
+    put_behavior_config(0.6);
+}
+
 //LOGS errors on console
 function err_callback(error) {
     //console.log(error);
@@ -679,17 +712,13 @@ var intervalId = window.setInterval(function(){
     fetch_fire();
     fetch_vehicles();
     fetch_stations();
-}, 1000);
+}, 2000);
 
 //Functions called every time the page is refreshed
-//create_vehicle(0, 1, 4.5, 45.5);
-//modify_vehicle(id, vehicle_type, fuel, fuelConsumption, liquidQuantity, liquid_type, liquidConsumption,lon, lat, 
-//crewMember, crewMemberCapacity, efficiency, facilityRefID)
-//modify_vehicle(10453, 3, 0, 0, 10, 3, 20, 1, 1, 23, 25, 12, 45);   //TODO USE POSTEMAN PUT REQUEST TO UPDATE VEHICLE
 put_config();
 fetch_fire();
 fetch_vehicles();
 fetch_stations();
 
-create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
-create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+//create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+//create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
