@@ -91,6 +91,8 @@ public class vehicServ {
 		vehic newV = getVehic(v.getId());
 		newV = v;
 		vRepo.save(newV);
+		
+		System.out.println("à la sortie du save de update v est :"+newV.toString());
 	}
 	
 	public vehic getVehic(Integer id) {
@@ -165,7 +167,7 @@ public class vehicServ {
 	public void moveVehic(Coord c, Integer id) {
 		vehic v = getVehic(id);
 
-		System.out.println(c);
+		System.out.println("on bouge vehic "+id+" vers coord"+c.getLat()+","+c.getLon());
 		
 		v.setLat(c.getLat());
 		v.setLon(c.getLon());
@@ -204,7 +206,8 @@ public class vehicServ {
 		Coord cFS = reqCoord.getBody();
 		Coord c = new Coord(cFS.getLon(),cFS.getLat());
 		this.switchDispo(id);
-		this.moveVehic(c, id);	
+	//	this.moveVehic(c, id);	
+		this.askMoveVehic(c, id);
 		System.out.println("Fin mission véhicule"+id);
 	}
 
@@ -229,8 +232,8 @@ public class vehicServ {
 	}
 	
 
-	/*
-	@Bean(initMethod="init")
+
+	/*@Bean(initMethod="init")
 	public void init() {
 		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
 		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
@@ -306,7 +309,12 @@ public class vehicServ {
 
 	public void askMoveVehic(Coord c, Integer id) {
 		//on update mvRepo avec une nouvelle demande de déplacement
-		Optional<vehic> vOpt = vRepo.findById(id);
+		System.out.println("l'id vaut bieng :"+id);
+		//Optional<vehic> vOpt = vRepo.findById(id);
+		Optional<vehic> vOpt = vRepo.findByRemoteId(id);
+		
+		System.out.println("vOpt:"+vOpt.toString());
+		System.out.println("vOpt isPresent ?"+vOpt.isPresent());
 		if (vOpt.isPresent()) {
 			vehic v=vOpt.get();
 			v.setEndPoint(c);
@@ -318,6 +326,7 @@ public class vehicServ {
 			v.computeAll(v.getEndPoint(),v.getStartPoint());
 			v.setMoving(true);
 			vRepo.save(v);
+			System.out.println("::::::: V, parle moi : " +v.isMoving());
 		}
 		
 	}
