@@ -312,8 +312,17 @@ function modify_vehicle(id, remoteId, vehicle_type, fuel, fuelConsumption, liqui
 function vehicle_creator() {
     var vehicle_type = document.getElementById("vehicle_type").value;
     var liquid_type = document.getElementById("liquid_type").value;
-    var lat = Math.random()*(45.7941125 - 45.7145454) + 45.7145454;
-    var lon = Math.random()*(4.9266428 - 4.7736324) + 4.7736324;
+    var lat = 0;
+    var lon = 0;
+    for (station of stationList) {
+        vehicle_station = document.getElementById("vehicle_station").value;
+        if (vehicle_station == station.id) {
+            lat = station.lat;
+            lon = station.lon;
+        }
+    }
+    //var lat = Math.random()*(45.7941125 - 45.7145454) + 45.7145454;
+    //var lon = Math.random()*(4.9266428 - 4.7736324) + 4.7736324;
     create_vehicle(vehicle_type, liquid_type, lon, lat);
 }
 
@@ -435,7 +444,7 @@ function vehicle_update_callback(vJSON) {
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
 }
 
-//////---------------------------------------------------------- ERREUR
+//////---------------------------------------------------------- ERREUR (faut cliquer vite)
 function station_vehicle_creator() {
     var text_html = "";
     for (station of stationList) {
