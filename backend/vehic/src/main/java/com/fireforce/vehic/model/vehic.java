@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.project.model.dto.Coord;
 import com.project.model.dto.LiquidType;
 import com.project.model.dto.VehicleType;
 
@@ -29,6 +30,21 @@ public class vehic {
 	private int crewMemberCapacity;
 	private Integer facilityRefID;
 	private boolean dispo=true;
+	
+	//private Coord startPoint;
+	private double startLon;
+	private double startLat;
+	private double endLat;
+	private double endLon;
+	//private Coord endPoint;
+	private double progress=0;
+    private double dl=0.0001;
+	private double deltaLat;
+	private double deltaLon;
+	private double D;
+	private double dlLat;
+	private double dlLon;
+	private boolean moving=false;
 
 	
 	public vehic(double lon, double lat, com.project.model.dto.VehicleType type, float efficiency,
@@ -189,6 +205,92 @@ public class vehic {
 		this.dispo = dispo;
 	}
 
+	public boolean isMoving() {
+		return moving;
+	}
+
+	public void setMoving(boolean moving) {
+		this.moving = moving;
+	}
+
+	public double getDlLon() {
+		return dlLon;
+	}
+
+	public void setDlLon(double dlLon) {
+		this.dlLon = dlLon;
+	}
+
+	public double getDlLat() {
+		return dlLat;
+	}
+
+	public void setDlLat(double dlLat) {
+		this.dlLat = dlLat;
+	}
+
+	public double getProgress() {
+		return progress;
+	}
+
+	public void setProgress(double progress) {
+		this.progress = progress;
+	}
+
+	public void setD(double D) {
+		this.D=D;
+	}
 	
+	public double getD() {
+		return this.D;
+	}
+
+	/*public Coord getEndPoint() {
+		return this.endPoint;
+	}
 	
+	public void setEndPoint(Coord endPoint) {
+		this.endPoint=endPoint;
+	}*/
+
+	public double getDl() {
+		return this.dl;
+	}
+	
+	public void computeDeltaLat(Coord endPoint,Coord startPoint) {
+		this.deltaLat=endPoint.getLat()-startPoint.getLat();
+	}
+	
+	public void computeDeltaLon(Coord endPoint,Coord startPoint) {
+		
+		this.deltaLon=endPoint.getLon()-startPoint.getLon();
+	}
+
+	public void setStartPoint(Coord StPt) {
+		this.startLat=StPt.getLat();
+		this.startLon=StPt.getLon();
+	}
+
+	public Coord getStartPoint() {
+		Coord StPt = new Coord(this.startLon,this.startLat);
+		return StPt;
+	}
+	
+	public Coord getEndPoint() {
+		Coord EdPt = new Coord(this.endLon,this.endLat);
+		return EdPt;
+	}
+	
+	public void setEndPoint(Coord EdPt) {
+		this.endLat=EdPt.getLat();
+		this.endLon=EdPt.getLon();
+	}
+	
+	public void computeAll(Coord endPoint, Coord startPoint) {
+		this.deltaLat=endPoint.getLat()-startPoint.getLat();
+		this.deltaLon=endPoint.getLon()-startPoint.getLon();
+		this.D=Math.sqrt(Math.pow(deltaLat, 2)+Math.pow(deltaLon, 2));
+		this.dlLat=deltaLat*dl/D;
+		this.dlLon=deltaLon*dl/D;
+	}
 }

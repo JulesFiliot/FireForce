@@ -81,7 +81,8 @@ public class DisplayRunnable implements Runnable {
 				
 				// Maintenant on assigne les véhicules là où il faut
 				
-				String reqVehic = "http://127.0.0.1:8095/affectVehicSimple";
+			//	String reqVehic = "http://127.0.0.1:8095/affectVehicSimple";
+				String reqVehic = "http://127.0.0.1:8095/affectOptiStraight";
 				restTemplate.getForEntity(reqVehic, null);
 				
 			/*	for (fire f : this.fRepo.findAll()) {
