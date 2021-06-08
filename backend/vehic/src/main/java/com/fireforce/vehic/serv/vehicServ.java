@@ -229,7 +229,7 @@ public class vehicServ {
 	}
 	
 
-
+	/*
 	@Bean(initMethod="init")
 	public void init() {
 		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
@@ -242,6 +242,7 @@ public class vehicServ {
 		this.addVehic(v3);
 		this.addVehic(v4);
 	}
+	*/
 
 	public ArrayList<vehic> getAllVehic() {
 		ArrayList<vehic> ListVehic = new ArrayList<vehic>();
