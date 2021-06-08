@@ -111,11 +111,14 @@ function fetch_fire() {
     let context = {
         method: 'GET'
     };
-    clear_fire();
     fireList = [];
     fetch(GET_ALL_FIRE_URL, context)
         .then(reponse => reponse.json().then(body => fireList_callback(body)))
-        .catch(error => err_callback(error));
+        .catch(error => err_callback_fire(error));
+}
+
+function err_callback_fire() {
+    clear_fire();
 }
 
 //Called when fetching fires => fill the fireList with all existing fires 
@@ -124,6 +127,7 @@ function fireList_callback(reponse) {
     for(var i = 0; i < reponse.length; i++) {
         fireList[i] = reponse[i];
     }
+    clear_fire();
     for(const fire of fireList){
         fire_filter(fire);
     }
@@ -252,11 +256,14 @@ function fetch_vehicles() {
     let context = {
         method: 'GET',
     };
-    //clear_vehicles();
-    //vehicleList = [];
+    vehicleList = [];
     fetch(GET_VEHICLE_URL, context)
         .then(response => response.json().then(body => vehiclesList_callback(body)))
-        .catch(error => err_callback(error));
+        .catch(error => err_callback_vehicles(error));
+}
+
+function err_callback_vehicles() {
+    clear_vehicles();
 }
 
 //GET request to fetch a vehicle infos using its ID in URL parameter. Call the function to update the vehicle.
@@ -335,11 +342,10 @@ function vehicle_creator() {
 
 //Takes the list of all vehicles as parameter. Calls vehicle_filter function for each vehicle to print them
 function vehiclesList_callback(response) {    
-    clear_vehicles();
-    vehicleList = [];
     for(var i = 0; i < response.length; i++) {
         vehicleList[i] = response[i];
     }
+    clear_vehicles();
     for(const vehicle of vehicleList) {
         vehicle_filter(vehicle);
     }
@@ -513,8 +519,6 @@ function create_station(name, capacity, lon, lat) {
         })
     };
     fetch(POST_STATION_URL, context)
-        .then(station_vehicle_creator())
-        .then(station_vehicle_interface())
         .catch(error => err_callback(error));
 }
 
@@ -523,20 +527,24 @@ function fetch_stations() {
     let context = {
         method: 'GET',
     };
+    stationList = [];
     fetch(GET_STATION_URL, context)
         .then(response => response.json().then(body => stationList_callback(body)))
-        .catch(error => err_callback(error));
+        .catch(error => err_callback_stations(error));
+}
+
+function err_callback_stations() {
+    clear_stations();
 }
 
 //Takes the list of all stations as parameter. Calls print_station function for each vehicle to print them
 function stationList_callback(response) {    
-    clear_stations();
-    stationList = [];
     for(var i = 0; i < response.length; i++) {
         stationList[i] = response[i];
     }
     station_vehicle_creator();
     station_vehicle_interface();
+    clear_stations();
     for(const station of stationList) {
         print_station(station);
     }
@@ -816,10 +824,10 @@ setTimeout(function(){
             setTimeout(function(){
                 station = stationList[0];
                 create_vehicle(1, 1, 4.86904827217447, 45.78391737991209, station.id);
-            }, 250);
-        }, 250);
+            }, 100);
+        }, 100);
     }
-}, 250);
+}, 100);
 
 
 //Instructions called every 1000 ms
@@ -837,4 +845,4 @@ var intervalId = window.setInterval(function(){
         station_vehicle_creator()
         station_vehicle_interface()
     }, 250);
-}, 1000);
+}, 500);

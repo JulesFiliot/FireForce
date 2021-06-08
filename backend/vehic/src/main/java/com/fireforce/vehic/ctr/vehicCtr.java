@@ -112,6 +112,7 @@ public class vehicCtr {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/askMove/{id}")
 	public void askMove(@RequestBody Coord c, @PathVariable Integer id) {
+		System.out.println("askMove avec coord"+c.getLat()+","+c.getLon()+" et id"+id);
 		vServ.askMoveVehic(c,id);
 	}
 	/*

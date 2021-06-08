@@ -67,9 +67,11 @@ public class DisplayRunnable implements Runnable {
 					if (!present) {
 						System.out.println("Feu supprimé:"+fRepo.findById(id));
 						for (Integer vId :f.getLinkedVehic()){
+							if (vId != null) {
+								System.out.println("requete endMission sur le vehic "+vId);
 							String reqEM = "http://127.0.0.1:8094/endMission/"+vId;
 							restTemplate.getForEntity(reqEM,null);
-
+							}
 						}
 						fRepo.deleteById(id);
 						
