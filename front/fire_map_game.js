@@ -794,6 +794,10 @@ var intervalId = window.setInterval(function(){
     if (document.getElementById("info_vehicle").style.display == 'block') {
         live_fill_popup_vehicle(clickedArea);
     }
+    addMoney();
+    addTime();
+    printPlay();
+    setDifficulty();
     fetch_fire();
     fetch_vehicles();
     fetch_stations();
@@ -801,10 +805,6 @@ var intervalId = window.setInterval(function(){
         station_vehicle_creator()
         station_vehicle_interface()
     }, 250);
-    addMoney();
-    addTime();
-    printPlay();
-    setDifficulty();
 }, 1000);
 
 
@@ -816,9 +816,12 @@ let money = 0;
 let time = 0;
 
 function addMoney() {
-    var bonus = 100;
-    bonus = Math.floor(bonus/(fireList.length+1));
-    money += 10+bonus;
+    var malus = 5*fireList.length;
+    var bonus;
+    if (malus == 0) {
+        bonus = 100;
+    }
+    money = money+10+bonus-malus;
 }
 
 function addTime() {
@@ -839,22 +842,22 @@ function printPlay() {
 }
 
 function setDifficulty() {
-    if (time > 5000) {
+    if (time > 600) {
         put_creation_config(1, 1*1000);
     }
-    else if (time > 3000) {
+    else if (time > 420) {
         put_creation_config(1, 3*1000);
     }
-    else if (time > 2000) {
+    else if (time > 300) {
         put_creation_config(1, 5*1000);
     }
-    else if (time > 1000) {
+    else if (time > 240) {
         put_creation_config(1, 10*1000);
     }
-    else if (time > 500) {
+    else if (time > 180) {
         put_creation_config(0.75, 10*1000);
     }
-    else if (time > 200) {
+    else if (time > 120) {
         put_creation_config(1, 20*1000);
     }
     else if (time > 60) {

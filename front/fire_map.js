@@ -96,10 +96,9 @@ function reset_station() {
 }
 
 function reset_all() {
-    localStorage["1stStation"] = false;
-    reset_station();
-    reset_vehicle();
     reset_fire();
+    reset_vehicle();
+    reset_station();
     document.location.reload();
 }
 
@@ -710,7 +709,6 @@ function err_callback(error) {
 //MAP INITIALISATION
 var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
 
-
 var map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 	//minZoom: 10,
     maxZoom: 20,
@@ -725,6 +723,11 @@ var map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}
 
 switch_map_style();
 mymap.on('click', hide_interface_left);
+/*
+mymap.on('click', function(e) {
+    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
+});
+*/
 
 //GLOBAL variables
 let fireList = [];
@@ -783,4 +786,4 @@ var intervalId = window.setInterval(function(){
         station_vehicle_creator()
         station_vehicle_interface()
     }, 250);
-}, 500);
+}, 10000);
