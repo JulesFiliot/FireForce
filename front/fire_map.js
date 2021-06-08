@@ -711,7 +711,7 @@ function simulation_preset_soft() {
         let stationId = [];
         console.log(stationList);
         for(const station of stationList) {
-            stationId.push(station.id);
+            stationId.push(station.id + 1);
         }
         console.log(stationId);
         create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
