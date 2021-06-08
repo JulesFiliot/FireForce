@@ -244,7 +244,8 @@ public class vehicServ {
 		this.addVehic(v2);
 		this.addVehic(v3);
 		this.addVehic(v4);
-	}*/
+	}
+	*/
 
 	public ArrayList<vehic> getAllVehic() {
 		ArrayList<vehic> ListVehic = new ArrayList<vehic>();

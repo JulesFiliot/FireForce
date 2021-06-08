@@ -61,7 +61,7 @@
 
 			<h3 onclick="hide_interface('fire_interface')">Fire interface</h3>
 
-			<div class="interface" id="fire_interface" onchange="fetch_fire()">
+			<div class="interface" id="fire_interface">
 
 				<p>Fire intensity :</p>
 				<input type="number" id="intensitymin" name="intensitymin" min="0" max="50" value="0"> <br/>
@@ -107,7 +107,7 @@
 
 			<h3 onclick="hide_interface('vehicle_interface')">Vehicle interface</h3>
 
-			<div class="interface" id="vehicle_interface" onchange="fetch_vehicles()">
+			<div class="interface" id="vehicle_interface">
 
 				<p>Vehicle type :</p>
 				<div>
@@ -176,9 +176,9 @@
 				<p>Capacity :</p>
 				<input type="number" id="station_capacity" max="200" min="10" step="10" value="100">
 				<p>Latitude :</p>
-				<input type="number" id="station_lat" max="45.7941125" min="45.7145454" step="0.001" value="45.783">
+				<input type="number" id="station_lat" max="45.82" min="45.60" step="0.01" value="45.78">
 				<p>Longitude :</p>
-				<input type="number" id="station_long" max="4.9266428" min="4.7736324" step="0.001" value="4.869">
+				<input type="number" id="station_long" max="5.10" min="4.7" step="0.01" value="4.87">
 
 				<br/><br/>
 				<button onclick="station_creator()">Create</button>
