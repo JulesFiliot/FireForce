@@ -150,6 +150,7 @@ public class hqServ {
 			Integer fId = fD.getId();
 			reqUrl = "http://127.0.0.1:8092/getLinkedVehic/"+fId;
 			ResponseEntity<Integer[]> reqLV = restTemplate.getForEntity(reqUrl,Integer[].class);
+			if (reqLV.hasBody()) {
 			ArrayList<Integer> LV = new ArrayList<Integer>(Arrays.asList(reqLV.getBody()));
 			//System.out.println(LV);
 			if (LV.isEmpty()){
@@ -219,7 +220,7 @@ public class hqServ {
 				return;
 				
 			}
-		}
+		}}
 	}
 
 	private Integer getClosestVehicFromArrayList(FireDto fD, ArrayList<VehicleDto> lvdto) {
@@ -236,8 +237,26 @@ public class hqServ {
 			lat1=t.getLat();
 			lon1=t.getLon();
 			
-			distanceTampon = 6371*Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lon1)*Math.cos(lon2)*Math.cos(lon2-lon1));
-
+			//distanceTampon = 6371*Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lon1)*Math.cos(lon2)*Math.cos(lon2-lon1));
+			distanceTampon = 2 * 6371 * Math.asin(
+					  Math.sqrt(
+					    (
+					      Math.pow(Math.sin((
+					        Math.toRadians(lat2) -
+					        Math.toRadians(lat1)
+					      )/2)
+					    ,2)
+					    +
+					    Math.cos(Math.toRadians(lat1)) *
+					    Math.cos(Math.toRadians(lat2)) *
+					    (
+					      Math.pow(Math.sin((
+					        Math.toRadians(lon2) -
+					        Math.toRadians(lon1)
+					      )/2)
+					    ,2)
+					  )
+					)));
 			System.out.println("GCVFAL : pour le vehic (remote ID "+t.getId()+" )on calcule la distance "+distanceTampon+" avec les coordonnées ("+ lat1+","+lat2+","+lon1+","+lon2+")");
 			if (distanceTampon < distance) {
 				distance=distanceTampon;
