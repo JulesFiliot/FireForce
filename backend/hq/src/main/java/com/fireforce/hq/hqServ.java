@@ -160,6 +160,7 @@ public class hqServ {
 				ResponseEntity<VehicleDto[]> reqVID = restTemplate.getForEntity(reqUrl, VehicleDto[].class);
 				ArrayList<VehicleDto> VDto = new ArrayList<VehicleDto>(Arrays.asList(reqVID.getBody()));
 				Integer vId = null;
+				System.out.println(VDto.toString());
 				if (VDto.isEmpty()) {
 					//On récupère le vehic le plus proche parmi tous les vehic	
 					reqUrl = "http://127.0.0.1:8094/getAllVehicDto";
@@ -173,6 +174,7 @@ public class hqServ {
 					//on a qu'un vehicule avec un type optimal donc le choisit par défaut
 					VehicleDto t =VDto.get(0);
 					vId=t.getId();
+					System.out.println("VDTO SIZE 1 ===> vId ="+vId);
 				}
 				
 				else {
@@ -195,8 +197,11 @@ public class hqServ {
 				
 				c.setLat(fD.getLat());
 				c.setLon(fD.getLon());
-						
+				
+				System.out.println("c : "+c.getLat()+","+c.getLon());
+				
 				if(vId!=null) {
+					System.out.println("requete askMove en direction de 8094");
 				//String reqMov = "http://127.0.0.1:8094/vehicMove/"+vId;
 					String reqMov = "http://127.0.0.1:8094/askMove/"+vId;
 					restTemplate.postForEntity(reqMov, c, null);
@@ -223,11 +228,12 @@ public class hqServ {
 			lon1=t.getLon();
 			
 			distanceTampon = 6371*Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lon1)*Math.cos(lon2)*Math.cos(lon2-lon1));
-			if (distanceTampon<distance) {
+			if (distanceTampon < distance) {
 				distance=distanceTampon;
 				vId=t.getId();
 			}
 		}
+		System.out.println("________ Sortie de getClosestVehicFAL : vId ="+vId);
 		return vId;
 	
 	}
