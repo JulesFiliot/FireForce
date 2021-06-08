@@ -86,6 +86,15 @@ function vehiclesList_callback_reset(response) {
     */
 }
 
+function reset_station() {
+    const RESET_URL = "http://127.0.0.1:8098/resetFStation";
+    let context = {
+        method: 'GET',
+    };
+    fetch(RESET_URL, context)
+        .then(station_vehicle_creator())
+        .catch(error => err_callback(error));
+}
 
 
 // FUNCTIONS FIRE ----------------------------------------------------------------------------------------------------
@@ -150,13 +159,6 @@ function print_fire(fire) {
 
 }
 
-//DEPRECIATED
-//Display a popup when we click on a fire on the map. The popup display pertinents fire attributes 
-function create_fire_popup(circle, fire) {
-    let popup_text = "Type : " + fire.type + "<br>Intensity : " + fire.intensity + "<br>Range : " + fire.range;
-    circle.bindPopup(popup_text);
-}
-
 //clear all printed fires
 function clear_fire() {
     for (i of firePrinted) {
@@ -188,6 +190,7 @@ function fill_popup_fire(fire) {
     document.getElementById("over_map_left").style.display = 'block';
     document.getElementById("info_fire").style.display = 'block';
     document.getElementById("over_map_left_bottom").style.display = 'none';
+    document.getElementById("info_station").style.display = 'none';
 }
 
 //Updates the fire popup when it's already open
@@ -195,13 +198,8 @@ function live_fill_popup_fire(clkA) {
     var lat = clkA.lat;
     var long = clkA.lng;
     var good_fire;
-    console.log(fireList);
     for (fire of fireList) {
-        console.log("=====");
-        console.log(fire.lat);
-        console.log(fire.long);
         if (fire.lon == long && fire.lat == lat) {
-            console.log("OK");
             good_fire = fire;
             document.getElementById("info_fire_type").innerHTML = "Type : " + good_fire.type;
             document.getElementById("info_fire_intensity").innerHTML = "Intensity : " + good_fire.intensity;
@@ -267,18 +265,6 @@ function fetch_vehicle_byId(id_vehicle, vehicle_update_callback) {
         .catch(error => err_callback(error));
 }
 
-//GET request to fetch a vehicle infos using its ID in URL parameter. 
-//Call the function to only update the left visual panel displaying vehicle infos.
-function fetch_vehicle_byId_visu(id_vehicle, fill_popup_vehicle) {
-    const GET_VEHICLE_URL = "http://127.0.0.1:8094/getVehic/"+id_vehicle; // 8081/vehicle/
-    let context = {
-        method: 'GET',
-    };
-    fetch(GET_VEHICLE_URL, context)
-        .then(response => response.json().then(body => {console.log(body); fill_popup_vehicle(body);}))
-        .catch(error => err_callback(error));
-}
-
 //Delete the vehicule corresponding to the given id in parameters 
 function delete_vehicle(id_vehicle) {
     const DELETE_VEHICLE_URL = "http://127.0.0.1:8094/vehicle/"+id_vehicle; // 8081/vehicle/
@@ -319,7 +305,6 @@ function modify_vehicle(id, remoteId, vehicle_type, fuel, fuelConsumption, liqui
     };
     //return if needed
     fetch(PUT_VEHICLE_URL, context)
-        .then(response => {fetch_vehicle_byId_visu(id, fill_popup_vehicle);})
         .catch(error => err_callback(error));
 }
 
@@ -376,6 +361,8 @@ function clear_vehicles() {
 //Fetch vehicle object when clicking on a vehicle marker 
 //and calls the fill_popup_vehicle function to display the corresponding vehicle info
 function fetch_vehicle_fromMarker(event) {
+    clickedArea = event.latlng;
+
     var lat_marker = event.latlng.lat;
     var lng_marker = event.latlng.lng;
     for (vehicle of vehicleList) {
@@ -387,9 +374,6 @@ function fetch_vehicle_fromMarker(event) {
 }
 
 function fill_popup_vehicle(vehicle) {
-    
-
-    console.log(vehicle);
     document.getElementById("info_vehicle_id").value = vehicle.id;
     document.getElementById("info_vehicle_img").src = "images/" + vehicle.type;
     document.getElementById("info_vehicle_type").innerHTML = "Type : " + pretty_text(vehicle.type);
@@ -402,6 +386,25 @@ function fill_popup_vehicle(vehicle) {
     document.getElementById("info_vehicle_update").style.display = 'none';
     document.getElementById("info_vehicle").style.display = 'block';
     document.getElementById("info_fire").style.display = 'none';
+    document.getElementById("info_station").style.display = 'none';
+}
+
+//Updates the vehicle popup when it's already open
+function live_fill_popup_vehicle(clkA) {
+    var lat = clkA.lat;
+    var long = clkA.lng;
+    var good_vehicle;
+    for (vehicle of vehicleList) {
+        if (vehicle.lon == long && vehicle.lat == lat) {
+            good_vehicle = vehicle;
+            document.getElementById("info_vehicle_id").value = good_vehicle.id;
+            document.getElementById("info_vehicle_img").src = "images/" + good_vehicle.type;
+            document.getElementById("info_vehicle_type").innerHTML = "Type : " + pretty_text(good_vehicle.type);
+            document.getElementById("info_vehicle_fuel").innerHTML = "Fuel quantity : " + good_vehicle.fuel;
+            document.getElementById("info_vehicle_liquid_type").innerHTML = "Liquid type : " + pretty_text(good_vehicle.liquidType);
+            document.getElementById("info_vehicle_liquid_quantity").innerHTML = "Liquid quantity : " + good_vehicle.liquidQuantity;
+        }
+    }
 }
 
 function delete_vehicle(id_vehicle) {
@@ -427,12 +430,25 @@ function button_update_vehicle() {
 }
 
 function vehicle_update_callback(vJSON) {
-    console.log(vJSON);
     modify_vehicle(vJSON.id, vJSON.remoteId, document.getElementById("vehicle_type_update").value, document.getElementById("fuel_value_update").value, 
     vJSON.fuelConsumption, document.getElementById("liquid_quantity_update").value, document.getElementById("liquid_type_update").value, 
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
 }
 
+//////---------------------------------------------------------- ERREUR
+function station_vehicle_creator() {
+    var text_html = "";
+    for (station of stationList) {
+        text_html += "<option value="+station.id+">"+station.name+"</option>";
+    }
+    t_html = document.getElementById("vehicle_station").innerHTML;
+    console.log("=====");
+    console.log(text_html);
+    console.log(t_html);
+    if (text_html != "") {
+        document.getElementById("vehicle_station").innerHTML = text_html;
+    }
+}
 
 
 // FUNCTIONS FIRE STATION ----------------------------------------------------------------------------------------------------
@@ -446,7 +462,7 @@ function vehicle_update_callback(vJSON) {
 
 
 //Uses a POST request to create a station given some basic parameters of the station
-function create_station(name,capacity,lon, lat) {
+function create_station(name, capacity,lon, lat) {
     const POST_STATION_URL = "http://127.0.0.1:8098/createStation";
     let context = {
         method: 'POST',
@@ -461,6 +477,7 @@ function create_station(name,capacity,lon, lat) {
         })
     };
     fetch(POST_STATION_URL, context)
+        .then(station_vehicle_creator())
         .catch(error => err_callback(error));
 }
 
@@ -481,6 +498,7 @@ function stationList_callback(response) {
     for(var i = 0; i < response.length; i++) {
         stationList[i] = response[i];
     }
+    station_vehicle_creator();
     for(const station of stationList) {
         print_station(station);
     }
@@ -504,6 +522,40 @@ function clear_stations() {
         i.remove();
     }
     stationPrinted = [];
+}
+
+//Fills the popup concerning the Fire Station
+function fill_popup_station(station) {
+    document.getElementById("info_station_name").innerHTML = "Nom : "  + station.name;
+    document.getElementById("info_station_capacity").innerHTML = "Capacité : " + station.capacity;
+
+
+    document.getElementById("over_map_left").style.display = 'block';
+    document.getElementById("over_map_left_bottom").style.display = 'none';
+    document.getElementById("info_vehicle_update").style.display = 'none';
+    document.getElementById("info_vehicle").style.display = 'none';
+    document.getElementById("info_fire").style.display = 'none';
+    document.getElementById("info_station").style.display = 'block';
+}
+
+function fetch_station_fromMarker(event) {
+    var lat_marker = event.latlng.lat;
+    var lng_marker = event.latlng.lng;
+    for (station of stationList) {
+        if (station.lon == lng_marker && station.lat == lat_marker) {
+            fill_popup_station(station);
+            return;
+        }
+    }
+}
+
+//Create fire station from interface. Station is created using create_station
+function station_creator() {
+    var name = document.getElementById("station_name").value;
+    var capacity = document.getElementById("station_capacity").value;
+    var lat = document.getElementById("station_lat").value;
+    var lon = document.getElementById("station_long").value;
+    create_station(name, capacity, lon, lat);
 }
 
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
@@ -534,6 +586,11 @@ function hide_interface_left(event) {
     }
     for (fire of fireList) {
         if (fire.lon == lng_marker && fire.lat == lat_marker) {
+            return;
+        }
+    }
+    for (station of stationList) {
+        if (station.lon == lng_marker && station.lat == lat_marker) {
             return;
         }
     }
@@ -632,7 +689,7 @@ var vehiclesGroup = L.featureGroup().addTo(mymap).on("click", fetch_vehicle_from
 
 let stationList = [];
 let stationPrinted = [];
-let stationGroup = L.featureGroup().addTo(mymap);
+let stationGroup = L.featureGroup().addTo(mymap).on("click", fetch_station_fromMarker);
 
 let clickedArea;
 
@@ -641,10 +698,13 @@ var intervalId = window.setInterval(function(){
     if (document.getElementById("info_fire").style.display == 'block') {
         live_fill_popup_fire(clickedArea);
     }
+    if (document.getElementById("info_vehicle").style.display == 'block') {
+        live_fill_popup_vehicle(clickedArea);
+    }
     fetch_fire();
     fetch_vehicles();
-    //fetch_stations();
-}, 1000);
+    fetch_stations();
+}, 5000);
 
 //Functions called every time the page is refreshed
 //create_vehicle(0, 1, 4.5, 45.5);
@@ -654,5 +714,7 @@ var intervalId = window.setInterval(function(){
 put_config();
 fetch_fire();
 fetch_vehicles();
-fetch_stations()
+fetch_stations();
+
 create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
