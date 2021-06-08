@@ -25,10 +25,35 @@ import com.project.model.dto.VehicleType;
 public class vehicServ {
 	
 	@Autowired
-	private final vehicRepo vRepo;
-
+	vehicRepo vRepo;
+ 
+	
+	vehicThread vThread;
+	private Thread DisplayThread;
+	
 	public vehicServ(vehicRepo vRepo) {
-		this.vRepo = vRepo;
+		//Replace the @Autowire annotation....
+		this.vRepo=vRepo;
+		
+		//Create a Runnable is charge of executing cyclic actions 
+		this.vThread=new vehicThread(this.vRepo,this);
+		
+		// A Runnable is held by a Thread which manage lifecycle of the Runnable
+		DisplayThread=new Thread(vThread);
+		System.out.println("le thread va démarrer");
+		// The Thread is started and the method run() of the associated DisplayRunnable is launch
+		DisplayThread.start();
+	}
+	
+	public void stopDisplay() {
+		//Call the user defined stop method of the runnable
+		this.vThread.stop();
+		try {
+			//force the thread to stop
+			this.DisplayThread.join(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void addVehic(vehic v) {
@@ -164,9 +189,10 @@ public class vehicServ {
 
 	public void switchDispo(Integer id) {
 		vehic v = getVehic(id);
+		if (v!=null) {
 		v.setDispo(!getVehic(id).isDispo());
 		vRepo.save(v);
-		System.out.println("Vehic "+v.getId()+" -> switchDispo");
+		System.out.println("Vehic "+v.getId()+" -> switchDispo");}
 	}
 
 	public void endMission(Integer id) {
@@ -204,7 +230,7 @@ public class vehicServ {
 	
 
 
-	/*@Bean(initMethod="init")
+	@Bean(initMethod="init")
 	public void init() {
 		vehic v1 = new vehic(0,0, VehicleType.PUMPER_TRUCK, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
 		vehic v2 = new vehic(0,0, VehicleType.FIRE_ENGINE, 10, LiquidType.ALL, 1000, 1, 1, 1, 4, 4, 1);
@@ -215,7 +241,7 @@ public class vehicServ {
 		this.addVehic(v2);
 		this.addVehic(v3);
 		this.addVehic(v4);
-	}*/
+	}
 
 	public ArrayList<vehic> getAllVehic() {
 		ArrayList<vehic> ListVehic = new ArrayList<vehic>();
@@ -251,7 +277,6 @@ public class vehicServ {
 	}
 
 	public ArrayList<VehicleDto> getOptiTypeVehic(FireType type) {
-		float initEff = 0;
 		ArrayList<VehicleDto> ListVDto = new ArrayList<VehicleDto>();
 		ArrayList<vehic> ListVehic = this.getAllDisp();
 		for (vehic v: ListVehic) {
@@ -262,6 +287,38 @@ public class vehicServ {
 		}
 		return ListVDto;
 	
+	}
+
+	public ArrayList<VehicleDto> getAllVehicDto() {
+		ArrayList<VehicleDto> ListVehicDto = new ArrayList<VehicleDto>();
+		Iterable<vehic> allVehic = vRepo.findAll();
+		Iterator<vehic> iterator = allVehic.iterator();
+		while(iterator.hasNext()) {
+		    vehic v = iterator.next();
+		    VehicleDto t = new VehicleDto(v.getId(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
+
+		    ListVehicDto.add(t);
+		}
+		return ListVehicDto;
+		
+	}
+
+	public void askMoveVehic(Coord c, Integer id) {
+		//on update mvRepo avec une nouvelle demande de déplacement
+		Optional<vehic> vOpt = vRepo.findById(id);
+		if (vOpt.isPresent()) {
+			vehic v=vOpt.get();
+			v.setEndPoint(c);
+			
+			Coord StPt = new Coord(v.getLon(),v.getLat());
+			v.setStartPoint(StPt);
+			//v.computeDeltaLat(v.getEndPoint(), v.getStartPoint());
+			//v.computeDeltaLon(v.getEndPoint(), v.getStartPoint());
+			v.computeAll(v.getEndPoint(),v.getStartPoint());
+			v.setMoving(true);
+			vRepo.save(v);
+		}
+		
 	}
 
 }
