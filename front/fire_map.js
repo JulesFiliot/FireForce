@@ -99,7 +99,7 @@ function reset_all() {
     reset_station();
     reset_vehicle();
     reset_fire();
-    document.location.reload();
+    //document.location.reload();
 }
 
 
@@ -498,7 +498,7 @@ function station_vehicle_interface() {
 
 
 //Uses a POST request to create a station given some basic parameters of the station
-function create_station(name, capacity,lon, lat) {
+function create_station(name, capacity, lon, lat) {
     const POST_STATION_URL = "http://127.0.0.1:8098/createStation";
     let context = {
         method: 'POST',
@@ -692,30 +692,45 @@ function switch_map_style() {
 
 function simulation_preset_soft() {
     //Reset
-    reset_fire();
-    reset_vehicle();
+    reset_all();
 
-    //Creates one fire station and two vehicles
-    create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
-    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
-    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
-    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    setTimeout(function(){
+        setTimeout(function(){
+            //Creates one fire station and three vehicles
+            create_station("Lyon Pompier Crew", 100, 4.86904827217447, 45.78391737991209);
+        }, 250);
 
-    //Set the spawn probability and frequency and the child spawn rate
-    put_creation_config(0.3, 10000);
-    put_behavior_config(0.0);
+        let stationId = [];
+        console.log(stationList);
+        for(const station of stationList) {
+            stationId.push(station.id);
+        }
+        console.log(stationId);
+        create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+        create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+        create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+
+        //Set the spawn probability and frequency and the child spawn rate
+        put_creation_config(0.3, 10000);
+        put_behavior_config(0.0);
+    }, 250);
+    
 }
 function simulation_preset_balanced() {
     //Reset
-    reset_fire();
-    reset_vehicle();
+    reset_all();
 
-    //Creates one fire station and two vehicles
+    //Creates two fire stations and three vehicles
     create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
-    create_station("Gangsta FireMen", 200, 4.96904827217447, 45.88391737991209);
-    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
-    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
-    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_station("Gangsta FireMen", 200, 4.96904827217447, 45.68391737991209);
+
+    let stationId = [];
+    for(const station of stationList) {
+        stationId.push(station.id);
+    }
+    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
 
     //Set the spawn probability and frequency and the child spawn rate
     put_creation_config(0.8, 8000);
@@ -723,15 +738,19 @@ function simulation_preset_balanced() {
 }
 function simulation_preset_hell() {
     //Reset
-    reset_fire();
-    reset_vehicle();
+    reset_all();
 
-    //Creates one fire station and two vehicles
+    //Creates two fire station and three vehicles
     create_station("Irithyll Dungeon", 50, 4.86904827217447, 45.78391737991209);
-    create_station("Kiln of the First Flame", 100, 4.96904827217447, 45.88391737991209);
-    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
-    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
-    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
+    create_station("Kiln of the First Flame", 100, 4.96904827217447, 45.68391737991209);
+
+    let stationId = [];
+    for(const station of stationList) {
+        stationId.push(station.id);
+    }
+    create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+    create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+    create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
 
     //Set the spawn probability and frequency and the child spawn rate
     put_creation_config(1, 5000);
