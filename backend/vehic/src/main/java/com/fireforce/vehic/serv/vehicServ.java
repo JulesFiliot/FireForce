@@ -194,7 +194,7 @@ public class vehicServ {
 		if (v!=null) {
 		v.setDispo(!getVehic(id).isDispo());
 		vRepo.save(v);
-		System.out.println("Vehic "+v.getId()+" -> switchDispo");}
+		System.out.println("Vehic "+v.getId()+" -> switchDispo, is dispo now?"+v.isDispo());}
 	}
 
 	public void endMission(Integer id) {
@@ -207,7 +207,7 @@ public class vehicServ {
 		Coord c = new Coord(cFS.getLon(),cFS.getLat());
 		this.switchDispo(id);
 	//	this.moveVehic(c, id);	
-		this.askMoveVehic(c, id);
+		this.askMoveVehic(c, getVehic(id).getRemoteId());
 		System.out.println("Fin mission véhicule"+id);
 	}
 
@@ -293,13 +293,27 @@ public class vehicServ {
 	
 	}
 
+	public ArrayList<VehicleDto> getAllDispDto() {
+		ArrayList<VehicleDto> ListVehicDto = new ArrayList<VehicleDto>();
+		Iterable<vehic> allVehic = vRepo.findAll();
+		Iterator<vehic> iterator = allVehic.iterator();
+		while(iterator.hasNext()) {
+		    vehic v = iterator.next();
+		    VehicleDto t = new VehicleDto(v.getRemoteId(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
+		    if (v.isDispo()) {
+		    	ListVehicDto.add(t);
+		    }
+		}
+		return ListVehicDto;
+	}
+	
 	public ArrayList<VehicleDto> getAllVehicDto() {
 		ArrayList<VehicleDto> ListVehicDto = new ArrayList<VehicleDto>();
 		Iterable<vehic> allVehic = vRepo.findAll();
 		Iterator<vehic> iterator = allVehic.iterator();
 		while(iterator.hasNext()) {
 		    vehic v = iterator.next();
-		    VehicleDto t = new VehicleDto(v.getId(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
+		    VehicleDto t = new VehicleDto(v.getRemoteId(),v.getLon(),v.getLat(),v.getType(),v.getEfficiency(),v.getLiquidType(),v.getLiquidQuantity(),v.getLiquidConsumption(),v.getFuel(),v.getFuelConsumption(),v.getCrewMember(),v.getCrewMemberCapacity(),v.getFacilityRefID().intValue());
 
 		    ListVehicDto.add(t);
 		}
@@ -307,14 +321,14 @@ public class vehicServ {
 		
 	}
 
-	public void askMoveVehic(Coord c, Integer id) {
+	public void askMoveVehic(Coord c, Integer id) { //utilise le remoteId
 		//on update mvRepo avec une nouvelle demande de déplacement
-		System.out.println("l'id vaut bieng :"+id);
+		System.out.println("askMoveVehic :le remote id utilisé ici :"+id);
 		//Optional<vehic> vOpt = vRepo.findById(id);
 		Optional<vehic> vOpt = vRepo.findByRemoteId(id);
 		
-		System.out.println("vOpt:"+vOpt.toString());
-		System.out.println("vOpt isPresent ?"+vOpt.isPresent());
+		System.out.println("askMoveVehic :vOpt:"+vOpt.toString());
+		System.out.println("askMoveVehic :vOpt isPresent ?"+vOpt.isPresent());
 		if (vOpt.isPresent()) {
 			vehic v=vOpt.get();
 			v.setEndPoint(c);
@@ -326,9 +340,13 @@ public class vehicServ {
 			v.computeAll(v.getEndPoint(),v.getStartPoint());
 			v.setMoving(true);
 			vRepo.save(v);
-			System.out.println("::::::: V, parle moi : " +v.isMoving());
+			System.out.println("askMoveVehic : is V (remoteId "+id+ " ) moving " +v.isMoving());
 		}
 		
+	}
+
+	public Integer getRepoId(Integer remoteId) {
+		return vRepo.findByRemoteId(remoteId).get().getId();
 	}
 
 }
