@@ -54,6 +54,8 @@ public class hqServ {
 			Integer fId = fD.getId();
 			reqUrl = "http://127.0.0.1:8092/getLinkedVehic/"+fId;
 			ResponseEntity<ArrayList> reqLV = restTemplate.getForEntity(reqUrl,ArrayList.class);
+			
+			if (reqLV.hasBody()) {
 			ArrayList<Integer> LV = reqLV.getBody();
 			//System.out.println(LV);
 			if (LV.isEmpty()){
@@ -86,7 +88,7 @@ public class hqServ {
 				return;
 				
 			}
-		}
+		}}
 		
 		
 	/*	for (fire f : this.fRepo.findAll()) {
