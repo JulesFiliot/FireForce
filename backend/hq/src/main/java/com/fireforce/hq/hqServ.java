@@ -1,6 +1,7 @@
 package com.fireforce.hq;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -146,16 +147,40 @@ public class hqServ {
 		for (FireDto fD : fArray) {
 			Integer fId = fD.getId();
 			reqUrl = "http://127.0.0.1:8092/getLinkedVehic/"+fId;
-			ResponseEntity<ArrayList> reqLV = restTemplate.getForEntity(reqUrl,ArrayList.class);
-			ArrayList<Integer> LV = reqLV.getBody();
+			ResponseEntity<Integer[]> reqLV = restTemplate.getForEntity(reqUrl,Integer[].class);
+			ArrayList<Integer> LV = new ArrayList<Integer>(Arrays.asList(reqLV.getBody()));
 			//System.out.println(LV);
 			if (LV.isEmpty()){
 				
 				// -> Dire au Simulator que tel vehicule est maintenant assigné à tel feu
 
-				reqUrl = "http://127.0.0.1:8094/getDispo";
-				ResponseEntity<Integer> reqVID = restTemplate.getForEntity(reqUrl, Integer.class);
-				Integer vId = reqVID.getBody();
+				
+				//Récupérer les vehic dispo avec un type optimal
+				reqUrl = "http://127.0.0.1:8094/getOptiTypeVehic/"+fD.getType();
+				ResponseEntity<VehicleDto[]> reqVID = restTemplate.getForEntity(reqUrl, VehicleDto[].class);
+				ArrayList<VehicleDto> VDto = new ArrayList<VehicleDto>(Arrays.asList(reqVID.getBody()));
+				Integer vId = null;
+				if (VDto.isEmpty()) {
+					//On récupère le vehic le plus proche parmi tous les vehic	
+					reqUrl = "http://127.0.0.1:8094/getAllVehicDto";
+					ResponseEntity<VehicleDto[]> reqClosest = restTemplate.getForEntity(reqUrl, VehicleDto[].class);
+					ArrayList<VehicleDto> lvdto = new ArrayList<VehicleDto>(Arrays.asList(reqClosest.getBody()));
+					vId=this.getClosestVehicFromArrayList(fD,lvdto);
+
+				}
+				
+				else if (VDto.size()==1) {
+					//on a qu'un vehicule avec un type optimal donc le choisit par défaut
+					VehicleDto t =VDto.get(0);
+					vId=t.getId();
+				}
+				
+				else {
+					//plusieurs vehic ont un type optimal donc on choisit le plus proche
+					vId=this.getClosestVehicFromArrayList(fD, VDto);
+				}
+				
+				
 				System.out.println(vId);
 				if (vId!=null) {
 					//System.out.println("Oui Oui Oui");					
@@ -172,8 +197,9 @@ public class hqServ {
 				c.setLon(fD.getLon());
 						
 				if(vId!=null) {
-				String reqMov = "http://127.0.0.1:8094/vehicMove/"+vId;
-				restTemplate.put(reqMov, c);
+				//String reqMov = "http://127.0.0.1:8094/vehicMove/"+vId;
+					String reqMov = "http://127.0.0.1:8094/askMove/"+vId;
+					restTemplate.postForEntity(reqMov, c, null);
 				}
 				
 				return;
@@ -181,5 +207,31 @@ public class hqServ {
 			}
 		}
 	}
+
+	private Integer getClosestVehicFromArrayList(FireDto fD, ArrayList<VehicleDto> lvdto) {
+		// TODO Auto-generated method stub
+		Integer vId = null;
+		double distance=16000;
+		double distanceTampon;
+		double lat1;
+		double lat2=fD.getLat();
+		double lon1;
+		double lon2=fD.getLon();
+		
+		for (VehicleDto t : lvdto) {
+			lat1=t.getLat();
+			lon1=t.getLon();
+			
+			distanceTampon = 6371*Math.acos(Math.sin(lat1)*Math.sin(lat2)+Math.cos(lon1)*Math.cos(lon2)*Math.cos(lon2-lon1));
+			if (distanceTampon<distance) {
+				distance=distanceTampon;
+				vId=t.getId();
+			}
+		}
+		return vId;
+	
+	}
+
+	
 	
 }

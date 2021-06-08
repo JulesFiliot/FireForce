@@ -49,9 +49,15 @@ public class vehicCtr {
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value = "/getAllVehic") //Si ca marche pas cf dto et non repo
+	@RequestMapping(value = "/getAllVehic") 
 	public ArrayList<vehic> getAllVehic() {
     	ArrayList<vehic> vList = vServ.getAllVehic();
+    	return vList;
+    }
+	
+	@RequestMapping(value = "/getAllVehicDto") 
+	public ArrayList<VehicleDto> getAllVehicDto() {
+    	ArrayList<VehicleDto> vList = vServ.getAllVehicDto();
     	return vList;
     }
 	
@@ -103,7 +109,11 @@ public class vehicCtr {
 	public void delVehic(@PathVariable Integer id) {
 		vServ.delVehic(id);
 	}
-
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/askMove/{id}")
+	public void askMove(@RequestBody Coord c, @PathVariable Integer id) {
+		vServ.askMoveVehic(c,id);
+	}
 	/*
 	@RequestMapping(value = "/editVehicLiquidType/{id}/{type}")
 	public void newLiquidType(@PathVariable Integer id ,@PathVariable String type) {

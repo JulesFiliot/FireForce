@@ -25,6 +25,8 @@ public class hqCtr {
     	hqServ.affectVehicSimple();
     }
     
+    
+    // affectOptiStraight permet d'assigner à chaque feu le véhicule le plus proche et avec le meilleur type
     @RequestMapping("/affectOptiStraight")
     public void affectOptiStraight() {
     	hqServ.affectOptiStraight();
