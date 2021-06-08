@@ -39,7 +39,7 @@ public class vehicThread implements Runnable {
 				Thread.sleep(1000);
 				for (vehic v: vRepo.findAll()) {
 					System.out.println("==============");
-					System.out.println("v isMoving ?"+v.isMoving());
+					System.out.println("v"+v.getId()+" isMoving ?"+v.isMoving());
 					if (v.isMoving()) {
 						System.out.println("v progress ?"+v.getProgress());
 						if (v.getProgress()>1) {
