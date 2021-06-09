@@ -272,8 +272,6 @@ setTimeout(function(){
 }, 100);
 */
 
-simulation_preset_hell();
-
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
     if (document.getElementById("info_fire").style.display == 'block') {
