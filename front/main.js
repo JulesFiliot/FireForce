@@ -92,84 +92,9 @@ function switch_map_style() {
     }
 }
 
-function simulation_preset_soft() {
-    //Reset
-    reset_all();
-
-    setTimeout(function(){
-        setTimeout(function(){
-            //Creates one fire station and three vehicles
-            create_station("Lyon Pompier Crew", 100, 4.86904827217447, 45.78391737991209);
-        }, 250);
-
-        let stationId = [];
-        console.log(stationList);
-        for(const station of stationList) {
-            stationId.push(station.id + 1);
-        }
-        console.log(stationId);
-        create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-
-        //Set the spawn probability and frequency and the child spawn rate
-        put_creation_config(0.3, 10000);
-        put_behavior_config(0.0);
-    }, 250);  
-}
-function simulation_preset_balanced() {
-    //Reset
-    reset_all();
-
-    setTimeout(function(){
-        setTimeout(function(){
-            //Creates two fire stations and three vehicles
-            create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
-            create_station("Gangsta FireMen", 200, 4.96904827217447, 45.68391737991209);
-        }, 250);
-
-        let stationId = [];
-        console.log(stationList);
-        for(const station of stationList) {
-            stationId.push(station.id + 1);
-        }
-        console.log(stationId);
-        create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-
-        //Set the spawn probability and frequency and the child spawn rate
-        put_creation_config(0.8, 8000);
-        put_behavior_config(0.2);
-    }, 250);
-}
-function simulation_preset_hell() {
-    //Reset
-    reset_all();
-
-    setTimeout(function(){
-        setTimeout(function(){
-            //Creates two fire station and three vehicles
-            create_station("Irithyll Dungeon", 50, 4.86904827217447, 45.78391737991209);
-            create_station("Kiln of the First Flame", 100, 4.96904827217447, 45.68391737991209);
-        }, 250);
-
-        let stationId = [];
-        console.log(stationList);
-        for(const station of stationList) {
-            stationId.push(station.id + 1);
-        }
-        create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-
-        //Set the spawn probability and frequency and the child spawn rate
-        put_creation_config(1, 5000);
-        put_behavior_config(0.6);
-    }, 250);
-}
 
 function reset_all() {
+    put_creation_config(0,20);
     reset_fire();
     reset_vehicle();
     reset_station();
@@ -180,6 +105,105 @@ function reset_all() {
 function err_callback(error) {
     //console.log(error);
 }
+
+// FUNCTIONS SIMULATION ----------------------------------------------------------------------------------------------------
+
+function simulation_preset_soft() {
+    //Reset
+    reset_all();
+
+    //Creates one fire station and three vehicles
+    setTimeout(function(){
+
+        create_station("Lyon Pompier Crew", 100, 4.86904827217447, 45.78391737991209);
+
+        setTimeout(function(){
+            fetch_stations();
+            
+            setTimeout(function(){
+                let station = stationList[0];
+
+                create_vehicle(1, 1, station.lon, station.lat, station.id);
+                create_vehicle(2, 2, station.lon, station.lat, station.id);
+                create_vehicle(3, 3, station.lon, station.lat, station.id);
+
+            }, 250);
+
+        }, 250);
+
+        //Set the spawn probability and frequency and the child spawn rate
+        put_creation_config(0.4, 10000);
+        put_behavior_config(0.0);
+    }, 250);  
+}
+
+function simulation_preset_balanced() {
+    //Reset
+    reset_all();
+
+    //Creates one fire station and three vehicles
+    setTimeout(function(){
+
+        create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
+        create_station("Gangsta FireMen", 200, 4.96904827217447, 45.68391737991209);
+
+        setTimeout(function(){
+            fetch_stations();
+            
+            setTimeout(function(){
+                let station = stationList[0];
+                let station2 = stationList[1];
+
+                create_vehicle(1, 1, station.lon, station.lat, station.id);
+                create_vehicle(2, 2, station2.lon, station2.lat, station2.id);
+                create_vehicle(3, 3, station2.lon, station2.lat, station2.id);
+
+            }, 250);
+
+        }, 250);
+
+        //Set the spawn probability and frequency and the child spawn rate
+        put_creation_config(0.8, 8000);
+        put_behavior_config(0.2);
+    }, 250);  
+}
+
+function simulation_preset_hell() {
+    //Reset
+    reset_all();
+
+    //Creates one fire station and three vehicles
+    setTimeout(function(){
+
+        create_station("Irithyll Dungeon", 50, 4.86904827217447, 45.78391737991209);
+        create_station("Kiln of the First Flame", 100, 4.96904827217447, 45.68391737991209);
+        create_station("Cemetery of Ash", 200, 4.82, 45.71);
+
+        setTimeout(function(){
+            fetch_stations();
+            
+            setTimeout(function(){
+                let station = stationList[0];
+                let station2 = stationList[1];
+                let station3 = stationList[2];
+
+                create_vehicle(1, 1, station.lon, station.lat, station.id);
+                create_vehicle(2, 2, station2.lon, station2.lat, station2.id);
+                create_vehicle(3, 3, station2.lon, station2.lat, station2.id);
+                create_vehicle(4, 4, station3.lon, station3.lat, station3.id);
+                create_vehicle(5, 1, station3.lon, station3.lat, station3.id);
+                create_vehicle(0, 0, station3.lon, station3.lat, station3.id);
+
+            }, 250);
+
+        }, 250);
+
+        //Set the spawn probability and frequency and the child spawn rate
+        put_creation_config(1, 5000);
+        put_behavior_config(0.6);
+    }, 250);  
+}
+
 
 
 // CODE ----------------------------------------------------------------------------------------------------
@@ -225,11 +249,13 @@ let clickedArea;
 let vehic_station_filter = false;
 
 //Functions called every time the page is refreshed
+/*
 put_config();
 fetch_fire();
 fetch_vehicles();
 fetch_stations();
-
+*/
+/*
 //create_station("CPE Lyon", 100, 4.86904827217447, 45.78391737991209);
 //create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454);
 setTimeout(function(){
@@ -244,7 +270,9 @@ setTimeout(function(){
         }, 100);
     }
 }, 100);
+*/
 
+simulation_preset_hell();
 
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){
@@ -261,4 +289,4 @@ var intervalId = window.setInterval(function(){
         station_vehicle_creator()
         station_vehicle_interface()
     }, 250);
-}, 500);
+}, 2000);
