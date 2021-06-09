@@ -772,6 +772,29 @@ function simulation_preset_hell() {
     }, 250);
 }
 
+//Start the simulation in user mode : deletes the panels allowing to create vehicles, stations, ...
+function start_user_mode() {
+    document.getElementById("station_creator").style.display = 'none';
+    document.getElementById("station_creator_title").style.display = 'none';
+    document.getElementById("vehicle_creator").style.display = 'none';
+    document.getElementById("vehicle_creator_title").style.display = 'none';
+    document.getElementById("config_interface_title").style.display = 'none';
+    document.getElementById("config_interface").style.display = 'none';
+}
+
+function test_mode_param() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const simu_mode = urlParams.get('mode');
+    if (simu_mode == '0') {
+        start_user_mode();
+        console.log('User mode launched !');
+    } else {
+        console.log('Dev mode launched !');
+    }
+
+}
+
 //LOGS errors on console
 function err_callback(error) {
     //console.log(error);
@@ -801,6 +824,11 @@ mymap.on('click', hide_interface_left);
 //     alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
 // });
 
+
+//Once page is loaded launch the mode check function
+window.onload = function() {
+    test_mode_param();
+};
 
 //GLOBAL variables
 let fireList = [];
