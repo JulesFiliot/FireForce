@@ -204,7 +204,39 @@ function simulation_preset_hell() {
     }, 250);  
 }
 
+//Start the simulation in user mode : deletes the panels allowing to create vehicles, stations, ...
+function start_user_mode() {
+    document.getElementById("station_creator").style.display = 'none';
+    document.getElementById("station_creator_title").style.display = 'none';
+    document.getElementById("vehicle_creator").style.display = 'none';
+    document.getElementById("vehicle_creator_title").style.display = 'none';
+    document.getElementById("config_interface_title").style.display = 'none';
+    document.getElementById("config_interface").style.display = 'none';
+}
 
+function test_mode_param() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const simu_mode = urlParams.get('mode');
+    console.log(simu_mode);
+    if (simu_mode == '0') {
+        start_user_mode();
+        console.log('User mode launched !');
+        const difficulty = urlParams.get('diff');
+
+        if (difficulty == '0') {
+            simulation_preset_hell()
+            console.log("Difficulty balanced");
+
+        } else if (difficulty == '1') {
+            simulation_preset_balanced()
+            console.log("Difficulty hell");
+        }
+
+    } else {
+        console.log('Dev mode launched !');
+    }
+}
 
 // CODE ----------------------------------------------------------------------------------------------------
 
@@ -271,6 +303,12 @@ setTimeout(function(){
     }
 }, 100);
 */
+
+//simulation_preset_hell();
+//Once page is loaded launch the mode check function
+window.onload = function() {
+    test_mode_param();
+};
 
 //Instructions called every 1000 ms
 var intervalId = window.setInterval(function(){

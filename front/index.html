@@ -15,6 +15,28 @@
 
 	<body>
 
+		<div id="myModal" class="modal">
+			<div class="card modal-content">
+				<h2>Chose Difficulty</h2>
+				<ul onchange="select_diff()">
+					<li>
+						<input type="radio" name="name" id="one" checked />
+						<label for="one">Balanced</label>
+							
+						<div class="check"></div>
+					</li>
+								
+					<li>
+						<input type="radio" name="name" id="two" />
+						<label for="two">Hell</label>
+									
+						<div class="check"></div>
+					</li>
+				</ul>
+				<button id="launch_user_simu">START</button>
+			</div>
+		</div>
+
         <div id="home_page">
 
 			<div id="content">
@@ -23,7 +45,7 @@
 				<p id="iconText">FireForce Project</p>
 
 				<div id="formatting_div">
-					<a href="fire_map.html?mode=0">
+					<a id="myBtn" href="#">
 						<span>Start User</span>
 						<div class="liquid"></div>
 					</a>
@@ -37,10 +59,10 @@
 					<br>
 					<p>An Emergency Manager simulation</p>
 				</div>
-
+				
 			</div>
 
 		</div>
-        
+        <script src="index.js"></script>
 	</body>
 </html>

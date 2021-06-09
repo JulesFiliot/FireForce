@@ -65,6 +65,28 @@ body {
     padding-top: 5%;
     padding-right: 4%;
 }
+#launch_user_simu {
+  /*position: absolute;*/
+  /*left: 44.7%;*/
+  background-color: transparent;
+  -moz-border-radius: 42px;
+  -webkit-border-radius: 42px;
+  border-radius: 42px;
+  border: 3px solid #ffffff;
+  /*display: inline-block;*/
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 15px;
+  padding: 5px 25px;
+  text-decoration: none;
+}
+#launch_user_simu:hover {
+  /*effet lors du passage de la souris sur le bouton*/
+  background-color: #ffffff;
+  color: #333333;
+}
+
 
 /* LIQUID BUTTON - SOURCE: https://codepen.io/fliseno1k/pen/WNboLBy */
 * {
@@ -152,3 +174,155 @@ body {
     }
   }
 /* END LIQUID BUTTON - SOURCE: https://codepen.io/fliseno1k/pen/WNboLBy */
+
+
+/* LIQUID RADIO BUTTON - SOURCE: */
+
+/* Variables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+:root {
+	--primary-c: #2196F3;
+	--secondary-c: #B2D7F5;
+	
+	--white: #0000;/*#FDFBFB;*/
+	
+	--text: #fff;/*#f5f9fc;	*/
+	--bg: var(--primary-c);
+}
+
+
+/* Basic Config
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+html, body {
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+  background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+	font-family: 'Raleway', sans-serif;
+	color: var(--text);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+ul {
+	list-style-type: none;
+	padding-left: 50px;
+	margin: 0;
+}
+
+li {
+	display: block;
+	position: relative;
+	padding: 20px 0px;
+}
+
+h2 {
+	margin: 10px 0;
+	font-weight: 900;
+}
+
+
+/* Card
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.card {
+	display: flex;
+	flex-direction: column;	
+	background: var(--white);
+	width: 300px;
+	padding: 20px 25px;
+	border-radius: 20px;
+	box-shadow: 0 19px 38px rgba(0, 0, 0, 0.13);
+}
+
+
+/* Radio Button
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+input[type=radio] {
+	position: absolute;
+	visibility: hidden;
+}
+
+label { 
+	cursor: pointer; 
+	font-weight: 400;
+}
+
+.check {
+	width: 30px; height: 30px;
+	position: absolute;
+	border-radius: 50%;
+	transition: transform .6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* Reset */
+input#one ~ .check { 
+	transform: translate(-50px, -25px); 
+	background: var(--secondary-c); 
+}
+input#two ~ .check { 
+	transform: translate(-50px, -83px); 
+	background: var(--primary-c);
+	box-shadow: 0 6px 12px rgba(33, 150, 243, 0.35);
+}
+
+/* Radio Input #1 */
+input#one:checked ~ .check { transform: translate(-50px, 33px); }
+
+/* Radio Input #2  */
+input#two:checked ~ .check { transform: translate(-50px, -25px); }
+
+
+/* END LIQUID RADIO BUTTON - SOURCE: */
+
+
+/* MODAL */
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 2; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  /*background-color: #fefefe;*/
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.modal-content button {
+  width: 10%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* END MODAL */

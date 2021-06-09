@@ -708,13 +708,16 @@ function simulation_preset_soft() {
         let stationId = [];
         console.log(stationList);
         for(const station of stationList) {
-            stationId.push(station.id + 1);
+            stationId.push(station.id);
         }
-        console.log(stationId);
-        create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
-        create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
 
+        setTimeout(function() {
+            console.log(stationId);
+            create_vehicle(1, 1, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+            create_vehicle(2, 2, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+            create_vehicle(3, 3, Math.random()*(4.9266428 - 4.7736324) + 4.7736324, Math.random()*(45.7941125 - 45.7145454) + 45.7145454, stationId[Math.floor(Math.random() * stationId.length)]);
+        }, 250);
+        
         //Set the spawn probability and frequency and the child spawn rate
         put_creation_config(0.3, 10000);
         put_behavior_config(0.0);
@@ -786,13 +789,24 @@ function test_mode_param() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const simu_mode = urlParams.get('mode');
+    console.log(simu_mode);
     if (simu_mode == '0') {
         start_user_mode();
         console.log('User mode launched !');
+        const difficulty = urlParams.get('diff');
+
+        if (difficulty == '0') {
+            simulation_preset_hell()
+            console.log("Difficulty balanced");
+
+        } else if (difficulty == '1') {
+            simulation_preset_balanced()
+            console.log("Difficulty hell");
+        }
+
     } else {
         console.log('Dev mode launched !');
     }
-
 }
 
 //LOGS errors on console
