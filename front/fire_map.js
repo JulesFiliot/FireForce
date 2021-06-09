@@ -1,3 +1,4 @@
+/*
 // FUNCTIONS CONFIGURATION ----------------------------------------------------------------------------------------------------
 
 //PUT request to change the main fire configs
@@ -51,7 +52,9 @@ function put_config() {
     creationSleep = document.getElementById("creationSleep").value*1000;
     put_creation_config(creationProba,creationSleep);
 }
+*/
 
+/*
 //deletes all fires and unprint them from map
 function reset_fire() {
     const RESET_URL = "http://127.0.0.1:8092/fire/reset";
@@ -61,6 +64,7 @@ function reset_fire() {
     fetch(RESET_URL, context)
         .catch(error => err_callback(error));
 }
+
 
 // Reset all vehicle and unprint them from map
 function reset_vehicle() {
@@ -72,18 +76,6 @@ function reset_vehicle() {
         .catch(error => err_callback(error));
 }
 
-function vehiclesList_callback_reset(response) {    
-    /*
-    clear_vehicles();
-    vehicleList = [];
-    for(var i = 0; i < response.length; i++) {
-        vehicleList[i] = response[i];
-    }
-    for(const vehicle of vehicleList) {
-        delete_vehicle(vehicle.id);
-    }
-    */
-}
 
 function reset_station() {
     const RESET_URL = "http://127.0.0.1:8098/resetFStation";
@@ -94,14 +86,15 @@ function reset_station() {
         .catch(error => err_callback(error));
 }
 
+
 function reset_all() {
     reset_fire();
     reset_vehicle();
     reset_station();
     //document.location.reload();
 }
-
-
+*/
+/*
 // FUNCTIONS FIRE ----------------------------------------------------------------------------------------------------
 
 //Fetch all existing fires
@@ -215,10 +208,10 @@ function live_fill_popup_fire(clkA) {
         }
     }
 }
+*/
 
 
-
-
+/*
 // FUNCTIONS VEHICLES ----------------------------------------------------------------------------------------------------
 
 //Uses a POST request to create a vehicle given some basic parameters of the vehicle
@@ -465,7 +458,9 @@ function vehicle_update_callback(vJSON) {
     vJSON.fuelConsumption, document.getElementById("liquid_quantity_update").value, document.getElementById("liquid_type_update").value, 
     vJSON.liquidConsumption, vJSON.lon, vJSON.lat, vJSON.crewMember, vJSON.crewMemberCapacity, vJSON.efficiency, vJSON.facilityRefID);
 }
+*/
 
+/*
 function station_vehicle_creator() {
     if (document.getElementById("vehicle_creator").style.display == "none") {
         var text_html = "";
@@ -490,6 +485,7 @@ function station_vehicle_interface() {
         }
     }
 }
+*/
 
 
 // FUNCTIONS FIRE STATION ----------------------------------------------------------------------------------------------------
@@ -501,7 +497,7 @@ function station_vehicle_interface() {
     Vehicle pop here + fuel + liquid
 */
 
-
+/*
 //Uses a POST request to create a station given some basic parameters of the station
 function create_station(name, capacity, lon, lat) {
     const POST_STATION_URL = "http://127.0.0.1:8098/createStation";
@@ -602,7 +598,9 @@ function station_creator() {
     var lon = document.getElementById("station_long").value;
     create_station(name, capacity, lon, lat);
 }
+*/
 
+/*
 // FUNCTIONS OTHERS ----------------------------------------------------------------------------------------------------
 
 //Hides the right interface given in parameters. Also hides all its childs
@@ -778,10 +776,10 @@ function simulation_preset_hell() {
 function err_callback(error) {
     //console.log(error);
 }
-
+*/
 // CODE ----------------------------------------------------------------------------------------------------
 
-//MAP INITIALISATION
+/* //MAP INITIALISATION
 var mymap = L.map('mapid').setView([45.76392211069434, 4.832544118002555], 12);  // [51.505, -0.09], 13
 
 var map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -798,11 +796,11 @@ var map_layer = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}
 
 switch_map_style();
 mymap.on('click', hide_interface_left);
-/*
-mymap.on('click', function(e) {
-    alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
-});
-*/
+
+// mymap.on('click', function(e) {
+//     alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng)
+// });
+
 
 //GLOBAL variables
 let fireList = [];
@@ -859,3 +857,4 @@ var intervalId = window.setInterval(function(){
         station_vehicle_interface()
     }, 250);
 }, 500);
+ */
