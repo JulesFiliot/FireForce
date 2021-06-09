@@ -62,8 +62,8 @@ body {
 }
 #formatting_div {
     text-align: center;
-    padding-left: 37%;
     padding-top: 5%;
+    padding-right: 4%;
 }
 
 /* LIQUID BUTTON - SOURCE: https://codepen.io/fliseno1k/pen/WNboLBy */
@@ -84,18 +84,19 @@ body {
   a {
     position: relative;
     padding: 20px 50px;
-    display: block;
+    display: inline-block;
     text-decoration: none;
     text-transform: uppercase;
     width: 200px;
     overflow: hidden;
     border-radius: 40px;
+    margin: 2%;
   }
   
   a span {
     position: relative;
     color: #fff;
-    font-size: 20px;
+    font-size: 15px;
     font-family: Arial;
     letter-spacing: 8px;
     z-index: 1;
